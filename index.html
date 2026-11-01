@@ -1,0 +1,1901 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Matteo in Transit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Fredoka:wght@500;600;700&display=swap">
+<style>
+/* Layout: one phone-width column with an app-style tab bar at the bottom. Enamel station plaques carry the Paris
+   signage feel; a soft "boarding pass" and a little pram give it Matteo's personality. Everything else stays calm. */
+:root{
+  --bg:#F3F6FB; --surface:#FFFFFF; --ink:#172036; --muted:#586379; --line:#DCE2EC;
+  --plaque:#1A2955; --plaque-ink:#FFFFFF; --plaque-rim:#C8D1E6;
+  --accent:#1A2955; --accent-soft:#E4E9F5; --focus:#3D6BE0;
+  --sun:#FFC83D; --pass:#E6EFFD; --pass-line:#BFD0EE;
+  --ok:#137A3A; --ok-soft:#E1F2E7; --warn:#9A5800; --warn-soft:#FCEFD9;
+  --bad:#BD2A20; --bad-soft:#FBE4E1; --unk:#586379; --unk-soft:#E9ECF1;
+  --sample:#6E4600; --sample-soft:#FFF3D1; --sample-line:#E9C770;
+  --f-display:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --f-sign:"Barlow Semi Condensed","Arial Narrow","Helvetica Neue",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:14px;
+  --nav-h:68px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1320; --surface:#161D2D; --ink:#E7EAF1; --muted:#9AA4B9; --line:#2A3347;
+    --plaque:#22356F; --plaque-ink:#FFFFFF; --plaque-rim:#93A3CB;
+    --accent:#A9BCF3; --accent-soft:#1F2A47; --focus:#8FA9F5;
+    --sun:#F5C04A; --pass:#1A2540; --pass-line:#33436B;
+    --ok:#62CF8B; --ok-soft:#14301F; --warn:#F0B35A; --warn-soft:#3A2A0F;
+    --bad:#FF8F85; --bad-soft:#3D1A17; --unk:#A3ACBF; --unk-soft:#232B3C;
+    --sample:#F5D27A; --sample-soft:#2E250E; --sample-line:#6B5520;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1320; --surface:#161D2D; --ink:#E7EAF1; --muted:#9AA4B9; --line:#2A3347;
+  --plaque:#22356F; --plaque-ink:#FFFFFF; --plaque-rim:#93A3CB;
+  --accent:#A9BCF3; --accent-soft:#1F2A47; --focus:#8FA9F5;
+  --sun:#F5C04A; --pass:#1A2540; --pass-line:#33436B;
+  --ok:#62CF8B; --ok-soft:#14301F; --warn:#F0B35A; --warn-soft:#3A2A0F;
+  --bad:#FF8F85; --bad-soft:#3D1A17; --unk:#A3ACBF; --unk-soft:#232B3C;
+  --sample:#F5D27A; --sample-soft:#2E250E; --sample-line:#6B5520;
+  color-scheme:dark;
+}
+
+[hidden]{ display:none !important; }
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--f-body); font-size:16px; line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:18px calc(var(--nav-h) + 32px + env(safe-area-inset-bottom, 0px));
+}
+.wrap{ max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:16px; }
+p{ margin:0; }
+h1,h2,h3{ margin:0; text-wrap:balance; }
+button{ font:inherit; color:inherit; }
+:focus-visible{ outline:2.5px solid var(--focus); outline-offset:2px; border-radius:6px; }
+.tnum{ font-variant-numeric:tabular-nums; }
+
+/* Header */
+.top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.brand{ display:flex; align-items:center; gap:12px; min-width:0; }
+.brand .pram{ width:58px; height:50px; flex:none; align-self:flex-start; margin-top:2px; }
+.top h1{ font-family:var(--f-display); font-weight:700; font-size:1.85rem; line-height:1.05; letter-spacing:-.01em; }
+.lede{ color:var(--muted); font-size:.92rem; margin-top:3px; }
+.status-pill{ margin-top:8px; display:inline-flex; align-items:center; gap:6px; min-height:34px; padding:4px 12px; border-radius:999px;
+  border:1.5px solid var(--line); background:var(--surface); font-size:.82rem; font-weight:700; color:var(--muted); cursor:pointer; white-space:nowrap; }
+.status-pill.live{ color:var(--ok); border-color:color-mix(in srgb, var(--ok) 35%, var(--line)); }
+.status-pill.practice{ color:var(--sample); border-color:var(--sample-line); background:var(--sample-soft); }
+.dot{ width:9px; height:9px; border-radius:50%; background:var(--unk); flex:none; display:inline-block; }
+.dot.ok{ background:var(--ok); }
+.status-pill.practice .dot{ background:var(--sun); }
+.pulse{ animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse{ 50%{ opacity:.3; } }
+
+/* Pram mascot */
+.pram .wheel{ transform-box:fill-box; transform-origin:center; }
+.rolling .wheel{ animation:roll 1s linear infinite; }
+@keyframes roll{ to{ transform:rotate(360deg); } }
+.mini-pram{ width:30px; height:26px; flex:none; vertical-align:middle; }
+
+/* Boarding pass */
+.pass{ display:grid; grid-template-columns:1fr auto; background:var(--pass); border:1.5px solid var(--pass-line); border-radius:var(--r); overflow:hidden; position:relative; }
+.pass-fields{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px 12px; padding:12px 14px; }
+.pass-k{ font-size:.66rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+.pass-v{ font-family:var(--f-display); font-weight:600; font-size:1.02rem; line-height:1.2; }
+.pass-stub{ display:flex; flex-direction:column; justify-content:center; gap:2px; padding:12px 16px; border-left:2px dashed var(--pass-line); background:color-mix(in srgb, var(--sun) 38%, var(--surface)); position:relative; }
+.pass-stub::before, .pass-stub::after{ content:""; position:absolute; left:-9px; width:16px; height:16px; border-radius:50%; background:var(--bg); border:1.5px solid var(--pass-line); }
+.pass-stub::before{ top:-9px; } .pass-stub::after{ bottom:-9px; }
+@media (max-width:420px){ .pass-fields{ grid-template-columns:repeat(2, minmax(0, 1fr)); } .pass-fields .pass-wide{ grid-column:span 2; } }
+
+/* Panels and text */
+.view{ display:flex; flex-direction:column; gap:14px; }
+.panel{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:18px; display:flex; flex-direction:column; gap:14px; min-width:0; }
+.panel-h{ font-family:var(--f-display); font-weight:600; font-size:1.35rem; line-height:1.2; }
+.sec-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.count{ color:var(--muted); font-size:.9rem; }
+.label{ font-size:.74rem; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+.sub-h{ font-size:.74rem; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:700; }
+.hint{ color:var(--muted); font-size:.92rem; }
+.fine{ color:var(--muted); font-size:.82rem; }
+
+/* Inputs */
+.input{ width:100%; box-sizing:border-box; min-height:52px; padding:12px 14px; font:inherit; font-size:1.05rem; color:var(--ink);
+  background:var(--bg); border:1.5px solid var(--line); border-radius:12px; appearance:none; }
+.input::placeholder{ color:var(--muted); }
+.input:focus{ outline:none; border-color:var(--focus); box-shadow:0 0 0 3px color-mix(in srgb, var(--focus) 25%, transparent); }
+.field{ position:relative; }
+.field > svg{ position:absolute; left:14px; top:50%; width:20px; height:20px; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+#q{ padding-left:44px; }
+.select{ min-height:44px; padding:8px 10px; font:inherit; font-weight:700; color:var(--ink); background:var(--bg); border:1.5px solid var(--line); border-radius:10px; }
+.results{ list-style:none; margin:0; padding:4px; background:var(--surface); border:1px solid var(--line); border-radius:12px; display:flex; flex-direction:column; box-shadow:0 8px 24px color-mix(in srgb, var(--ink) 10%, transparent); }
+.hit{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; text-align:left; background:none; border:0; padding:11px 10px; border-radius:8px; cursor:pointer; }
+.hit:hover{ background:var(--accent-soft); }
+.hit-name{ font-weight:700; min-width:0; overflow-wrap:anywhere; }
+.noresult{ padding:12px 10px; color:var(--muted); }
+
+/* Buttons */
+.btn{ display:inline-flex; align-items:center; gap:6px; min-height:40px; box-sizing:border-box; padding:8px 14px; border-radius:999px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); font-weight:700; font-size:.9rem; cursor:pointer; }
+.btn:hover{ border-color:var(--accent); }
+.btn-primary{ min-height:54px; border:0; border-radius:14px; background:var(--plaque); color:var(--plaque-ink); font-family:var(--f-display); font-weight:600; font-size:1.12rem; letter-spacing:.01em; cursor:pointer; }
+.btn-primary:hover{ filter:brightness(1.15); }
+.linkbtn{ background:none; border:0; padding:4px 2px; color:var(--accent); font-weight:700; font-size:inherit; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+.back{ align-self:flex-start; text-decoration:none; padding:2px 0; font-size:.92rem; }
+.vh{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.vh:focus-visible + .btn{ outline:2.5px solid var(--focus); outline-offset:2px; }
+.src-actions, .st-actions{ display:flex; flex-wrap:wrap; gap:8px; }
+
+/* Trip form */
+.trip-form{ display:flex; flex-direction:column; gap:14px; }
+.od{ display:grid; grid-template-columns:18px minmax(0, 1fr) 44px; gap:0 10px; align-items:start; }
+.od-rail{ grid-row:1 / span 2; display:flex; flex-direction:column; align-items:center; padding:20px 0; height:100%; box-sizing:border-box; }
+.od-rail .o, .od-rail .d{ width:12px; height:12px; border-radius:50%; flex:none; box-sizing:border-box; }
+.od-rail .o{ border:3px solid var(--plaque); }
+.od-rail .d{ background:var(--plaque); }
+.od-rail .track{ flex:1; width:3px; margin:4px 0; background:repeating-linear-gradient(to bottom, var(--line) 0 5px, transparent 5px 9px); }
+.tf{ display:flex; flex-direction:column; gap:6px; min-width:0; }
+.tf + .tf{ margin-top:10px; }
+.swap{ grid-column:3; grid-row:1 / span 2; align-self:center; width:44px; height:44px; border-radius:50%; border:1.5px solid var(--line); background:var(--surface); color:var(--accent); cursor:pointer; display:grid; place-items:center; }
+.swap svg{ width:20px; height:20px; }
+.quick{ display:flex; flex-wrap:wrap; gap:6px; }
+.quick:empty{ display:none; }
+.trip-opts{ display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; }
+.opt{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+.opt .select{ width:100%; }
+.trip-opts .check{ grid-column:1 / -1; order:3; }
+.check{ display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:700; }
+.check input{ width:22px; height:22px; margin:0; flex:none; accent-color:var(--plaque); }
+
+/* Trip status and results */
+.trip-status{ font-size:.94rem; color:var(--muted); display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; }
+.trip-status:empty{ display:none; }
+.trip-status.is-example{ background:var(--pass); border:1.5px dashed var(--pass-line); border-radius:var(--r); padding:10px 14px; color:var(--ink); }
+.trip-status.is-error{ color:var(--bad); font-weight:700; }
+.key-help{ display:block; margin-top:4px; color:var(--ink); font-weight:400; }
+.trip-warn{ display:block; font-weight:700; color:var(--bad); }
+.journeys{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+.journey{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px; display:flex; flex-direction:column; gap:12px; min-width:0; }
+.journey.is-best{ border-color:var(--ok); box-shadow:inset 0 0 0 1px var(--ok); }
+.j-tags{ display:flex; flex-wrap:wrap; gap:6px; }
+.jt{ font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:.24em .62em; border-radius:6px; }
+.jt.best{ background:var(--ok-soft); color:var(--ok); }
+.jt.bad{ background:var(--bad-soft); color:var(--bad); }
+.jt.free{ background:var(--accent-soft); color:var(--accent); }
+.jt.stairs, .jt.okish{ background:var(--warn-soft); color:var(--warn); }
+.jt.fast{ background:var(--unk-soft); color:var(--ink); }
+.j-main{ display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 12px; }
+.j-dur{ font-family:var(--f-display); font-weight:600; font-size:2rem; line-height:1; }
+.j-times{ color:var(--muted); font-size:.92rem; }
+.j-why{ font-size:.95rem; line-height:1.45; }
+.j-lines{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+.line{ display:inline-flex; align-items:center; min-height:26px; padding:0 .55em; border-radius:6px; background:var(--plaque); color:var(--plaque-ink); font-family:var(--f-sign); font-weight:700; font-size:1rem; letter-spacing:.01em; white-space:nowrap; }
+.j-sep{ color:var(--muted); }
+.j-checks{ list-style:none; margin:0; padding:12px 0 0; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:9px; }
+.j-checks li{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; }
+.j-role{ width:4.4em; flex:none; font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.j-st{ font-weight:700; min-width:0; overflow-wrap:anywhere; }
+.j-note{ font-size:.82rem; color:var(--muted); }
+.j-steps summary{ cursor:pointer; font-weight:700; color:var(--accent); font-size:.92rem; }
+.j-steps ol{ list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:12px; }
+.step{ display:grid; grid-template-columns:4.8em 1fr; gap:10px; align-items:start; font-size:.92rem; }
+.step > span:last-child{ min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:3px; }
+.step-k{ font-size:.74rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; padding-top:3px; }
+.stlink{ background:none; border:0; padding:0; font:inherit; font-weight:700; color:var(--ink); text-align:left; cursor:pointer; text-decoration:underline; text-decoration-color:color-mix(in srgb, var(--accent) 45%, transparent); text-decoration-thickness:1.5px; text-underline-offset:3px; }
+.stlink:hover{ color:var(--accent); }
+.more-routes > summary{ cursor:pointer; list-style:none; text-align:center; font-weight:700; color:var(--accent); padding:12px; border:1.5px dashed var(--line); border-radius:var(--r); }
+.more-routes > summary::-webkit-details-marker{ display:none; }
+.more-routes[open] > summary{ margin-bottom:12px; }
+
+/* Saved stations */
+.favs{ display:flex; flex-direction:column; gap:6px; }
+.chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.fav{ display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border:1.5px solid var(--line); background:var(--surface); border-radius:999px; cursor:pointer; font-weight:700; font-size:.9rem; }
+.fav:hover{ border-color:var(--accent); }
+.fav.is-current{ border-color:var(--accent); background:var(--accent-soft); }
+.sdot{ width:9px; height:9px; border-radius:50%; flex:none; background:var(--unk); }
+.sdot.ok{ background:var(--ok); } .sdot.warn{ background:var(--warn); } .sdot.bad{ background:var(--bad); }
+
+/* Enamel station plaque */
+.plaque{ display:inline-block; max-width:100%; box-sizing:border-box; overflow-wrap:anywhere; font-family:var(--f-sign); font-weight:600; line-height:1.15; letter-spacing:.01em;
+  background:var(--plaque); color:var(--plaque-ink); border-radius:7px; padding:.3em .75em .34em;
+  box-shadow:inset 0 0 0 2px var(--plaque), inset 0 0 0 3.5px var(--plaque-rim); }
+.plaque-lg{ font-size:clamp(1.5rem, 6.4vw, 2.05rem); border-radius:9px; padding:.3em .7em .36em; }
+.plaque-sm{ font-size:1.05rem; }
+
+/* Station */
+.st-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.st-meta{ color:var(--muted); font-size:.9rem; display:flex; flex-wrap:wrap; gap:4px 8px; align-items:center; margin-top:-4px; }
+.save{ display:inline-flex; align-items:center; gap:6px; flex:none; padding:8px 12px; min-height:40px; border:1.5px solid var(--line); background:var(--surface); border-radius:999px; cursor:pointer; font-weight:700; font-size:.9rem; }
+.save svg{ width:18px; height:18px; }
+.save[aria-pressed="true"]{ border-color:var(--accent); background:var(--accent-soft); color:var(--accent); --star-fill:currentColor; }
+.verdict{ display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border-radius:var(--r); }
+.verdict svg{ width:30px; height:30px; flex:none; }
+.verdict.ok{ background:var(--ok-soft); color:var(--ok); }
+.verdict.warn{ background:var(--warn-soft); color:var(--warn); }
+.verdict.bad{ background:var(--bad-soft); color:var(--bad); }
+.verdict.unk{ background:var(--unk-soft); color:var(--unk); }
+.v-title{ font-weight:700; font-size:1.18rem; line-height:1.25; }
+.v-sub{ color:var(--ink); margin-top:2px; }
+.lifts{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
+.lift{ display:flex; flex-direction:column; gap:2px; padding:12px 0; border-top:1px solid var(--line); }
+.lift:first-child{ border-top:0; padding-top:4px; }
+.lift-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.lift-where{ font-weight:700; min-width:0; overflow-wrap:anywhere; }
+.lift-dir{ color:var(--muted); font-size:.92rem; }
+.lift-meta{ color:var(--muted); font-size:.85rem; }
+.chip{ display:inline-block; font-size:.78rem; font-weight:700; padding:.18em .62em; border-radius:999px; white-space:nowrap; flex:none; }
+.chip.ok{ background:var(--ok-soft); color:var(--ok); }
+.chip.out{ background:var(--bad-soft); color:var(--bad); }
+.chip.unknown{ background:var(--unk-soft); color:var(--unk); }
+.chip.warn{ background:var(--warn-soft); color:var(--warn); }
+.tag{ display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:.1em .5em; border-radius:5px; background:var(--warn-soft); color:var(--warn); }
+.tag.sample{ background:var(--sample-soft); color:var(--sample); border:1px solid var(--sample-line); }
+.planb{ display:flex; flex-direction:column; gap:8px; padding-top:14px; border-top:1px dashed var(--line); }
+.rows{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
+.rows > li + li{ border-top:1px solid var(--line); }
+.row{ width:100%; display:flex; align-items:center; gap:10px; text-align:left; background:none; border:0; padding:12px 6px; border-radius:10px; cursor:pointer; }
+.row:hover{ background:var(--accent-soft); }
+.row > svg{ width:20px; height:20px; flex:none; color:var(--muted); }
+.row-main{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
+.row-meta{ color:var(--muted); font-size:.9rem; display:flex; flex-wrap:wrap; gap:4px 8px; align-items:center; }
+.rowwrap{ display:flex; align-items:center; gap:4px; }
+.rowwrap .row{ flex:1; min-width:0; }
+.walk{ flex:none; padding:8px 6px; font-weight:700; font-size:.88rem; color:var(--accent); }
+
+/* Lifts out */
+.bar{ display:flex; height:12px; border-radius:6px; overflow:hidden; background:var(--unk-soft); }
+.seg.ok{ background:var(--ok); } .seg.out{ background:var(--bad); min-width:3px; } .seg.unknown{ background:var(--unk); }
+.seg.out.zero{ min-width:0; }
+.legend{ display:flex; flex-wrap:wrap; gap:4px 16px; font-size:.88rem; color:var(--muted); }
+.legend span{ display:inline-flex; align-items:center; gap:6px; }
+.sw{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+.sw.ok{ background:var(--ok); } .sw.out{ background:var(--bad); } .sw.unknown{ background:var(--unk); }
+.happy{ display:flex; align-items:center; gap:12px; padding:8px 0; color:var(--ok); font-weight:700; }
+
+/* Settings */
+.conn-form{ display:flex; flex-direction:column; gap:8px; }
+.conn-form .label{ margin-top:4px; }
+.conn-status{ font-size:.88rem; color:var(--muted); min-height:1.2em; }
+.data-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; font-size:.92rem; }
+.data-list li{ display:flex; gap:8px; align-items:baseline; }
+.data-list .dot{ position:relative; top:1px; }
+.diag{ font-size:.86rem; }
+.diag summary{ cursor:pointer; font-weight:700; color:var(--accent); padding:2px 0; }
+.diag ol{ margin:8px 0; padding-left:1.25em; display:flex; flex-direction:column; gap:10px; }
+.diag-url{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.74rem; color:var(--muted); overflow-wrap:anywhere; }
+.diag-err{ color:var(--bad); font-weight:700; }
+.how{ font-size:.92rem; }
+.how summary{ cursor:pointer; font-family:var(--f-display); font-weight:600; font-size:1.2rem; }
+.how ol{ margin:10px 0 0; padding-left:1.2em; display:flex; flex-direction:column; gap:8px; color:var(--muted); }
+.about p{ color:var(--muted); font-size:.9rem; }
+.about a{ color:var(--accent); }
+.made{ display:flex; align-items:center; gap:10px; font-family:var(--f-display); font-weight:500; color:var(--ink) !important; font-size:1rem !important; }
+
+/* Bottom tab bar */
+.tabbar{ position:fixed; left:0; right:0; bottom:0; z-index:20; background:var(--surface); border-top:1px solid var(--line);
+  padding:6px max(16px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.tabbar-in{ max-width:600px; margin:0 auto; display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; }
+.tab{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:56px; border:0; background:none; border-radius:12px; color:var(--muted); font-size:.74rem; font-weight:700; cursor:pointer; }
+.tab svg{ width:24px; height:24px; }
+.tab[aria-selected="true"]{ color:var(--accent); background:var(--accent-soft); }
+.tab-count{ position:absolute; top:4px; left:calc(50% + 6px); min-width:1.4em; padding:0 .35em; border-radius:999px; background:var(--bad); color:var(--surface); font-size:.68rem; line-height:1.5; text-align:center; }
+.tab-count:empty{ display:none; }
+
+@media (prefers-reduced-motion: reduce){ .pulse, .rolling .wheel{ animation:none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="pram" viewBox="0 0 54 46" aria-hidden="true">
+        <path d="M9 23 A15 15 0 0 1 24 8 L24 23 Z" fill="var(--sun)"/>
+        <path d="M6 23 H42 Q42 34 30 34 H18 Q6 34 6 23 Z" fill="var(--plaque)"/>
+        <path d="M42 23 L48 12" fill="none" stroke="var(--plaque)" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="48.5" cy="11" r="2.6" fill="var(--sun)"/>
+        <g class="wheel"><circle cx="15" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><path d="M15 34.5 V43.5" stroke="var(--ink)" stroke-width="1.6"/></g>
+        <g class="wheel"><circle cx="34" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><path d="M34 34.5 V43.5" stroke="var(--ink)" stroke-width="1.6"/></g>
+      </svg>
+      <div>
+        <h1>Matteo in Transit</h1>
+        <p class="lede">Lift-friendly routes around Paris for Maria &amp; Matteo</p>
+        <button type="button" id="source" class="status-pill" data-view="settings" aria-label="Data status"><span class="dot pulse"></span>Waking up the lifts…</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="view-trip" class="view" role="tabpanel" aria-labelledby="tab-trip">
+    <div class="pass" aria-label="Matteo's boarding pass">
+      <div class="pass-fields">
+        <div><p class="pass-k">Passenger</p><p class="pass-v">Matteo</p></div>
+        <div><p class="pass-k">Class</p><p class="pass-v">Pram, first</p></div>
+        <div class="pass-wide"><p class="pass-k">Departs</p><p class="pass-v">After the nap</p></div>
+      </div>
+      <div class="pass-stub"><p class="pass-k">Gate</p><p class="pass-v">Lifts only</p></div>
+    </div>
+
+    <section class="panel" aria-labelledby="trip-h">
+      <h2 id="trip-h" class="panel-h">Where to, Matteo?</h2>
+      <form id="trip-form" class="trip-form" autocomplete="off" novalidate>
+        <div class="od">
+          <div class="od-rail" aria-hidden="true"><span class="o"></span><span class="track"></span><span class="d"></span></div>
+          <div>
+            <div class="tf">
+              <label for="from" class="label">From</label>
+              <input id="from" class="input" type="text" autocomplete="off" spellcheck="false" enterkeyhint="next" placeholder="Station, address or place">
+              <ul id="from-sug" class="results" hidden></ul>
+            </div>
+            <div class="tf">
+              <label for="to" class="label">To</label>
+              <input id="to" class="input" type="text" autocomplete="off" spellcheck="false" enterkeyhint="search" placeholder="Station, address or place">
+              <ul id="to-sug" class="results" hidden></ul>
+            </div>
+          </div>
+          <button type="button" id="swap" class="swap" aria-label="Swap start and destination"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v15M8 4 4.5 7.5M8 4l3.5 3.5M16 20V5m0 15-3.5-3.5M16 20l3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div id="trip-favs" class="quick"></div>
+        <div class="trip-opts">
+          <label class="check" for="bus"><input type="checkbox" id="bus" checked>Buses</label>
+          <div class="opt">
+            <label for="stairs-pref" class="label">Stairs</label>
+            <select id="stairs-pref" class="select">
+              <option value="avoid">Avoid</option>
+              <option value="ok">A few are OK</option>
+            </select>
+          </div>
+          <div class="opt">
+            <label for="maxwalk" class="label">Walk</label>
+            <select id="maxwalk" class="select">
+              <option value="10">≤ 10 min</option>
+              <option value="15" selected>≤ 15 min</option>
+              <option value="20">≤ 20 min</option>
+              <option value="30">≤ 30 min</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">Find Matteo's route</button>
+      </form>
+    </section>
+    <div id="trip-status" class="trip-status" role="status"></div>
+    <ol id="trip-results" class="journeys"></ol>
+    <details id="trip-more" class="more-routes" hidden>
+      <summary id="trip-more-label">Show more routes</summary>
+      <ol id="trip-more-list" class="journeys"></ol>
+    </details>
+  </div>
+
+  <div id="view-station" class="view" role="tabpanel" aria-labelledby="tab-station" hidden>
+    <section class="panel" aria-labelledby="st-h">
+      <h2 id="st-h" class="panel-h">Station check</h2>
+      <div class="field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="q" class="input" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search" placeholder="Which station?" aria-label="Station">
+      </div>
+      <ul id="results" class="results" hidden></ul>
+      <div id="favs" class="favs"></div>
+    </section>
+    <section id="station" class="panel" aria-live="polite">
+      <p class="hint">Search for a station to check its lifts.</p>
+    </section>
+  </div>
+
+  <div id="view-out" class="view" role="tabpanel" aria-labelledby="tab-out" hidden>
+    <section class="panel" aria-labelledby="out-h">
+      <div class="sec-head"><h2 id="out-h" class="panel-h">Lifts out today</h2><span id="out-count" class="count tnum"></span></div>
+      <div id="summary"></div>
+      <ul id="outages" class="rows"></ul>
+    </section>
+  </div>
+
+  <div id="view-settings" class="view" role="tabpanel" aria-labelledby="tab-settings" hidden>
+    <section id="conn" class="panel" aria-labelledby="conn-h">
+      <h2 id="conn-h" class="panel-h">Connect to IDFM</h2>
+      <form id="conn-form" class="conn-form" novalidate>
+        <p class="hint">Live lifts and route planning use a free key from <a href="https://prim.iledefrance-mobilites.fr/" target="_blank" rel="noopener">PRIM</a>, IDFM's open data site. It stays on this device.</p>
+        <label for="k" class="label">PRIM API key</label>
+        <input id="k" class="input" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your key">
+        <label for="k2" class="label">Route planner key (only if different)</label>
+        <input id="k2" class="input" type="password" autocomplete="off" spellcheck="false" placeholder="Leave empty to use the same key">
+        <label for="u" class="label">Lift data address (optional)</label>
+        <input id="u" class="input" type="url" autocomplete="off" spellcheck="false" placeholder="Leave empty for IDFM's standard one">
+        <div class="src-actions">
+          <button type="submit" class="btn">Save and load live data</button>
+          <button type="button" id="forget" class="btn">Remove key</button>
+        </div>
+        <p id="conn-status" class="conn-status" role="status"></p>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="data-h">
+      <h2 id="data-h" class="panel-h">Data</h2>
+      <div id="data-panel"></div>
+    </section>
+
+    <section class="panel">
+      <details class="how">
+        <summary>How routes are ranked</summary>
+        <ol>
+          <li>Time comes first: each route starts from the minutes until you arrive, including any wait.</li>
+          <li>Extra minutes are added for what's harder with a pram. Stairs where a lift is missing or out: ~1 flight +8, 2–3 flights +15, a deep or large station +22 (with “A few are OK”: +3, +6, +10). Lifts partly out or with no status +6, step-free only with staff help +5, each change +4, each bus ride +2, a station with a single lift +2.</li>
+          <li>Walking up to 10 minutes counts as normal, a little more up to your limit, and double past it.</li>
+          <li>Stair sizes come from the station type: deep RER and train stations in Paris and big hubs 4+ flights, suburban train stations about 1, metro stations 2–3.</li>
+        </ol>
+      </details>
+    </section>
+
+    <section class="panel about">
+      <p class="made"><svg class="mini-pram" viewBox="0 0 54 46" aria-hidden="true"><path d="M9 23 A15 15 0 0 1 24 8 L24 23 Z" fill="var(--sun)"/><path d="M6 23 H42 Q42 34 30 34 H18 Q6 34 6 23 Z" fill="var(--plaque)"/><path d="M42 23 L48 12" fill="none" stroke="var(--plaque)" stroke-width="3.5" stroke-linecap="round"/><circle cx="15" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><circle cx="34" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/></svg>Made for Maria &amp; Matteo</p>
+      <p>Lift status, stations and accessibility ratings: <a href="https://prim.iledefrance-mobilites.fr/en/jeux-de-donnees/etat-des-ascenseurs" target="_blank" rel="noopener">Île-de-France Mobilités open data</a>. Routes: IDFM's journey planner.</p>
+    </section>
+  </div>
+</div>
+
+<nav class="tabbar" aria-label="Sections">
+  <div class="tabbar-in" role="tablist">
+    <button type="button" class="tab" role="tab" id="tab-trip" aria-controls="view-trip" aria-selected="true" data-view="trip">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6" r="2.5" fill="currentColor"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Trip</button>
+    <button type="button" class="tab" role="tab" id="tab-station" aria-controls="view-station" aria-selected="false" data-view="station">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 12h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Stations</button>
+    <button type="button" class="tab" role="tab" id="tab-out" aria-controls="view-out" aria-selected="false" data-view="out">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v18M8 9.5l-1.5 2h3zM16 14.5l-1.5-2h3z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>Lifts out<span id="tab-out-count" class="tab-count tnum"></span></button>
+    <button type="button" class="tab" role="tab" id="tab-settings" aria-controls="view-settings" aria-selected="false" data-view="settings">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Settings</button>
+  </div>
+</nav>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- Config ---------- */
+// IDFM lift-status endpoints (Opendatasoft API). The feed refuses anonymous requests, so the page sends a free PRIM API key
+// that the viewer types in; it stays in their browser only. Add ?src=<url> to the page address to try another endpoint first.
+const IDFM = 'https://data.iledefrance-mobilites.fr';
+const DATASET = 'etat-des-ascenseurs';
+const CFG_KEY = 'lift-or-stairs:idfm';
+function liveSources(){
+  const list = [];
+  const paged = url => /\/records(\?|$)/.test(url);
+  try {
+    const custom = new URLSearchParams(location.search).get('src');
+    if (custom) list.push({ label:'Custom source (?src=)', url:custom, paged:paged(custom) });
+  } catch (e){}
+  if (state.cfg.url) list.push({ label:'Your data URL', url:state.cfg.url, paged:paged(state.cfg.url) });
+  list.push(
+    { label:'Explore API v2.1 · records, page by page', url:`${IDFM}/api/explore/v2.1/catalog/datasets/${DATASET}/records`, paged:true },
+    { label:'Explore API v2.1 · full export', url:`${IDFM}/api/explore/v2.1/catalog/datasets/${DATASET}/exports/json` }
+  );
+  return list;
+}
+const STALE_HOURS = 12;             // older than this gets an "old info" tag
+const PRAM_M_PER_MIN = 4000 / 60;   // 4 km/h pushing a pram
+const DETOUR = 1.3;                 // real streets are longer than a straight line
+const PLAN_B_RADIUS_M = 2000;
+const FAV_KEY = 'lift-or-stairs:favs';
+
+const ICON = {
+  check:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="currentColor" opacity=".18"/><path d="M7.2 12.4l3.1 3.1L16.9 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  alert:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="currentColor" opacity=".18"/><path d="M12 6.8v7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.4" fill="currentColor"/></svg>',
+  x:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="currentColor" opacity=".18"/><path d="M8.6 8.6l6.8 6.8M15.4 8.6l-6.8 6.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  q:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="currentColor" opacity=".18"/><path d="M9.4 9.4a2.6 2.6 0 1 1 3.6 2.4c-.7.3-1 .8-1 1.5v.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.3" fill="currentColor"/></svg>',
+  star:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="var(--star-fill, none)" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+const STATUS_LABEL = { ok:'Working', out:'Out of service', unknown:'No status' };
+
+/* ---------- Pure helpers ---------- */
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fold(s){ return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[-'’‐–—.]/g, ' ').replace(/\s+/g, ' ').trim(); }
+
+// Field names follow IDFM's documentation (liftStatus, ZdCName…); matching is case-insensitive with fallbacks in case the schema shifts.
+function pick(rec, names){
+  for (const n of names){
+    const want = n.toLowerCase();
+    for (const k in rec){
+      if (k.toLowerCase() === want){
+        const v = rec[k];
+        if (v !== null && v !== undefined && v !== '') return v;
+      }
+    }
+  }
+  return null;
+}
+
+function normStatus(v){
+  const s = fold(v);
+  if (!s) return 'unknown';
+  if (/unknown|information|non disponible|inconnu/.test(s)) return 'unknown';
+  if (/notavailable|not available|hors|indisponible/.test(s)) return 'out';
+  if (/available|disponible|en service/.test(s)) return 'ok';
+  return 'unknown';
+}
+
+function reasonLabel(v){
+  const s = fold(v);
+  if (!s) return '';
+  if (/failure|technique/.test(s)) return 'Technical fault';
+  if (/maintenance|travaux/.test(s)) return 'Works or maintenance';
+  if (/undefined|autre/.test(s)) return 'Other problem';
+  return String(v);
+}
+
+// Lambert-93 (EPSG:2154) to WGS84, the projection IDFM uses for ZdCXEpsg2154 / ZdCYEpsg2154.
+function l93ToWgs84(X, Y){
+  const n = 0.7256077650532670, C = 11754255.4261, Xs = 700000, Ys = 12655612.0499;
+  const e = 0.0818191910428158, lon0 = 3 * Math.PI / 180;
+  const dx = X - Xs, dy = Y - Ys;
+  const R = Math.hypot(dx, dy);
+  const lon = lon0 + Math.atan2(dx, -dy) / n;
+  const L = -Math.log(R / C) / n;
+  let p = 2 * Math.atan(Math.exp(L)) - Math.PI / 2;
+  for (let i = 0; i < 8; i++){
+    const es = e * Math.sin(p);
+    p = 2 * Math.atan(Math.pow((1 + es) / (1 - es), e / 2) * Math.exp(L)) - Math.PI / 2;
+  }
+  return { lat: p * 180 / Math.PI, lon: lon * 180 / Math.PI };
+}
+
+function coordsOf(rec){
+  const geo = pick(rec, ['geo_point_2d', 'stop_point_geopoint', 'geopoint', 'geo_point', 'coordonnees', 'coordinates']);
+  if (geo){
+    if (Array.isArray(geo) && geo.length === 2) return { lat:+geo[0], lon:+geo[1] };
+    if (typeof geo === 'object' && geo.lat != null) return { lat:+geo.lat, lon:+(geo.lon != null ? geo.lon : geo.lng) };
+    if (typeof geo === 'string' && geo.includes(',')){
+      const [a, b] = geo.split(',').map(parseFloat);
+      if (isFinite(a) && isFinite(b)) return { lat:a, lon:b };
+    }
+  }
+  const x = parseFloat(pick(rec, ['ZdCXEpsg2154', 'zdcx', 'x_l93', 'coord_x', 'x'])), y = parseFloat(pick(rec, ['ZdCYEpsg2154', 'zdcy', 'y_l93', 'coord_y', 'y']));
+  if (isFinite(x) && isFinite(y)){
+    if (x > 1e5 && y > 6e6) return l93ToWgs84(x, y);
+    if (Math.abs(x) <= 180 && y > 40 && y <= 90) return { lat:y, lon:x };
+  }
+  const lat = parseFloat(pick(rec, ['lat', 'latitude'])), lon = parseFloat(pick(rec, ['lon', 'lng', 'longitude']));
+  if (isFinite(lat) && isFinite(lon)) return { lat, lon };
+  return null;
+}
+
+function parseDate(v){
+  if (!v) return null;
+  let s = String(v).trim();
+  if (/^\d{4}-\d{2}-\d{2} \d/.test(s)) s = s.replace(' ', 'T');
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
+}
+
+const liftRank = l => l.status === 'out' ? 0 : l.status === 'unknown' ? 1 : 2;
+
+function buildStations(records){
+  const map = new Map();
+  for (const rec of records){
+    if (!rec || typeof rec !== 'object') continue;
+    const name = pick(rec, ['ZdCName', 'zdc_name', 'nom_zdc', 'zdcnom', 'nom_gare', 'station', 'gare', 'stop_name']);
+    if (!name) continue;
+    const id = String(pick(rec, ['ZdCId', 'zdc_id', 'id_zdc']) || fold(name));
+    let st = map.get(id);
+    if (!st){
+      const c = coordsOf(rec);
+      st = { id, name:String(name), lat:c ? c.lat : null, lon:c ? c.lon : null, lifts:[], zdcNum:digits(pick(rec, ['ZdCId', 'zdc_id', 'id_zdc'])) };
+      map.set(id, st);
+    } else if (st.lat == null){
+      const c = coordsOf(rec);
+      if (c){ st.lat = c.lat; st.lon = c.lon; }
+    }
+    st.lifts.push({
+      id: String(pick(rec, ['liftId', 'lift_id', 'id_ascenseur']) || ''),
+      where: String(pick(rec, ['liftSituation', 'situation', 'emplacement', 'localisation']) || 'Lift'),
+      dir: String(pick(rec, ['liftDirection', 'direction']) || ''),
+      status: normStatus(pick(rec, ['liftStatus', 'liftState', 'statut', 'etat', 'status'])),
+      reason: reasonLabel(pick(rec, ['liftReason', 'raison', 'motif', 'cause'])),
+      updated: parseDate(pick(rec, ['liftStateUpdate', 'date_maj', 'date_mise_a_jour', 'last_update', 'updated_at']))
+    });
+  }
+  return finalizeStations([...map.values()]);
+}
+
+function finalizeStations(stations){
+  for (const st of stations){
+    const c = { ok:0, out:0, unknown:0 };
+    let last = null;
+    for (const l of st.lifts){
+      c[l.status]++;
+      if (l.updated && (!last || l.updated > last)) last = l.updated;
+    }
+    st.counts = { ok:c.ok, out:c.out, unk:c.unknown, n:st.lifts.length };
+    st.last = last;
+    st.key = fold(st.name);
+    st.altKeys = st.altKeys || [];
+    st.lines = st.lines || [];
+    st.tramOnly = !!st.tramOnly;
+    st.lifts.sort((a, b) => liftRank(a) - liftRank(b));
+  }
+  stations.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+  return stations;
+}
+
+/* ---------- All rail stations (with or without lifts) ---------- */
+// IDFM dataset "Gares et stations du réseau ferré d'Île-de-France (par ligne)": one row per station per line.
+const RAIL_DATASET = 'emplacement-des-gares-idf';
+const LINE_COLORS = {
+  'M1':['FFCD00','000000'], 'M2':['003CA6','FFFFFF'], 'M3':['837902','FFFFFF'], 'M3bis':['6EC4E8','000000'], 'M4':['CF009E','FFFFFF'],
+  'M5':['FF7E2E','000000'], 'M6':['6ECA97','000000'], 'M7':['FA9ABA','000000'], 'M7bis':['6ECA97','000000'], 'M8':['E19BDF','000000'],
+  'M9':['B6BD00','000000'], 'M10':['C9910D','000000'], 'M11':['704B1C','FFFFFF'], 'M12':['007852','FFFFFF'], 'M13':['6EC4E8','000000'],
+  'M14':['62259D','FFFFFF'], 'RER A':['EB2132','FFFFFF'], 'RER B':['5091CB','FFFFFF'], 'RER C':['FFCE00','000000'], 'RER D':['00814F','FFFFFF'], 'RER E':['C04191','FFFFFF']
+};
+const KIND_ORDER = { metro:0, rer:1, train:2, tram:3, val:4, cable:5, navette:6, '':7 };
+const lineOrder = (a, b) => (KIND_ORDER[a.kind] - KIND_ORDER[b.kind]) || a.code.localeCompare(b.code, 'fr', { numeric:true });
+
+function railLine(rec){
+  const m = fold(pick(rec, ['mode', 'mode_transport', 'transportmode']) || '');
+  let kind = /metro/.test(m) ? 'metro' : /rer/.test(m) ? 'rer' : /tram/.test(m) ? 'tram' : /train|transilien/.test(m) ? 'train'
+    : /val/.test(m) ? 'val' : /cable/.test(m) ? 'cable' : /navette/.test(m) ? 'navette' : '';
+  if (!kind){
+    if (+pick(rec, ['metro'])) kind = 'metro'; else if (+pick(rec, ['rer'])) kind = 'rer';
+    else if (+pick(rec, ['tramway'])) kind = 'tram'; else if (+pick(rec, ['train'])) kind = 'train';
+  }
+  let code = String(pick(rec, ['indice_lig', 'ligne_code', 'ligne', 'res_com']) || '').trim();
+  code = code.replace(/^(m[eé]tro|rer|train|tramway|tram|ligne)\s+/i, '');
+  if (!code && !kind) return null;
+  const mode = { metro:'Métro', rer:'RER', tram:'Tramway', train:'Train', val:'VAL', cable:'Câble', navette:'Navette' }[kind] || '';
+  const short = modeShort(mode, code);
+  const col = LINE_COLORS[(short === 'M' ? 'M' : short === 'RER' ? 'RER ' : '') + code];
+  return { kind, mode, code, label:(short ? short + ' ' : '') + code, color:col ? col[0] : '', text:col ? col[1] : '' };
+}
+
+const digits = v => (v == null ? '' : String(v).replace(/\.0+$/, '').replace(/\D/g, ''));
+
+function buildRail(records){
+  const groups = [];
+  const byZdc = new Map();
+  for (const rec of records){
+    if (!rec || typeof rec !== 'object') continue;
+    const name = pick(rec, ['nom_zdc', 'nom_gares', 'nom_gare', 'nomlong', 'nom_long', 'nom_so_gar', 'nom']);
+    const c = coordsOf(rec);
+    if (!name || !c) continue;
+    const zdc = digits(pick(rec, ['id_ref_zdc', 'idrefzdc', 'zdc_id']));
+    const k = fold(name);
+    let g = (zdc && byZdc.get(zdc)) || groups.find(x => x.key === k && distM(x, c) < 800);
+    if (!g){ g = { key:k, name:String(name), lat:c.lat, lon:c.lon, lines:[], zdc:new Set() }; groups.push(g); }
+    if (zdc){ g.zdc.add(zdc); byZdc.set(zdc, g); }
+    const line = railLine(rec);
+    if (line && !g.lines.some(l => l.label === line.label)) g.lines.push(line);
+  }
+  for (const g of groups){
+    g.lines.sort(lineOrder);
+    g.tramOnly = g.lines.length > 0 && g.lines.every(l => l.kind === 'tram');
+  }
+  return groups;
+}
+
+// Attach each lift station to the rail station with the same name nearby (or the closest one within 250 m).
+function mergeStations(liftStations, rail){
+  if (!rail.length) return liftStations;
+  const out = rail.map(r => ({ id:`R:${r.key}:${r.lat.toFixed(4)}`, name:r.name, lat:r.lat, lon:r.lon, lines:r.lines.slice(), tramOnly:r.tramOnly, lifts:[], altKeys:[], zdc:r.zdc || new Set() }));
+  for (const ls of liftStations){
+    let best = null, bestScore = Infinity;
+    // Same IDFM station ID first; otherwise same name nearby, or the closest station within 250 m.
+    if (ls.zdcNum) best = out.find(r => r.zdc && r.zdc.has(ls.zdcNum)) || null;
+    if (best){ /* matched by ID */ }
+    else if (ls.lat != null){
+      for (const r of out){
+        const d = distM(ls, r);
+        const same = fold(r.name) === ls.key;
+        if ((same && d < 800) || d < 250){
+          const score = same ? d / 10 : d;
+          if (score < bestScore){ best = r; bestScore = score; }
+        }
+      }
+    } else {
+      best = out.find(r => fold(r.name) === ls.key) || null;
+    }
+    if (best){
+      best.lifts.push(...ls.lifts);
+      if (fold(best.name) !== ls.key && !best.altKeys.includes(ls.key)) best.altKeys.push(ls.key);
+    } else {
+      out.push({ id:ls.id, name:ls.name, lat:ls.lat, lon:ls.lon, lines:[], tramOnly:false, lifts:ls.lifts.slice(), altKeys:[], zdc:new Set() });
+    }
+  }
+  return finalizeStations(out);
+}
+
+function sampleRailRecords(){
+  const R = [
+    ['Madeleine', 48.8705, 2.3253, 'METRO', ['8', '12', '14']], ['Saint-Lazare', 48.8754, 2.3254, 'METRO', ['3', '12', '13', '14']],
+    ['Pyramides', 48.8657, 2.3343, 'METRO', ['7', '14']], ['Châtelet - Les Halles', 48.8616, 2.3468, 'RER', ['A', 'B', 'D']],
+    ['Gare de Lyon', 48.8443, 2.3740, 'METRO', ['1', '14']], ['Gare de Lyon', 48.8443, 2.3740, 'RER', ['A', 'D']],
+    ['Gare du Nord', 48.8809, 2.3553, 'METRO', ['4', '5']], ['Gare du Nord', 48.8809, 2.3553, 'RER', ['B', 'D']],
+    ['Magenta', 48.8814, 2.3575, 'RER', ['E']], ['Haussmann Saint-Lazare', 48.8738, 2.3283, 'RER', ['E']], ['Auber', 48.8721, 2.3299, 'RER', ['A']],
+    ['Opéra', 48.8712, 2.3316, 'METRO', ['3', '7', '8']], ['Concorde', 48.8656, 2.3212, 'METRO', ['1', '8', '12']],
+    ['Saint-Augustin', 48.8746, 2.3209, 'METRO', ['9']], ['Bercy', 48.8402, 2.3794, 'METRO', ['6', '14']],
+    ['Nation', 48.8483, 2.3959, 'METRO', ['1', '2', '6', '9']], ['Nation', 48.8483, 2.3959, 'RER', ['A']]
+  ];
+  const recs = [];
+  for (const [nom, lat, lon, mode, lines] of R) for (const l of lines) recs.push({ nom_gare:nom, mode, indice_lig:l, geo_point_2d:{ lat, lon } });
+  return recs;
+}
+
+function verdict(st){
+  const { ok, out, unk, n } = st.counts;
+  if (n === 0){
+    if (st.tramOnly) return { cls:'ok', dot:'ok', icon:ICON.check, title:'Street-level tram stop', sub:'Tram stops are at street level, so no lift is needed.' };
+    if (st.access === 6) return { cls:'ok', dot:'ok', icon:ICON.check, title:'Step-free without a lift',
+      sub:'IDFM rates this station accessible on your own: you can reach the platform without stairs.' };
+    if (st.access === 4) return { cls:'warn', dot:'warn', icon:ICON.alert, title:'Step-free with staff help',
+      sub:'IDFM rates this station accessible with help from station staff, for example a ramp. Ask at the ticket office.' };
+    const size = stairEstimate(st, st, '');
+    return { cls:'bad', dot:'bad', icon:ICON.x, title:'No lift at this station',
+      sub:`Expect ${STAIRS[size].text} between the street and the platform.${st.access === 3 ? ' Assistance is only available by booking ahead through Assist\'enGare.' : ''} Plan B shows the nearest stations with working lifts.` };
+  }
+  if (out > 0 && ok > 0) return { cls:'warn', dot:'warn', icon:ICON.alert, title:'Some lifts out',
+    sub:`${out} of ${n} lifts out of service. Check whether it's the one you need, or use Plan B.` };
+  if (out > 0) return { cls:'bad', dot:'bad', icon:ICON.x, title:'No working lift',
+    sub: n === 1 ? 'The only lift here is out of service.' : `All ${n} lifts are out of service.` };
+  if (unk > 0 && ok > 0) return { cls:'ok', dot:'ok', icon:ICON.check, title:'Lifts working',
+    sub:`${ok} working at the last check, ${unk} with no status.` };
+  if (unk > 0) return { cls:'unk', dot:'', icon:ICON.q, title:'No status right now',
+    sub:'The last check gave no status. Ask station staff, or pick a station from Plan B.' };
+  return { cls:'ok', dot:'ok', icon:ICON.check, title:'All lifts working',
+    sub: n === 1 ? 'The lift was working at the last check.' : `All ${n} lifts were working at the last check.` };
+}
+
+function shortStatus(st){
+  const { ok, out, unk, n } = st.counts;
+  if (n === 0) return st.tramOnly ? { cls:'ok', text:'Street level' } : st.access === 6 ? { cls:'ok', text:'Step-free' }
+    : st.access === 4 ? { cls:'warn', text:'Staff help' } : { cls:'warn', text:'No lift' };
+  if (out > 0) return ok > 0 ? { cls:'warn', text:`${out} out` } : { cls:'out', text:'Out' };
+  if (ok > 0) return { cls:'ok', text: unk ? 'Working' : 'All working' };
+  return { cls:'unknown', text:'No status' };
+}
+
+function distM(a, b){
+  const R = 6371000, r = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * r, dLon = (b.lon - a.lon) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+const walkMin = d => Math.max(1, Math.round(d * DETOUR / PRAM_M_PER_MIN));
+const fmtDist = d => d < 1000 ? `${Math.round(d / 10) * 10} m` : `${(d / 1000).toFixed(1)} km`;
+const fmtNum = n => n.toLocaleString('en-GB');
+
+function planB(st, stations){
+  if (st.lat == null) return null;
+  return stations
+    .filter(s => s !== st && s.lat != null && ((s.counts.out === 0 && s.counts.ok > 0) || (s.counts.n === 0 && s.access === 6)))
+    .map(s => ({ s, d:distM(st, s) }))
+    .filter(x => x.d <= PLAN_B_RADIUS_M)
+    .sort((a, b) => a.d - b.d)
+    .slice(0, 3);
+}
+
+function ago(d){
+  const m = Math.round((Date.now() - d.getTime()) / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m} min ago`;
+  const h = Math.round(m / 60);
+  if (h < 36) return `${h} h ago`;
+  return `${Math.round(h / 24)} days ago`;
+}
+const isStale = d => !!d && (Date.now() - d.getTime()) > STALE_HOURS * 3600000;
+
+/* ---------- Sample data (used only when the live feed can't be reached) ---------- */
+// Real station names and approximate positions; every status is made up.
+function sampleRecords(){
+  const now = Date.now();
+  const t = m => new Date(now - m * 60000).toISOString();
+  const A = 'Disponible', O = 'Hors-service', U = 'Information non disponible';
+  const two = (m, s) => [["Accès rue ↔ salle des billets", 'Toutes directions', s || A, '', m], ['Salle des billets ↔ quais', 'Toutes directions', s || A, '', m]];
+  const S = [
+    ['S01', 'Madeleine', 650509, 6863597, [["Accès boulevard Malesherbes ↔ salle d'échanges", 'Toutes directions', O, 'closedForMaintenance', 150], ["Salle d'échanges ↔ quai ligne 14", "Direction Aéroport d'Orly", O, 'closedForMaintenance', 150]]],
+    ['S02', 'Saint-Lazare', 650521, 6864142, [["Accès rue Saint-Lazare ↔ salle d'échanges", 'Toutes directions', 'available', '', 95], ["Salle d'échanges ↔ quai ligne 14", 'Direction Saint-Denis Pleyel', 'available', '', 95], ["Salle d'échanges ↔ quai ligne 14", "Direction Aéroport d'Orly", 'available', '', 95]]],
+    ['S03', 'Pyramides', 651164, 6863058, [["Accès avenue de l'Opéra ↔ salle des billets", 'Toutes directions', A, '', 95], ['Salle des billets ↔ quais ligne 14', 'Toutes directions', A, '', 95]]],
+    ['S04', 'Châtelet - Les Halles', 652077, 6862594, [["Salle d'échanges ↔ quais RER B et D", 'Toutes directions', 'notavailable', 'liftFailure', 40], ["Accès Forum des Halles ↔ salle d'échanges", 'Toutes directions', A, '', 95], ["Salle d'échanges ↔ quais RER A", 'Toutes directions', A, '', 95], ["Salle d'échanges ↔ quai ligne 14", 'Toutes directions', A, '', 95]]],
+    ['S05', 'Gare de Lyon', 654058, 6860655, [["Accès boulevard Diderot ↔ salle d'échanges", 'Toutes directions', A, '', 95], ["Salle d'échanges ↔ quais RER A", 'Toutes directions', A, '', 95], ["Salle d'échanges ↔ quai ligne 14", 'Toutes directions', A, '', 95], ['Hall 1 ↔ quais RER D', 'Toutes directions', U, '', 95]]],
+    ['S06', 'Bercy', 654450, 6860196, two(95)],
+    ['S07', 'Cour Saint-Émilion', 654973, 6859435, two(95)],
+    ['S08', 'Bibliothèque François Mitterrand', 654206, 6859041, two(95)],
+    ['S09', 'Olympiades', 653529, 6858735, two(95)],
+    ['S10', 'Gare du Nord', 652719, 6864735, [["Salle d'échanges ↔ quais RER B et D", 'Toutes directions', O, 'liftFailure', 210], ["Accès rue de Dunkerque ↔ salle d'échanges", 'Toutes directions', A, '', 95], ["Salle d'échanges ↔ couloir Magenta", 'Toutes directions', A, '', 95]]],
+    ['S11', 'Magenta', 652880, 6864790, two(95)],
+    ['S12', 'Haussmann Saint-Lazare', 650732, 6863962, two(95)],
+    ['S13', 'Auber', 650847, 6863772, [["Accès rue Auber ↔ salle d'échanges", 'Toutes directions', A, '', 95], ["Salle d'échanges ↔ quais RER A", 'Direction Marne-la-Vallée', A, '', 95], ["Salle d'échanges ↔ quais RER A", 'Direction Saint-Germain-en-Laye', U, '', 95]]],
+    ['S14', 'Charles de Gaulle - Étoile', 648289, 6863984, two(95)],
+    ['S15', 'La Défense', 644128, 6866035, two(95)],
+    ['S16', 'Nation', 655668, 6861087, [['Accès place de la Nation ↔ salle des billets', 'Toutes directions', O, 'undefinedEquipmentProblem', 70], ['Salle des billets ↔ quais RER A', 'Toutes directions', A, '', 95]]],
+    ['S17', "Gare d'Austerlitz", 653395, 6860449, two(95)],
+    ['S18', 'Porte de Clichy', 649666, 6866285, two(95, 'available')],
+    ['S19', 'Pont Cardinet', 649807, 6865605, two(95, 'available')],
+    ['S20', 'Saint-Ouen', 650299, 6867380, two(95)],
+    ['S21', 'Mairie de Saint-Ouen', 651186, 6868207, two(95)],
+    ['S22', 'Luxembourg', 651550, 6860886, [['Accès boulevard Saint-Michel ↔ quais', 'Toutes directions', U, '', 95]]],
+    ['S23', 'Invalides', 649707, 6862548, two(95)],
+    ['S24', 'Saint-Michel Notre-Dame', 651901, 6861695, [['Accès quai Saint-Michel ↔ salle des billets', 'Toutes directions', O, 'liftFailure', 55], ['Salle des billets ↔ quais RER C', 'Toutes directions', O, 'closedForMaintenance', 900]]],
+    ['S25', "Musée d'Orsay", 650550, 6862429, two(95)],
+    ['S26', 'Port-Royal', 651338, 6860221, two(95)],
+    ['S27', 'Maison Blanche', 652908, 6858207, two(95)]
+  ];
+  const recs = [];
+  let i = 0;
+  for (const [zid, name, x, y, lifts] of S){
+    for (const [sit, dir, status, why, m] of lifts){
+      recs.push({ liftId:'SAMPLE-' + (++i), liftStateUpdate:t(m), liftSituation:sit, liftDirection:dir,
+        liftStatus:status, liftReason:why, ZdCId:'SAMPLE:' + zid, ZdCName:name, ZdCXEpsg2154:x, ZdCYEpsg2154:y });
+    }
+  }
+  return recs;
+}
+
+/* ---------- State ---------- */
+const $ = s => document.querySelector(s);
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const state = { stations:[], selected:null, mode:'loading', loadedAt:null, favs:loadFavs(), diag:[], source:'', fileError:'', cfg:loadCfg(), sources:{} };
+
+function loadCfg(){
+  try {
+    const v = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+    const s = x => typeof x === 'string' ? x : '';
+    return { key:s(v.key), navKey:s(v.navKey), url:s(v.url) };
+  } catch (e){ return { key:'', navKey:'', url:'' }; }
+}
+function saveCfg(){ try { localStorage.setItem(CFG_KEY, JSON.stringify(state.cfg)); } catch (e){} }
+
+function loadFavs(){
+  try { const v = JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); return Array.isArray(v) ? v.filter(x => typeof x === 'string') : []; }
+  catch (e){ return []; }
+}
+function saveFavs(){ try { localStorage.setItem(FAV_KEY, JSON.stringify(state.favs)); } catch (e){} }
+
+/* ---------- Rendering ---------- */
+const PRAM_SVG = '<svg class="mini-pram rolling pram" viewBox="0 0 54 46" aria-hidden="true"><path d="M9 23 A15 15 0 0 1 24 8 L24 23 Z" fill="var(--sun)"/><path d="M6 23 H42 Q42 34 30 34 H18 Q6 34 6 23 Z" fill="var(--plaque)"/><path d="M42 23 L48 12" fill="none" stroke="var(--plaque)" stroke-width="3.5" stroke-linecap="round"/><g class="wheel"><circle cx="15" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><path d="M15 34.5 V43.5" stroke="var(--ink)" stroke-width="1.6"/></g><g class="wheel"><circle cx="34" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><path d="M34 34.5 V43.5" stroke="var(--ink)" stroke-width="1.6"/></g></svg>';
+
+function renderSource(){
+  const el = $('#source');
+  if (state.mode === 'loading'){
+    el.className = 'status-pill';
+    el.innerHTML = '<span class="dot pulse"></span>Waking up the lifts…';
+  } else if (state.mode === 'live'){
+    const time = state.loadedAt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+    el.className = 'status-pill live';
+    el.innerHTML = `<span class="dot ok"></span>Live · <span class="tnum">${time}</span>`;
+  } else if (state.mode === 'file'){
+    el.className = 'status-pill live';
+    el.innerHTML = '<span class="dot ok"></span>From a file';
+  } else {
+    el.className = 'status-pill practice';
+    el.innerHTML = '<span class="dot"></span>Practice mode';
+  }
+  renderDataPanel();
+}
+
+function renderDataPanel(){
+  const el = $('#data-panel');
+  if (!el) return;
+  const lifts = state.stations.reduce((n, s) => n + s.counts.n, 0);
+  const actions = `<div class="src-actions">
+      <button type="button" id="retry" class="btn">Refresh now</button>
+      <input id="file" type="file" class="vh" accept=".json,.geojson,.csv,application/json,text/csv"><label for="file" class="btn">Load an IDFM export file</label>
+    </div>${state.fileError ? `<p class="diag-err">${esc(state.fileError)}</p>` : ''}`;
+  const row = (label, x) => x ? `<li><span class="dot ${x.ok === true ? 'ok' : x.ok === null ? 'pulse' : ''}"></span><span><b>${label}:</b> ${x.ok === false ? `<span class="diag-err">${esc(x.text)}</span>` : esc(x.text)}</span></li>` : '';
+  if (state.mode === 'loading'){ el.innerHTML = '<p class="hint">Loading…</p>'; return; }
+  if (state.mode === 'live'){
+    const time = state.loadedAt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+    const src = state.sources || {};
+    el.innerHTML = `<p>Live from Île-de-France Mobilités, loaded at <span class="tnum">${time}</span>: <span class="tnum">${fmtNum(state.stations.length)}</span> stations and <span class="tnum">${fmtNum(lifts)}</span> lifts.</p>
+      <ul class="data-list">${row('Lift status', src.lifts)}${row('Stations and lines', src.rail)}${row('Accessibility ratings', src.access)}</ul>${actions}`;
+    return;
+  }
+  if (state.mode === 'file'){
+    el.innerHTML = `<p>Using the file “${esc(state.source)}”: <span class="tnum">${fmtNum(state.stations.length)}</span> stations and <span class="tnum">${fmtNum(lifts)}</span> lifts. It won't update by itself.</p>${actions}`;
+    return;
+  }
+  const steps = state.diag.map(d => `<li><b>${esc(d.label)}</b><br><span class="diag-url">${esc(d.url)}</span><br>${esc(d.detail)}</li>`).join('');
+  el.innerHTML = `<p>${state.cfg.key ? "Live data didn't load, so the app is in practice mode with made-up lift statuses." : 'Practice mode: lift statuses are made up so you can try the app. Add a PRIM key above to switch to live data.'}</p>
+    ${state.cfg.key && steps ? `<details class="diag"><summary>What IDFM answered</summary><ol>${steps}</ol></details>` : ''}${actions}`;
+}
+
+function renderResults(){
+  const input = $('#q').value;
+  const q = fold(input);
+  const ul = $('#results');
+  if (!q){ ul.hidden = true; ul.innerHTML = ''; return; }
+  const hits = state.stations
+    .filter(s => s.key.includes(q) || s.altKeys.some(k => k.includes(q)))
+    .sort((a, b) => (b.key.startsWith(q) - a.key.startsWith(q)) || a.name.localeCompare(b.name, 'fr'))
+    .slice(0, 8);
+  ul.hidden = false;
+  if (!hits.length){
+    ul.innerHTML = state.railOk
+      ? `<li class="noresult">No station matches “${esc(input.trim())}”.</li>`
+      : `<li class="noresult">No lifts listed for “${esc(input.trim())}”. If that station has no lift, it isn't in the lift feed: expect stairs there.</li>`;
+    return;
+  }
+  ul.innerHTML = hits.map(s => {
+    const st = shortStatus(s);
+    return `<li><button type="button" class="hit" data-id="${esc(s.id)}"><span class="hit-name">${esc(s.name)}</span><span class="chip ${st.cls}">${st.text}</span></button></li>`;
+  }).join('');
+}
+
+function renderFavs(){
+  const el = $('#favs');
+  const list = state.favs.map(n => state.stations.find(s => s.name === n)).filter(Boolean);
+  const quick = $('#trip-favs');
+  if (quick) quick.innerHTML = list.length ? list.map(s => `<button type="button" class="fav" data-fill="${esc(s.id)}"><span class="sdot ${verdict(s).dot}"></span>${esc(s.name)}</button>`).join('') : '';
+  if (!list.length){
+    el.innerHTML = state.mode === 'loading' ? '' : '<p class="hint">Tap Save on a station and it becomes one of Matteo\'s stations, one tap away here and in the trip planner.</p>';
+    return;
+  }
+  el.innerHTML = '<p class="label">Matteo\'s stations</p><div class="chips">' + list.map(s => {
+    const v = verdict(s);
+    return `<button type="button" class="fav${s === state.selected ? ' is-current' : ''}" data-id="${esc(s.id)}"><span class="sdot ${v.dot}"></span>${esc(s.name)}</button>`;
+  }).join('') + '</div>';
+}
+
+function renderPlanB(st){
+  const opts = planB(st, state.stations);
+  let body;
+  if (opts === null){
+    body = '<p class="hint">This station has no location in the feed, so nearby options can\'t be worked out.</p>';
+  } else if (!opts.length){
+    body = '<p class="hint">No station within 2 km has its lifts confirmed working. A bus or tram may be easier today.</p>';
+  } else {
+    body = '<ul class="rows">' + opts.map(({ s, d }) => {
+      const extra = s.counts.unk ? `, ${s.counts.unk} no status` : '';
+      if (s.counts.n === 0){
+        const maps0 = `https://www.google.com/maps/dir/?api=1&destination=${s.lat.toFixed(5)},${s.lon.toFixed(5)}&travelmode=walking`;
+        return `<li class="rowwrap"><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta tnum">${fmtDist(d)} · about ${walkMin(d)} min with a pram · step-free, no lift needed</span></span>${ICON.chev}</button><a class="walk" href="${maps0}" target="_blank" rel="noopener">Walk there</a></li>`;
+      }
+      const maps = `https://www.google.com/maps/dir/?api=1&destination=${s.lat.toFixed(5)},${s.lon.toFixed(5)}&travelmode=walking`;
+      return `<li class="rowwrap"><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta tnum">${fmtDist(d)} · about ${walkMin(d)} min with a pram · ${s.counts.ok} lift${s.counts.ok > 1 ? 's' : ''} working${extra}</span></span>${ICON.chev}</button><a class="walk" href="${maps}" target="_blank" rel="noopener">Walk there</a></li>`;
+    }).join('') + '</ul>';
+  }
+  return `<div class="planb"><h3 class="sub-h">Plan B for Matteo · nearby stations with working lifts</h3>${body}</div>`;
+}
+
+function renderStation(){
+  const el = $('#station');
+  const st = state.selected;
+  if (!st){
+    el.innerHTML = state.mode === 'loading' ? '<p class="hint">Waking up the lifts…</p>' : '<p class="hint">Search for a station to check its lifts.</p>';
+    return;
+  }
+  const v = verdict(st);
+  const saved = state.favs.includes(st.name);
+  const lifts = st.lifts.map(l => {
+    const bits = [];
+    if (l.status === 'out' && l.reason) bits.push(esc(l.reason));
+    bits.push(l.updated ? `checked ${ago(l.updated)}` : 'check time not given');
+    return `<li class="lift">
+      <div class="lift-top"><p class="lift-where">${esc(l.where)}</p><span class="chip ${l.status}">${STATUS_LABEL[l.status]}</span></div>
+      ${l.dir ? `<p class="lift-dir">${esc(l.dir)}</p>` : ''}
+      <p class="lift-meta tnum">${bits.join(' · ')}${isStale(l.updated) ? ' <span class="tag">old info</span>' : ''}</p>
+    </li>`;
+  }).join('');
+  const meta = [st.counts.n ? `<span class="tnum">${st.counts.n} lift${st.counts.n > 1 ? 's' : ''}</span>` : '<span>No lifts</span>'];
+  if (st.last) meta.push(`<span>checked ${ago(st.last)}</span>`);
+  if (state.mode === 'sample') meta.push('<span class="tag sample">Practice</span>');
+  const showPlanB = (st.counts.out > 0 || st.counts.ok === 0) && !(st.counts.n === 0 && (st.tramOnly || st.access === 6));
+  const lines = st.lines.length ? `<div class="j-lines" aria-label="Lines at this station">${st.lines.map(lineBadge).join('')}</div>` : '';
+  const liftList = st.counts.n ? `<ul class="lifts">${lifts}</ul>` : '<p class="hint">No lifts here.</p>';
+  el.innerHTML = `
+    ${state.backToTrip ? '<button type="button" id="back-trip" class="linkbtn back">‹ Back to your trip</button>' : ''}
+    <div class="st-head">
+      <h2 class="plaque plaque-lg">${esc(st.name)}</h2>
+      <button type="button" class="save" id="save" aria-pressed="${saved}">${ICON.star}<span>${saved ? 'Saved' : 'Save'}</span></button>
+    </div>
+    ${lines}
+    <p class="st-meta">${meta.join('<span aria-hidden="true">·</span>')}</p>
+    <div class="st-actions"><button type="button" class="btn" data-trip="from">Trip from here</button><button type="button" class="btn" data-trip="to">Trip to here</button></div>
+    <div class="verdict ${v.cls}">${v.icon}<div><p class="v-title">${v.title}</p><p class="v-sub">${v.sub}</p></div></div>
+    <h3 class="sub-h">Lifts at this station</h3>
+    ${liftList}
+    ${showPlanB ? renderPlanB(st) : ''}`;
+}
+
+function renderOutages(){
+  let ok = 0, out = 0, unk = 0;
+  for (const s of state.stations){ ok += s.counts.ok; out += s.counts.out; unk += s.counts.unk; }
+  const tot = ok + out + unk;
+  if (!tot){ $('#summary').innerHTML = ''; $('#outages').innerHTML = ''; return; }
+  const pct = n => (n / tot * 100).toFixed(2) + '%';
+  $('#summary').innerHTML = `
+    <div class="bar" role="img" aria-label="${ok} lifts working, ${out} out of service, ${unk} with no status">
+      <span class="seg ok" style="width:${pct(ok)}"></span><span class="seg out${out ? '' : ' zero'}" style="width:${pct(out)}"></span><span class="seg unknown" style="width:${pct(unk)}"></span>
+    </div>
+    <p class="legend tnum"><span><i class="sw ok"></i>${fmtNum(ok)} working</span><span><i class="sw out"></i>${fmtNum(out)} out of service</span><span><i class="sw unknown"></i>${fmtNum(unk)} no status</span></p>`;
+  const list = state.stations.filter(s => s.counts.out > 0)
+    .sort((a, b) => b.counts.out - a.counts.out || a.name.localeCompare(b.name, 'fr'));
+  $('#out-count').textContent = list.length ? `${list.length} station${list.length > 1 ? 's' : ''}` : '';
+  $('#tab-out-count').textContent = list.length ? String(list.length) : '';
+  $('#outages').innerHTML = list.length ? list.map(s => {
+    const reasons = [...new Set(s.lifts.filter(l => l.status === 'out').map(l => l.reason).filter(Boolean))].join(', ');
+    return `<li><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta"><span class="chip out tnum">${s.counts.out} of ${s.counts.n} out</span>${reasons ? `<span>${esc(reasons)}</span>` : ''}</span></span>${ICON.chev}</button></li>`;
+  }).join('') : `<li class="happy">${PRAM_SVG}Every lift is awake. Smooth rolling!</li>`;
+}
+
+function renderAll(){ renderSource(); renderResults(); renderFavs(); renderStation(); renderOutages(); renderTrip(); }
+
+/* ---------- Views (Trip / Station / Lifts out), routed on the page hash ---------- */
+const VIEWS = ['trip', 'station', 'out', 'settings'];
+function showView(v, updateHash){
+  if (!VIEWS.includes(v)) v = 'trip';
+  state.view = v;
+  for (const name of VIEWS){
+    $('#view-' + name).hidden = name !== v;
+    $('#tab-' + name).setAttribute('aria-selected', String(name === v));
+  }
+  if (updateHash){ try { if (location.hash !== '#' + v) location.hash = v; } catch (e){} }
+}
+
+/* ---------- Actions ---------- */
+function select(id, scroll){
+  const st = state.stations.find(s => s.id === id);
+  if (!st) return;
+  state.selected = st;
+  $('#q').value = '';
+  showView('station', true);
+  renderResults(); renderFavs(); renderStation();
+  if (scroll) $('#station').scrollIntoView({ behavior:reduceMotion ? 'auto' : 'smooth', block:'start' });
+}
+
+function toggleSave(){
+  const st = state.selected;
+  if (!st) return;
+  const i = state.favs.indexOf(st.name);
+  if (i >= 0) state.favs.splice(i, 1); else state.favs.push(st.name);
+  saveFavs(); renderFavs(); renderStation();
+}
+
+function setData(r){
+  const prev = state.selected ? state.selected.name : null;
+  state.stations = r.stations;
+  state.mode = r.mode;
+  state.diag = r.diag || [];
+  state.source = r.source || '';
+  state.railOk = r.railOk === undefined ? false : r.railOk;
+  state.loadedAt = new Date();
+  const find = n => r.stations.find(s => s.name === n);
+  const fav = state.favs.map(find).find(Boolean);
+  // Keep the open station, else a saved one, else the one with the most lifts out, so the first view shows Plan B at work.
+  state.selected = (prev && find(prev)) || fav || [...r.stations].sort((a, b) => b.counts.out - a.counts.out || b.counts.n - a.counts.n || a.name.localeCompare(b.name, 'fr'))[0] || null;
+  renderAll();
+}
+
+/* ---------- Data layer ---------- */
+// Swap this for your own backend later (e.g. a proxy that merges PRIM data and parents' reports).
+function loadError(detail, status){ const e = new Error(detail); e.detail = detail; e.status = status; return e; }
+
+// PRIM marketplace addresses take the key as an "apikey" header; Opendatasoft addresses take it as an apikey query parameter.
+function keyed(url, key){
+  if (!key) return { url, headers:{} };
+  try {
+    const u = new URL(url);
+    if (u.hostname === 'prim.iledefrance-mobilites.fr') return { url, headers:{ apikey:key } };
+    u.searchParams.set('apikey', key);
+    return { url:u.toString(), headers:{} };
+  } catch (e){ return { url, headers:{} }; }
+}
+
+async function fetchJson(url, ms, keyOverride){
+  const key = keyOverride !== undefined ? keyOverride : state.cfg.key;
+  const req = keyed(url, key);
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms);
+  try {
+    let res;
+    try { res = await fetch(req.url, { signal:ctrl.signal, headers:req.headers }); }
+    catch (e){
+      throw loadError(e && e.name === 'AbortError'
+        ? `No answer after ${ms / 1000} s.`
+        : 'Request blocked or server unreachable. In a normal browser this usually means the server refuses requests from other websites (CORS).');
+    }
+    const denied = res.status === 401 || res.status === 403;
+    if (!res.ok) throw loadError(`Server answered HTTP ${res.status}${res.status === 404 ? ' (not found: the dataset may have moved)' : denied ? (key ? ' (your API key was refused for this address)' : ' (needs an API key)') : ''}.`, res.status);
+    try { return await res.json(); }
+    catch (e){ throw loadError('Server answered, but not with JSON data.'); }
+  } finally { clearTimeout(timer); }
+}
+
+function extractRecords(json){
+  if (Array.isArray(json)) return json;
+  if (!json || typeof json !== 'object') return [];
+  if (Array.isArray(json.results)) return json.results;
+  if (Array.isArray(json.records)) return json.records.map(r => (r.record && r.record.fields) || r.fields || r);
+  if (Array.isArray(json.features)) return json.features.map(f => {
+    const c = f.geometry && Array.isArray(f.geometry.coordinates) ? f.geometry.coordinates : null;
+    return Object.assign({}, f.properties, c ? { geo_point_2d:{ lon:c[0], lat:c[1] } } : {});
+  });
+  return [];
+}
+
+async function fetchPaged(url){
+  const all = [];
+  for (let offset = 0; offset < 10000; offset += 100){
+    const u = new URL(url);
+    u.searchParams.set('limit', '100');
+    u.searchParams.set('offset', String(offset));
+    const json = await fetchJson(u.toString(), 10000);
+    const recs = extractRecords(json);
+    all.push(...recs);
+    const total = json && typeof json.total_count === 'number' ? json.total_count : null;
+    if (recs.length < 100 || (total != null && all.length >= total)) break;
+  }
+  return all;
+}
+
+async function loadLifts(){
+  const diag = [];
+  for (const src of liveSources()){
+    try {
+      const recs = src.paged ? await fetchPaged(src.url) : extractRecords(await fetchJson(src.url, 15000));
+      if (!recs.length){ diag.push({ label:src.label, url:src.url, detail:'Server answered, but with no lift records.' }); continue; }
+      const stations = buildStations(recs);
+      if (!stations.length){
+        diag.push({ label:src.label, url:src.url, detail:`Got ${recs.length} records but couldn't find station names in them. Fields seen: ${Object.keys(recs[0] || {}).slice(0, 16).join(', ')}.` });
+        continue;
+      }
+      return { stations, mode:'live', source:src.label, diag, railOk:null };
+    } catch (err){
+      diag.push({ label:src.label, url:src.url, detail:(err && err.detail) || String((err && err.message) || err) });
+    }
+  }
+  return { stations:mergeStations(buildStations(sampleRecords()), buildRail(sampleRailRecords())), mode:'sample', diag, railOk:true };
+}
+
+// Fetch a whole dataset (export first, then page by page). Returns { recs, detail } so the page can say what happened.
+async function loadDataset(id){
+  const base = `${IDFM}/api/explore/v2.1/catalog/datasets/${id}`;
+  let detail = '';
+  for (const src of [{ url:base + '/exports/json' }, { url:base + '/records', paged:true }]){
+    try {
+      const recs = src.paged ? await fetchPaged(src.url) : extractRecords(await fetchJson(src.url, 20000));
+      if (recs.length) return { recs, detail:'' };
+      detail = 'The server answered with no rows.';
+    } catch (e){ detail = (e && e.detail) || String((e && e.message) || e); }
+  }
+  return { recs:[], detail };
+}
+const fieldsOf = recs => Object.keys(recs[0] || {}).slice(0, 18).join(', ');
+
+async function loadRail(){
+  const { recs, detail } = await loadDataset(RAIL_DATASET);
+  const list = recs.length ? buildRail(recs) : [];
+  state.sources.rail = list.length
+    ? { ok:true, text:`${fmtNum(list.length)} stations loaded` }
+    : { ok:false, text:recs.length ? `Got ${recs.length} rows but couldn't read station names. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${detail}` };
+  return list;
+}
+
+// IDFM "Accessibilité en gare": one accessibility level per stop (6 = on your own, 4 = with staff help,
+// 3 = by booking ahead, 1 = not accessible). Used for stations that have no lift in the lift feed.
+const ACCESS_DATASET = 'accessibilite-en-gare';
+async function loadAccess(){
+  const { recs, detail } = await loadDataset(ACCESS_DATASET);
+  if (!recs.length) state.sources.access = { ok:false, text:`Didn't load. ${detail}` };
+  return recs;
+}
+function applyAccess(recs){
+  let matched = 0;
+  for (const rec of recs){
+    const lvl = parseInt(pick(rec, ['accessibility_level_id', 'niveau_accessibilite', 'level']), 10);
+    const name = pick(rec, ['stop_name', 'nom_gare', 'name']);
+    if (!isFinite(lvl) || !name) continue;
+    const c = coordsOf(rec);
+    const st = matchStation({ name:String(name), lat:c ? c.lat : null, lon:c ? c.lon : null });
+    if (!st) continue;
+    st.access = Math.max(st.access || 0, lvl);
+    matched++;
+  }
+  return matched;
+}
+
+// Lifts first so the page is usable quickly, then every other station, then accessibility levels.
+function loadAll(){
+  return loadLifts().then(r => {
+    if (r.mode === 'live'){
+      const lifts = r.stations.reduce((n, s) => n + s.counts.n, 0);
+      state.sources = { lifts:{ ok:true, text:`${fmtNum(lifts)} lifts at ${fmtNum(r.stations.length)} stations` },
+        rail:{ ok:null, text:'Loading…' }, access:{ ok:null, text:'Waiting…' } };
+    }
+    setData(r);
+    if (r.mode !== 'live') return r;
+    return loadRail().then(rail => {
+      state.sources.access = { ok:null, text:'Loading…' };
+      if (rail.length) setData(Object.assign({}, r, { stations:mergeStations(r.stations, rail), railOk:true }));
+      else { state.railOk = false; renderSource(); }
+      return loadAccess().then(acc => {
+        if (acc.length){
+          const matched = applyAccess(acc);
+          state.sources.access = matched
+            ? { ok:true, text:`${fmtNum(matched)} of ${fmtNum(acc.length)} stops matched to stations` }
+            : { ok:false, text:`Got ${acc.length} rows but couldn't match them to stations. Fields: ${fieldsOf(acc)}.` };
+        }
+        renderAll();
+        return r;
+      });
+    });
+  });
+}
+
+function parseCsv(text){
+  const nl = text.indexOf('\n');
+  const first = nl > -1 ? text.slice(0, nl) : text;
+  const delim = first.split(';').length > first.split(',').length ? ';' : ',';
+  const rows = [];
+  let row = [], field = '', quoted = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (quoted){
+      if (c === '"'){ if (text[i + 1] === '"'){ field += '"'; i++; } else quoted = false; }
+      else field += c;
+    } else if (c === '"') quoted = true;
+    else if (c === delim){ row.push(field); field = ''; }
+    else if (c === '\n' || c === '\r'){
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(field); rows.push(row); row = []; field = '';
+    } else field += c;
+  }
+  if (field !== '' || row.length){ row.push(field); rows.push(row); }
+  const head = (rows.shift() || []).map(h => h.replace(/^﻿/, '').trim());
+  return rows.filter(r => r.length > 1).map(r => Object.fromEntries(head.map((h, i) => [h, r[i]])));
+}
+
+async function loadFile(file){
+  let recs = [];
+  try {
+    const text = (await file.text()).trim();
+    recs = (text.startsWith('[') || text.startsWith('{')) ? extractRecords(JSON.parse(text)) : parseCsv(text);
+  } catch (e){ recs = []; }
+  const stations = recs.length ? buildStations(recs) : [];
+  if (!stations.length){
+    state.fileError = recs.length
+      ? `“${file.name}” has ${recs.length} rows but no station names the app recognises.`
+      : `Couldn't read “${file.name}”. Use the JSON or CSV export of the État des ascenseurs dataset.`;
+    renderSource();
+    return;
+  }
+  state.fileError = '';
+  setData({ stations, mode:'file', source:file.name, diag:state.diag });
+}
+
+function retryLive(){
+  state.fileError = '';
+  state.mode = 'loading';
+  renderSource();
+  loadAll().then(r => {
+    const msg = $('#conn-status');
+    if (msg) msg.textContent = r.mode === 'live'
+      ? 'Connected. Live data loaded.'
+      : 'Still no live data. See “What IDFM answered” under Data below.';
+  });
+}
+
+function wireConnection(){
+  $('#k').value = state.cfg.key;
+  $('#k2').value = state.cfg.navKey;
+  $('#u').value = state.cfg.url;
+  $('#conn-form').addEventListener('submit', e => {
+    e.preventDefault();
+    state.cfg = { key:$('#k').value.trim(), navKey:$('#k2').value.trim(), url:$('#u').value.trim() };
+    state.trip.status = state.trip.status === 'error' ? 'example' : state.trip.status;
+    saveCfg();
+    $('#conn-status').textContent = 'Saved on this device. Loading…';
+    retryLive();
+    window.scrollTo({ top:0, behavior:reduceMotion ? 'auto' : 'smooth' });
+  });
+  $('#forget').addEventListener('click', () => {
+    state.cfg = { key:'', navKey:'', url:'' };
+    saveCfg();
+    $('#k').value = ''; $('#k2').value = ''; $('#u').value = '';
+    $('#conn-status').textContent = 'Key removed from this device.';
+    retryLive();
+  });
+}
+
+/* ---------- Trip planner: IDFM journey planner (Navitia via PRIM), each station checked against lift status ---------- */
+const NAVITIA = 'https://prim.iledefrance-mobilites.fr/marketplace/v2/navitia';
+const PLACE_TYPES = { stop_area:'Station', stop_point:'Stop', address:'Address', poi:'Place', administrative_region:'Area' };
+// Ranking model (time-led). Score = minutes until you arrive + "effort minutes" for what makes the trip harder with a
+// pram. Effort is bounded, so time stays the main criterion: a much faster route can still win with some stairs.
+// Stair size is an estimate from the station type, because no open dataset gives step counts.
+const STAIRS = {
+  short:{ chip:'~1 flight', text:'about 1 flight of stairs', avoid:8, ok:3 },
+  medium:{ chip:'~2–3 flights', text:'about 2–3 flights of stairs', avoid:15, ok:6 },
+  long:{ chip:'4+ flights', text:'4 or more flights of stairs (deep or large station)', avoid:22, ok:10 }
+};
+const EFFORT = {
+  liftStation:1,       // each station that depends on a lift
+  singleLift:2,        // only one lift at the station, so no backup if it breaks
+  unconfirmed:1,       // lifts working, but some lifts at the station have no status
+  stale:3,             // lift info older than STALE_HOURS
+  someOut:[6, 3],      // some lifts out at the station [avoid stairs, a few stairs OK]
+  noStatus:[6, 3],     // no lift status at all
+  staffHelp:[5, 3],    // step-free only with help from station staff
+  notStepFree:[4, 2],  // IDFM doesn't mark the route as step-free (and no stairs were found)
+  change:4,            // each change: another platform to find
+  bus:2,               // each bus ride: no stairs, but space for a pram can be tight
+  walkEasy:10,         // walking up to this many minutes costs nothing extra
+  walkSoft:0.3,        // extra per minute between walkEasy and your limit
+  walkOver:1           // extra per minute beyond your limit, so those minutes count double
+};
+const VISIBLE_ROUTES = 3, MORE_ROUTES = 8;
+const WALK_KEY = 'lift-or-stairs:maxwalk';
+const STAIRS_KEY = 'lift-or-stairs:stairs';
+const BUS_KEY = 'lift-or-stairs:bus';
+state.trip = { from:null, to:null, results:null, status:'example', message:'', includeBus:true, maxWalk:15, stairs:'avoid' };
+try {
+  if (localStorage.getItem(BUS_KEY) === '0') state.trip.includeBus = false;
+  if (localStorage.getItem(STAIRS_KEY) === 'ok') state.trip.stairs = 'ok';
+  const w = parseInt(localStorage.getItem(WALK_KEY), 10);
+  if ([10, 15, 20, 30].includes(w)) state.trip.maxWalk = w;
+} catch (e){}
+const isBusLeg = l => /bus|noctilien|coach|autocar/.test(fold(`${l.mode} ${l.physical || ''}`));
+state.sug = { from:[], to:[] };
+
+function navitia(path, params){
+  const u = new URL(NAVITIA + path);
+  for (const [k, v] of params) u.searchParams.append(k, v);
+  return fetchJson(u.toString(), 15000, state.cfg.navKey || state.cfg.key);
+}
+
+function navPlace(p){
+  if (!p) return { name:'', lat:null, lon:null };
+  const o = p[p.embedded_type] || {};
+  const c = o.coord || (o.stop_area && o.stop_area.coord) || p.coord || null;
+  const lat = c ? parseFloat(c.lat) : NaN, lon = c ? parseFloat(c.lon) : NaN;
+  return { name:(o.stop_area && o.stop_area.name) || o.name || p.name || '', lat:isFinite(lat) ? lat : null, lon:isFinite(lon) ? lon : null };
+}
+
+async function searchPlaces(q){
+  const json = await navitia('/places', [['q', q], ['count', '6']]);
+  return ((json && json.places) || []).map(p => {
+    const pl = navPlace(p);
+    return { name:p.name || pl.name, label:PLACE_TYPES[p.embedded_type] || 'Place', id:p.id, lat:pl.lat, lon:pl.lon };
+  }).filter(p => p.id || p.lat != null);
+}
+
+function parseNavDate(s){
+  const m = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/.exec(s || '');
+  return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]) : null;
+}
+
+function normJourney(j, stepFree){
+  const legs = [];
+  let walk = 0;
+  for (const s of j.sections || []){
+    const min = Math.round((s.duration || 0) / 60);
+    if (s.type === 'public_transport' || s.type === 'on_demand_transport'){
+      const di = s.display_informations || {};
+      legs.push({ type:'pt', mode:di.commercial_mode || di.physical_mode || '', physical:di.physical_mode || '', code:di.code || di.label || '', color:di.color || '', text:di.text_color || '',
+        direction:di.direction || '', from:navPlace(s.from), to:navPlace(s.to), stops:Math.max(0, (s.stop_date_times || []).length - 1), min });
+    } else if (s.type === 'street_network' || s.type === 'crow_fly'){
+      if (min > 0){ walk += min; legs.push({ type:'walk', min, to:navPlace(s.to).name }); }
+    } else if (s.type === 'transfer'){
+      walk += min; legs.push({ type:'transfer', min });
+    }
+  }
+  return { dep:parseNavDate(j.departure_date_time), arr:parseNavDate(j.arrival_date_time), durMin:Math.round((j.duration || 0) / 60),
+    transfers:j.nb_transfers || 0, walkMin:walk, stepFree, legs };
+}
+
+const journeySig = j => j.legs.filter(l => l.type === 'pt').map(l => `${l.code}|${fold(l.from.name)}|${fold(l.to.name)}`).join('>') || 'walk';
+const placeRef = p => p.id || `${p.lon};${p.lat}`;
+
+// Two requests: step-free only (wheelchair=true) and unrestricted; merged, then ranked for a pram.
+async function findJourneys(from, to, includeBus){
+  includeBus = includeBus !== false;
+  const run = forbidBus => {
+    // Ask the planner to keep each walk to or from transport within the parent's limit.
+    const base = [['from', placeRef(from)], ['to', placeRef(to)], ['count', '5'], ['max_walking_duration_to_pt', String(state.trip.maxWalk * 60)]];
+    if (forbidBus) base.push(['forbidden_uris[]', 'physical_mode:Bus']);
+    return Promise.allSettled([navitia('/journeys', base.concat([['wheelchair', 'true']])), navitia('/journeys', base)]);
+  };
+  let [free, any] = await run(!includeBus);
+  // If the planner rejects the bus filter itself, ask again without it and filter buses out here instead.
+  if (!includeBus && free.status === 'rejected' && any.status === 'rejected' && free.reason && free.reason.status === 400) [free, any] = await run(false);
+  if (free.status === 'rejected' && any.status === 'rejected'){
+    const e = free.reason || any.reason;
+    if (e && e.status === 404) return [];
+    throw e;
+  }
+  const map = new Map();
+  const add = (res, stepFree) => {
+    if (res.status !== 'fulfilled') return;
+    for (const raw of (res.value && res.value.journeys) || []){
+      const j = normJourney(raw, stepFree);
+      const k = journeySig(j);
+      if (map.has(k)){ if (stepFree) map.get(k).stepFree = true; }
+      else map.set(k, j);
+    }
+  };
+  add(free, true);
+  add(any, false);
+  const list = [...map.values()];
+  return includeBus ? list : list.filter(j => !j.legs.some(l => l.type === 'pt' && isBusLeg(l)));
+}
+
+function matchStation(p){
+  if (!p || !p.name) return null;
+  const k = fold(p.name);
+  const same = state.stations.filter(s => s.key === k || s.altKeys.includes(k));
+  if (same.length === 1) return same[0];
+  const pool = same.length ? same : state.stations;
+  if (p.lat == null) return same[0] || null;
+  let best = null, bestD = Infinity;
+  for (const s of pool){
+    if (s.lat == null) continue;
+    const d = distM(p, s);
+    if (d < bestD){ best = s; bestD = d; }
+  }
+  if (same.length) return best || same[0];
+  return bestD <= 300 ? best : null;
+}
+
+const isStreetMode = mode => /bus|tram|noctilien|navette|cable/.test(fold(mode));
+const inParis = p => !!p && p.lat != null && p.lat > 48.815 && p.lat < 48.903 && p.lon > 2.224 && p.lon < 2.47;
+
+// Rough stair size when there's no working lift: deep RER/train stations in Paris and big hubs are long,
+// suburban train or RER stations usually mean one footbridge or underpass, metro stations about 2–3 flights.
+function stairEstimate(st, p, mode){
+  const lines = (st && st.lines) || [];
+  const kinds = new Set(lines.map(l => l.kind));
+  const f = fold(mode);
+  const rail = kinds.has('rer') || kinds.has('train') || /rer|train|transilien/.test(f);
+  const metro = kinds.has('metro') || /metro/.test(f);
+  if (rail && inParis(st || p)) return 'long';
+  if (lines.length >= 4) return 'long';
+  if (rail && !metro) return 'short';
+  return 'medium';
+}
+
+function checkStop(p, mode){
+  const st = matchStation(p);
+  if (isStreetMode(mode)) return { kind:'street', cls:'ok', label:'Street level', st };
+  const withStairs = (kind, cls, prefix, s) => {
+    const size = stairEstimate(s, p, mode);
+    return { kind, cls, label:`${prefix} · ${STAIRS[size].chip}`, st:s, stairs:size };
+  };
+  if (!st) return withStairs('none', 'warn', 'No lift listed', null);
+  const { ok, out, unk, n } = st.counts;
+  if (n === 0){
+    if (st.tramOnly) return { kind:'street', cls:'ok', label:'Street level', st };
+    if (st.access === 6) return { kind:'ok', cls:'ok', label:'Step-free, no lift needed', st };
+    if (st.access === 4) return { kind:'help', cls:'warn', label:'Step-free with staff help', st };
+    return withStairs('none', 'warn', 'No lift', st);
+  }
+  if (out > 0 && ok > 0) return { kind:'warn', cls:'warn', label:`${out} of ${n} lifts out`, st };
+  if (out > 0) return withStairs('bad', 'out', 'Lift out', st);
+  if (ok > 0) return { kind:'ok', cls:'ok', label:unk ? 'Lifts working (some unconfirmed)' : 'Lifts working', st };
+  return { kind:'unk', cls:'unknown', label:'No lift status', st };
+}
+
+function journeyChecks(j){
+  const stops = [];
+  const pts = j.legs.filter(l => l.type === 'pt');
+  pts.forEach((l, i) => {
+    const push = (p, role) => {
+      const last = stops[stops.length - 1];
+      if (last && fold(last.p.name) === fold(p.name)){
+        last.role = 'Change';
+        if (isStreetMode(last.mode)) last.mode = l.mode;
+        return;
+      }
+      stops.push({ p, role, mode:l.mode });
+    };
+    push(l.from, i === 0 ? 'Start' : 'Change');
+    push(l.to, i === pts.length - 1 ? 'Arrive' : 'Change');
+  });
+  return stops.map(s => Object.assign({ name:s.p.name, role:s.role }, checkStop(s.p, s.mode)));
+}
+
+function assessJourney(j, prefs, now){
+  const checks = journeyChecks(j);
+  const ix = prefs.stairs === 'ok' ? 1 : 0;
+  const pts = j.legs.filter(l => l.type === 'pt');
+  const allStreet = pts.length > 0 && pts.every(l => isStreetMode(l.mode));
+  const busLegs = pts.filter(isBusLeg).length;
+  const notes = { stairs:[], someOut:[], noStatus:[], help:[], stale:[], single:[] };
+  let effort = 0;
+  for (const c of checks){
+    if (c.kind === 'ok'){
+      effort += EFFORT.liftStation;
+      if (c.st && c.st.counts.n === 1){ effort += EFFORT.singleLift; notes.single.push(c.name); }
+      if (c.st && c.st.counts.unk) effort += EFFORT.unconfirmed;
+      if (c.st && c.st.counts.n && isStale(c.st.last)){ effort += EFFORT.stale; notes.stale.push(c.name); }
+    } else if (c.kind === 'warn'){ effort += EFFORT.liftStation + EFFORT.someOut[ix]; notes.someOut.push(c.name); }
+    else if (c.kind === 'unk'){ effort += EFFORT.liftStation + EFFORT.noStatus[ix]; notes.noStatus.push(c.name); }
+    else if (c.kind === 'help'){ effort += EFFORT.staffHelp[ix]; notes.help.push(c.name); }
+    else if (c.kind === 'bad' || c.kind === 'none'){ effort += STAIRS[c.stairs][ix ? 'ok' : 'avoid']; notes.stairs.push(c); }
+  }
+  effort += EFFORT.change * j.transfers + EFFORT.bus * busLegs;
+  if (pts.length && !j.stepFree && !allStreet && !notes.stairs.length) effort += EFFORT.notStepFree[ix];
+  const over = Math.max(0, j.walkMin - prefs.maxWalk);
+  effort += Math.max(0, Math.min(j.walkMin, prefs.maxWalk) - EFFORT.walkEasy) * EFFORT.walkSoft + over * EFFORT.walkOver;
+  // Arrival time, not ride time: a later departure arrives later even if the ride is shorter.
+  const arriveIn = j.arr ? Math.max(0, Math.round((j.arr.getTime() - now) / 60000)) : j.durMin;
+  return { j, checks, notes, effort:Math.round(effort), score:arriveIn + effort, arriveIn, over, busLegs, allStreet, hasStairs:notes.stairs.length > 0 };
+}
+
+function rankJourneys(list){
+  const prefs = { maxWalk:state.trip.maxWalk, stairs:state.trip.stairs };
+  const now = Date.now();
+  const items = list.map(j => assessJourney(j, prefs, now));
+  items.sort((a, b) => a.score - b.score || a.arriveIn - b.arriveIn);
+  const top = items[0];
+  const fastest = items.reduce((f, x) => (!f || x.arriveIn < f.arriveIn ? x : f), null);
+  if (top){
+    top.top = true;
+    top.best = !top.hasStairs && !top.notes.someOut.length && !top.notes.noStatus.length && !top.over;
+  }
+  if (fastest) fastest.fastest = true;
+  for (const it of items) it.comment = tripComment(it, top, fastest, prefs);
+  return items;
+}
+
+const listJoin = x => x.length <= 1 ? (x[0] || '') : `${x.slice(0, -1).join(', ')} and ${x[x.length - 1]}`;
+const plural = (n, one, many) => n === 1 ? one : many;
+
+// What makes route a easier than route b, phrased as "it …".
+function advantage(a, b){
+  const bs = b.notes.stairs.map(c => c.name), as = a.notes.stairs.map(c => c.name);
+  if (bs.length && !as.length) return `it avoids the stairs at ${listJoin(bs)}`;
+  if (bs.length > as.length) return 'it has fewer stairs';
+  if (b.j.transfers > a.j.transfers){ const d = b.j.transfers - a.j.transfers; return `it has ${d} fewer ${plural(d, 'change', 'changes')}`; }
+  if (b.j.walkMin - a.j.walkMin >= 3) return `it has ${b.j.walkMin - a.j.walkMin} min less walking`;
+  if (b.notes.someOut.length + b.notes.noStatus.length > a.notes.someOut.length + a.notes.noStatus.length) return 'its lifts are more reliable';
+  if (b.busLegs > a.busLegs) return 'it avoids a bus ride';
+  return 'it is easier with a pram';
+}
+const asTop = s => s.replace(/^its /, "the top route's ").replace(/^it /, 'the top route ');
+
+// Two short sentences: where the route stands on time, then what it's like with a pram.
+function tripComment(a, top, fastest, prefs){
+  const { j, notes } = a;
+  const s = [];
+  if (a === top){
+    if (!fastest || a.arriveIn <= fastest.arriveIn) s.push(a.hasStairs ? 'Fastest route, even counting the stairs.' : 'Fastest route, and smooth rolling all the way.');
+    else s.push(`Arrives ${a.arriveIn - fastest.arriveIn} min after the fastest route, but ${advantage(a, fastest)}.`);
+  } else {
+    const d = a.arriveIn - top.arriveIn;
+    if (d < 0) s.push(`${-d} min faster than the top route, but ${asTop(advantage(top, a))}.`);
+    else if (d > 0) s.push(`Arrives ${d} min after the top route.`);
+    else s.push(`Arrives at the same time as the top route, but ${asTop(advantage(top, a))}.`);
+  }
+  const d = [];
+  for (const c of notes.stairs) d.push(c.kind === 'bad' ? `the lift at ${c.name} is out, so expect ${STAIRS[c.stairs].text}` : `${c.name} has no lift, so expect ${STAIRS[c.stairs].text}`);
+  if (notes.someOut.length) d.push(`some lifts are out at ${listJoin(notes.someOut)}`);
+  if (notes.noStatus.length) d.push(`no lift status for ${listJoin(notes.noStatus)}`);
+  if (notes.help.length) d.push(`${listJoin(notes.help)} ${plural(notes.help.length, 'is', 'are')} step-free only with staff help`);
+  if (notes.stale.length) d.push(`lift info for ${listJoin(notes.stale)} is over ${STALE_HOURS} h old`);
+  if (notes.single.length) d.push(`only one lift at ${listJoin(notes.single)}`);
+  if (!d.length){
+    const okN = a.checks.filter(c => c.kind === 'ok').length;
+    if (!a.checks.length) d.push('walking only');
+    else if (okN && a.checks.some(c => c.kind === 'street')) d.push('lifts working at every station, plus street-level bus or tram stops');
+    else if (okN) d.push(`lifts working at ${okN === 1 ? 'the station' : okN === 2 ? 'both stations' : `all ${okN} stations`}`);
+    else d.push('street-level bus or tram stops, so no stairs');
+  }
+  if (a.checks.length) d.push(j.transfers === 0 ? 'no changes' : `${j.transfers} ${plural(j.transfers, 'change', 'changes')}`);
+  if (a.busLegs) d.push(a.busLegs > 1 ? `${a.busLegs} bus rides` : 'one bus ride');
+  if (a.over > 0) d.push(`${j.walkMin} min of walking, over your ${prefs.maxWalk} min limit`);
+  else if (j.walkMin >= EFFORT.walkEasy) d.push(`${j.walkMin} min of walking`);
+  if (j.legs.some(l => l.type === 'pt') && !j.stepFree && !a.allStreet && !a.hasStairs) d.push('not marked step-free by IDFM');
+  s.push(d.join('; ').replace(/^./, ch => ch.toUpperCase()) + '.');
+  return s.join(' ');
+}
+
+const stationLink = (name, st) => st
+  ? `<button type="button" class="stlink" data-id="${esc(st.id)}" data-from-trip="1">${esc(name)}</button>`
+  : `<b>${esc(name)}</b>`;
+
+const fmtTime = d => d ? d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) : '';
+const hexColor = c => /^[0-9a-f]{6}$/i.test(c || '') ? '#' + c : null;
+function modeShort(mode, code){
+  const f = fold(mode);
+  if (/metro/.test(f)) return 'M';
+  if (/rer/.test(f)) return 'RER';
+  if (/tram/.test(f)) return /^t/i.test(code || '') ? '' : 'T';
+  if (/bus|noctilien/.test(f)) return 'Bus';
+  if (/train|transilien/.test(f)) return 'Train';
+  return '';
+}
+function lineBadge(l){
+  const bg = hexColor(l.color), fg = hexColor(l.text) || '#FFFFFF';
+  const m = modeShort(l.mode, l.code);
+  return `<span class="line"${bg ? ` style="background:${bg};color:${fg}"` : ''}>${esc(m)}${m && l.code ? ' ' : ''}${esc(l.code)}</span>`;
+}
+const checkChip = c => c ? `<span class="chip ${c.cls}">${esc(c.label)}</span>` : '';
+
+function stepsHtml(j, checks){
+  const find = name => checks.find(c => fold(c.name) === fold(name));
+  return j.legs.map(l => {
+    if (l.type === 'walk') return `<li class="step"><span class="step-k">Walk</span><span>${l.min} min${l.to ? ` to ${esc(l.to)}` : ''}</span></li>`;
+    if (l.type === 'transfer') return `<li class="step"><span class="step-k">Change</span><span>Walk ${l.min} min to the next platform</span></li>`;
+    const cf = find(l.from.name), ct = find(l.to.name);
+    return `<li class="step"><span class="step-k">${lineBadge(l)}</span><span>
+      <span>${stationLink(l.from.name, cf && cf.st)} ${checkChip(cf)}</span>
+      <span class="fine">${l.direction ? `towards ${esc(l.direction)} · ` : ''}${l.stops} stop${l.stops === 1 ? '' : 's'} · ${l.min} min</span>
+      <span>${stationLink(l.to.name, ct && ct.st)} ${checkChip(ct)}</span></span></li>`;
+  }).join('');
+}
+
+function journeyHtml(item){
+  const { j, checks } = item;
+  const tags = [];
+  if (item.top) tags.push(item.best ? '<span class="jt best">Matteo-approved</span>' : '<span class="jt okish">Best option</span>');
+  if (item.fastest && !item.top) tags.push('<span class="jt fast">Fastest</span>');
+  if (item.hasStairs){
+    const n = item.notes.stairs.length;
+    tags.push(`<span class="jt bad">Stairs at ${n} ${plural(n, 'station', 'stations')}</span>`);
+  }
+  if (item.over > 0) tags.push('<span class="jt stairs">Long walk</span>');
+  if (j.legs.some(l => l.type === 'pt') && !item.hasStairs){
+    if (j.stepFree) tags.push('<span class="jt free">Smooth ride</span>');
+    else if (item.allStreet) tags.push('<span class="jt free">Street level</span>');
+    else if (!item.hasStairs) tags.push('<span class="jt stairs">Not marked step-free</span>');
+  }
+  const lines = j.legs.filter(l => l.type === 'pt').map(lineBadge).join('<span class="j-sep" aria-hidden="true">›</span>') || '<span class="hint">Walk only</span>';
+  const changes = j.transfers === 0 ? 'direct' : `${j.transfers} change${j.transfers > 1 ? 's' : ''}`;
+  const rows = checks.map(c => `<li><span class="j-role">${c.role}</span><span class="j-st">${stationLink(c.name, c.st)}</span>${checkChip(c)}${
+    (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">See Plan B</button>` : ''}${
+    c.kind === 'none' ? `<span class="j-note">${c.st ? 'expect stairs' : 'may mean stairs'}</span>` : ''}</li>`).join('');
+  return `<li class="journey${item.best ? ' is-best' : ''}">
+    <div class="j-tags">${tags.join('')}</div>
+    <div class="j-main"><p class="j-dur tnum">${j.durMin} min</p><p class="j-times tnum">${fmtTime(j.dep)} → ${fmtTime(j.arr)} · ${changes} · ${j.walkMin} min walking</p></div>
+    <p class="j-why">${esc(item.comment)}</p>
+    <div class="j-lines">${lines}</div>
+    ${rows ? `<ul class="j-checks">${rows}</ul>` : ''}
+    <details class="j-steps"><summary>Step by step</summary><ol>${stepsHtml(j, checks)}</ol></details>
+  </li>`;
+}
+
+// Example trip shown until the viewer plans their own (real line colours; times relative to now).
+function exampleTrip(){
+  const now = Date.now();
+  const at = m => new Date(now + m * 60000);
+  const P = (name, lat, lon) => ({ name, lat, lon });
+  const GDN = P('Gare du Nord', 48.8809, 2.3553), CLH = P('Châtelet - Les Halles', 48.8616, 2.3468), MAD = P('Madeleine', 48.8705, 2.3253);
+  const MAG = P('Magenta', 48.8814, 2.3575), HSL = P('Haussmann Saint-Lazare', 48.8738, 2.3283);
+  return {
+    from:GDN, to:MAD,
+    journeys:[
+      { dep:at(3), arr:at(25), durMin:22, transfers:1, walkMin:6, stepFree:true, legs:[
+        { type:'pt', mode:'RER', code:'B', color:'5291CE', text:'FFFFFF', direction:'Massy - Palaiseau', from:GDN, to:CLH, stops:1, min:5 },
+        { type:'transfer', min:6 },
+        { type:'pt', mode:'Métro', code:'14', color:'62259D', text:'FFFFFF', direction:"Aéroport d'Orly", from:CLH, to:MAD, stops:2, min:4 } ] },
+      { dep:at(2), arr:at(23), durMin:21, transfers:0, walkMin:12, stepFree:true, legs:[
+        { type:'walk', min:4, to:'Magenta' },
+        { type:'pt', mode:'RER', code:'E', color:'C04191', text:'FFFFFF', direction:'Haussmann Saint-Lazare', from:MAG, to:HSL, stops:1, min:5 },
+        { type:'walk', min:8, to:'Madeleine' } ] }
+    ]
+  };
+}
+
+function renderTrip(){
+  const t = state.trip, status = $('#trip-status'), list = $('#trip-results');
+  const addKey = '<button type="button" class="linkbtn open-conn">connect to IDFM in Settings</button>';
+  if (['loading', 'error', 'none', 'pick'].includes(t.status)) $('#trip-more').hidden = true;
+  if (t.status === 'loading'){
+    status.className = 'trip-status';
+    status.innerHTML = `${PRAM_SVG} Finding Matteo's smoothest route…`;
+    list.innerHTML = '';
+    return;
+  }
+  if (t.status === 'error' || t.status === 'none' || t.status === 'pick'){
+    status.className = 'trip-status is-error';
+    status.innerHTML = t.status === 'none' ? 'No route found between these places. Try a nearby station or address.'
+      : esc(t.message) + (t.status === 'error' && t.keyHelp
+        ? ` <span class="key-help">The route planner is a separate API on PRIM. Log in, open the API “Calculateur Île-de-France Mobilités – Accès générique”, and make sure your account has access to it. If PRIM gives you a separate token for it, paste it as the <button type="button" class="linkbtn open-conn">route planner key</button> in Settings.</span>`
+        : '');
+    list.innerHTML = '';
+    return;
+  }
+  let data = t.results, example = false;
+  if (!data){ data = exampleTrip(); example = true; }
+  const msgs = [];
+  if (example){
+    msgs.push(`<span><strong>Practice run:</strong> ${esc(data.from.name)} → ${esc(data.to.name)}.</span>`);
+    msgs.push(state.cfg.key ? '<span>Plan your own trip above.</span>' : `<span>To plan real trips, ${addKey}.</span>`);
+  } else {
+    msgs.push(`<strong>${esc(data.from.name)} → ${esc(data.to.name)}</strong>`);
+  }
+  const ranked = rankJourneys(data.journeys);
+  if (ranked.length && ranked.every(r => r.hasStairs)) msgs.push('<span class="trip-warn">Every route has stairs or a broken lift right now, so the quickest is first. Tap a station for its Plan B.</span>');
+  status.className = 'trip-status' + (example || state.mode === 'sample' ? ' is-example' : '');
+  status.innerHTML = msgs.join(' ');
+  list.innerHTML = ranked.slice(0, VISIBLE_ROUTES).map(journeyHtml).join('');
+  const more = ranked.slice(VISIBLE_ROUTES, VISIBLE_ROUTES + MORE_ROUTES);
+  const moreEl = $('#trip-more');
+  moreEl.hidden = !more.length;
+  moreEl.open = false;
+  $('#trip-more-label').textContent = `Show ${more.length} more ${plural(more.length, 'route', 'routes')}`;
+  $('#trip-more-list').innerHTML = more.map(journeyHtml).join('');
+}
+
+async function resolvePlace(which){
+  const q = $('#' + which).value.trim();
+  if (!q) return null;
+  if (state.cfg.key){
+    try { const r = await searchPlaces(q); if (r[0]) return r[0]; } catch (e){}
+  }
+  const f = fold(q);
+  const s = state.stations.find(x => x.key === f) || state.stations.find(x => x.key.includes(f));
+  return s && s.lat != null ? { name:s.name, lat:s.lat, lon:s.lon } : null;
+}
+
+async function runTrip(){
+  hideSug('from'); hideSug('to');
+  if (!state.cfg.key){ state.trip.status = 'nokey'; state.trip.results = null; renderTrip(); return; }
+  state.trip.status = 'loading';
+  renderTrip();
+  const [from, to] = await Promise.all([state.trip.from || resolvePlace('from'), state.trip.to || resolvePlace('to')]);
+  if (!from || !to){
+    state.trip.status = 'pick';
+    state.trip.message = !from && !to ? 'Enter a start and a destination.' : !from ? 'Choose a start from the suggestions.' : 'Choose a destination from the suggestions.';
+    renderTrip();
+    return;
+  }
+  state.trip.from = from; state.trip.to = to;
+  try {
+    const journeys = await findJourneys(from, to, state.trip.includeBus);
+    state.trip.results = journeys.length ? { from, to, journeys } : null;
+    state.trip.status = journeys.length ? 'live' : 'none';
+  } catch (err){
+    state.trip.results = null;
+    state.trip.status = 'error';
+    state.trip.keyHelp = !!err && (err.status === 401 || err.status === 403);
+    state.trip.message = state.trip.keyHelp
+      ? `IDFM's route planner refused your key (HTTP ${err.status}).`
+      : `IDFM's route planner didn't answer. ${(err && err.detail) || ''}`;
+  }
+  renderTrip();
+}
+
+let sugTimer = null;
+function hideSug(which){ const ul = $('#' + which + '-sug'); ul.hidden = true; ul.innerHTML = ''; state.sug[which] = []; }
+function onTripInput(which){
+  state.trip[which] = null;
+  const q = $('#' + which).value.trim();
+  clearTimeout(sugTimer);
+  if (q.length < 2){ hideSug(which); return; }
+  sugTimer = setTimeout(() => suggest(which, q), 250);
+}
+async function suggest(which, q){
+  let items = [];
+  if (state.cfg.key){ try { items = await searchPlaces(q); } catch (e){ items = []; } }
+  if (!items.length){
+    const f = fold(q);
+    items = state.stations.filter(s => s.key.includes(f) && s.lat != null).slice(0, 6).map(s => ({ name:s.name, label:'Station with lifts', lat:s.lat, lon:s.lon }));
+  }
+  if ($('#' + which).value.trim() !== q) return;
+  state.sug[which] = items;
+  const ul = $('#' + which + '-sug');
+  ul.hidden = false;
+  ul.innerHTML = items.length
+    ? items.map((it, i) => `<li><button type="button" class="hit" data-pick="${which}" data-idx="${i}"><span class="hit-name">${esc(it.name)}</span><span class="chip unknown">${esc(it.label)}</span></button></li>`).join('')
+    : `<li class="noresult">No match for “${esc(q)}”.</li>`;
+}
+function pickSug(which, idx){
+  const it = state.sug[which][idx];
+  if (!it) return;
+  state.trip[which] = it;
+  $('#' + which).value = it.name;
+  hideSug(which);
+  const other = which === 'from' ? 'to' : 'from';
+  if (!state.trip[other] && !$('#' + other).value.trim()) $('#' + other).focus();
+}
+function swapTrip(){
+  const a = state.trip.from;
+  state.trip.from = state.trip.to; state.trip.to = a;
+  const v = $('#from').value; $('#from').value = $('#to').value; $('#to').value = v;
+  hideSug('from'); hideSug('to');
+}
+// Saved station chips in the trip form fill the start first, then the destination.
+function fillTripFromFav(id){
+  const st = state.stations.find(s => s.id === id);
+  if (!st) return;
+  const which = !$('#from').value.trim() ? 'from' : 'to';
+  state.trip[which] = st.lat != null ? { name:st.name, lat:st.lat, lon:st.lon } : null;
+  $('#' + which).value = st.name;
+  hideSug(which);
+  if (which === 'from' && !$('#to').value.trim()) $('#to').focus();
+}
+
+function tripFromStation(which){
+  const st = state.selected;
+  if (!st) return;
+  state.trip[which] = st.lat != null ? { name:st.name, lat:st.lat, lon:st.lon } : null;
+  $('#' + which).value = st.name;
+  hideSug(which);
+  showView('trip', true);
+  window.scrollTo({ top:0, behavior:reduceMotion ? 'auto' : 'smooth' });
+  const other = which === 'from' ? 'to' : 'from';
+  if (state.trip[other] || $('#' + other).value.trim()) runTrip();
+  else $('#' + other).focus();
+}
+
+/* ---------- Wire up ---------- */
+document.addEventListener('click', e => {
+  if (e.target.closest('#save')){ toggleSave(); return; }
+  if (e.target.closest('#retry')){ retryLive(); return; }
+  if (e.target.closest('.open-conn')){ showView('settings', true); window.scrollTo(0, 0); return; }
+  const fill = e.target.closest('[data-fill]');
+  if (fill){ fillTripFromFav(fill.getAttribute('data-fill')); return; }
+  const tab = e.target.closest('[data-view]');
+  if (tab){ showView(tab.getAttribute('data-view'), true); window.scrollTo(0, 0); return; }
+  const trip = e.target.closest('[data-trip]');
+  if (trip){ tripFromStation(trip.getAttribute('data-trip')); return; }
+  const pick = e.target.closest('[data-pick]');
+  if (pick){ pickSug(pick.getAttribute('data-pick'), +pick.getAttribute('data-idx')); return; }
+  if (e.target.closest('#swap')){ swapTrip(); return; }
+  if (e.target.closest('#back-trip')){
+    state.backToTrip = false;
+    showView('trip', true);
+    renderStation();
+    const y = state.tripScroll || 0;
+    requestAnimationFrame(() => window.scrollTo(0, y));
+    return;
+  }
+  const btn = e.target.closest('[data-id]');
+  if (btn){
+    // Opened from a trip: remember where the trip was so "Back to your trip" can return there.
+    if (btn.hasAttribute('data-from-trip')){ state.backToTrip = true; state.tripScroll = window.scrollY || 0; }
+    else if (!btn.closest('#station')) state.backToTrip = false;
+    select(btn.getAttribute('data-id'), !btn.classList.contains('fav'));
+  }
+});
+const q = $('#q');
+q.addEventListener('input', renderResults);
+q.addEventListener('keydown', e => {
+  if (e.key === 'Enter'){
+    const first = $('#results [data-id]');
+    if (first){ e.preventDefault(); select(first.getAttribute('data-id'), true); }
+  } else if (e.key === 'Escape'){
+    q.value = ''; renderResults();
+  }
+});
+
+document.addEventListener('change', e => {
+  if (e.target && e.target.id === 'file' && e.target.files && e.target.files[0]) loadFile(e.target.files[0]);
+});
+
+// Expose pure helpers for testing outside the page.
+window.__liftOrStairs = { buildStations, verdict, planB, normStatus, reasonLabel, l93ToWgs84, sampleRecords, parseCsv, extractRecords, keyed, loadLifts, normJourney, rankJourneys, findJourneys, exampleTrip, state, buildRail, mergeStations, sampleRailRecords };
+
+$('#from').addEventListener('input', () => onTripInput('from'));
+$('#to').addEventListener('input', () => onTripInput('to'));
+$('#trip-form').addEventListener('submit', e => { e.preventDefault(); runTrip(); });
+$('#stairs-pref').value = state.trip.stairs;
+$('#stairs-pref').addEventListener('change', e => {
+  state.trip.stairs = e.target.value === 'ok' ? 'ok' : 'avoid';
+  try { localStorage.setItem(STAIRS_KEY, state.trip.stairs); } catch (err){}
+  renderTrip();
+});
+$('#maxwalk').value = String(state.trip.maxWalk);
+$('#maxwalk').addEventListener('change', e => {
+  state.trip.maxWalk = parseInt(e.target.value, 10) || 15;
+  try { localStorage.setItem(WALK_KEY, String(state.trip.maxWalk)); } catch (err){}
+  if (state.trip.status === 'live' || state.trip.status === 'none') runTrip(); else renderTrip();
+});
+$('#bus').checked = state.trip.includeBus;
+$('#bus').addEventListener('change', e => {
+  state.trip.includeBus = e.target.checked;
+  try { localStorage.setItem(BUS_KEY, e.target.checked ? '1' : '0'); } catch (err){}
+  if (state.trip.status === 'live' || state.trip.status === 'none') runTrip();
+});
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (VIEWS.includes(h)) showView(h); });
+try { const h = location.hash.slice(1); showView(VIEWS.includes(h) ? h : 'trip'); } catch (e){ showView('trip'); }
+
+wireConnection();
+loadAll();
+})();
+</script>
+
+</body>
+</html>

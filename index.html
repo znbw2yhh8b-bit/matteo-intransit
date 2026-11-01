@@ -398,6 +398,7 @@ button{ font:inherit; color:inherit; }
   <div id="view-settings" class="view" role="tabpanel" aria-labelledby="tab-settings" hidden>
     <section id="conn" class="panel" aria-labelledby="conn-h">
       <h2 id="conn-h" class="panel-h">Connect to IDFM</h2>
+      <p id="conn-proxy" class="hint" hidden>Connected through Matteo's own server, so nobody needs a key. <button type="button" id="show-key" class="linkbtn">Use a personal key instead</button></p>
       <form id="conn-form" class="conn-form" novalidate>
         <p class="hint">Live lifts and route planning use a free key from <a href="https://prim.iledefrance-mobilites.fr/" target="_blank" rel="noopener">PRIM</a>, IDFM's open data site. It stays on this device.</p>
         <label for="k" class="label">PRIM API key</label>
@@ -459,6 +460,15 @@ button{ font:inherit; color:inherit; }
 // IDFM lift-status endpoints (Opendatasoft API). The feed refuses anonymous requests, so the page sends a free PRIM API key
 // that the viewer types in; it stays in their browser only. Add ?src=<url> to the page address to try another endpoint first.
 const IDFM = 'https://data.iledefrance-mobilites.fr';
+// Shared proxy: the address of your Cloudflare Worker (worker.js), which holds the PRIM key.
+// With it set, anyone who opens the app gets live data without entering a key.
+const PROXY_URL = '';
+// Or keys built into the page. Simple, but anyone who views the page source can read them.
+const BUILT_IN_KEY = 'e02218841bd754cd97a8018b7b0f35027d383b26b237116612b50855';
+const BUILT_IN_NAV_KEY = '4UZ37Weqq8dU4cEVtgLgN3wBCXG5owG1';
+const dataKey = () => state.cfg.key || BUILT_IN_KEY;
+const navKey = () => state.cfg.navKey || state.cfg.key || BUILT_IN_NAV_KEY || BUILT_IN_KEY;
+const hasLiveAccess = () => !!(PROXY_URL || dataKey());
 const DATASET = 'etat-des-ascenseurs';
 const CFG_KEY = 'lift-or-stairs:idfm';
 function liveSources(){
@@ -896,8 +906,8 @@ function renderDataPanel(){
     return;
   }
   const steps = state.diag.map(d => `<li><b>${esc(d.label)}</b><br><span class="diag-url">${esc(d.url)}</span><br>${esc(d.detail)}</li>`).join('');
-  el.innerHTML = `<p>${state.cfg.key ? "Live data didn't load, so the app is in practice mode with made-up lift statuses." : 'Practice mode: lift statuses are made up so you can try the app. Add a PRIM key above to switch to live data.'}</p>
-    ${state.cfg.key && steps ? `<details class="diag"><summary>What IDFM answered</summary><ol>${steps}</ol></details>` : ''}${actions}`;
+  el.innerHTML = `<p>${hasLiveAccess() ? "Live data didn't load, so the app is in practice mode with made-up lift statuses." : 'Practice mode: lift statuses are made up so you can try the app. Add a PRIM key above to switch to live data.'}</p>
+    ${hasLiveAccess() && steps ? `<details class="diag"><summary>What IDFM answered</summary><ol>${steps}</ol></details>` : ''}${actions}`;
 }
 
 function renderResults(){
@@ -1073,6 +1083,12 @@ function loadError(detail, status){ const e = new Error(detail); e.detail = deta
 
 // PRIM marketplace addresses take the key as an "apikey" header; Opendatasoft addresses take it as an apikey query parameter.
 function keyed(url, key){
+  // No personal key on this device: send IDFM requests through the shared proxy, which adds the key.
+  if (!key && PROXY_URL){
+    const base = PROXY_URL.replace(/\/+$/, '');
+    if (url.startsWith(IDFM + '/')) return { url:base + '/idfm' + url.slice(IDFM.length), headers:{} };
+    if (url.startsWith(NAVITIA)) return { url:base + '/navitia' + url.slice(NAVITIA.length), headers:{} };
+  }
   if (!key) return { url, headers:{} };
   try {
     const u = new URL(url);
@@ -1083,7 +1099,7 @@ function keyed(url, key){
 }
 
 async function fetchJson(url, ms, keyOverride){
-  const key = keyOverride !== undefined ? keyOverride : state.cfg.key;
+  const key = keyOverride !== undefined ? keyOverride : dataKey();
   const req = keyed(url, key);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms);
@@ -1277,6 +1293,11 @@ function retryLive(){
 }
 
 function wireConnection(){
+  if ((PROXY_URL || BUILT_IN_KEY) && !state.cfg.key){
+    $('#conn-proxy').hidden = false; $('#conn-form').hidden = true;
+    if (!PROXY_URL) $('#conn-proxy').firstChild.textContent = 'Connected with the key built into the app, so nobody needs to enter one. ';
+  }
+  $('#show-key').addEventListener('click', () => { $('#conn-form').hidden = false; $('#conn-proxy').hidden = true; });
   $('#k').value = state.cfg.key;
   $('#k2').value = state.cfg.navKey;
   $('#u').value = state.cfg.url;
@@ -1341,7 +1362,7 @@ state.sug = { from:[], to:[] };
 function navitia(path, params){
   const u = new URL(NAVITIA + path);
   for (const [k, v] of params) u.searchParams.append(k, v);
-  return fetchJson(u.toString(), 15000, state.cfg.navKey || state.cfg.key);
+  return fetchJson(u.toString(), 15000, navKey());
 }
 
 function navPlace(p){
@@ -1701,7 +1722,7 @@ function renderTrip(){
   const msgs = [];
   if (example){
     msgs.push(`<span><strong>Practice run:</strong> ${esc(data.from.name)} → ${esc(data.to.name)}.</span>`);
-    msgs.push(state.cfg.key ? '<span>Plan your own trip above.</span>' : `<span>To plan real trips, ${addKey}.</span>`);
+    msgs.push(hasLiveAccess() ? '<span>Plan your own trip above.</span>' : `<span>To plan real trips, ${addKey}.</span>`);
   } else {
     msgs.push(`<strong>${esc(data.from.name)} → ${esc(data.to.name)}</strong>`);
   }
@@ -1721,7 +1742,7 @@ function renderTrip(){
 async function resolvePlace(which){
   const q = $('#' + which).value.trim();
   if (!q) return null;
-  if (state.cfg.key){
+  if (hasLiveAccess()){
     try { const r = await searchPlaces(q); if (r[0]) return r[0]; } catch (e){}
   }
   const f = fold(q);
@@ -1731,7 +1752,7 @@ async function resolvePlace(which){
 
 async function runTrip(){
   hideSug('from'); hideSug('to');
-  if (!state.cfg.key){ state.trip.status = 'nokey'; state.trip.results = null; renderTrip(); return; }
+  if (!hasLiveAccess()){ state.trip.status = 'nokey'; state.trip.results = null; renderTrip(); return; }
   state.trip.status = 'loading';
   renderTrip();
   const [from, to] = await Promise.all([state.trip.from || resolvePlace('from'), state.trip.to || resolvePlace('to')]);
@@ -1768,7 +1789,7 @@ function onTripInput(which){
 }
 async function suggest(which, q){
   let items = [];
-  if (state.cfg.key){ try { items = await searchPlaces(q); } catch (e){ items = []; } }
+  if (hasLiveAccess()){ try { items = await searchPlaces(q); } catch (e){ items = []; } }
   if (!items.length){
     const f = fold(q);
     items = state.stations.filter(s => s.key.includes(f) && s.lat != null).slice(0, 6).map(s => ({ name:s.name, label:'Station with lifts', lat:s.lat, lon:s.lon }));

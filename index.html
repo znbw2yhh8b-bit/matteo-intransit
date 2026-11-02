@@ -71,7 +71,7 @@ button{ font:inherit; color:inherit; }
 .brand .pram{ width:58px; height:50px; flex:none; align-self:flex-start; margin-top:2px; }
 .top h1{ font-family:var(--f-display); font-weight:700; font-size:1.85rem; line-height:1.05; letter-spacing:-.01em; }
 .lede{ color:var(--muted); font-size:.92rem; margin-top:3px; }
-.status-pill{ margin-top:8px; display:inline-flex; align-items:center; gap:6px; min-height:34px; padding:4px 12px; border-radius:999px;
+.status-pill{ display:inline-flex; align-items:center; gap:6px; min-height:34px; padding:4px 12px; border-radius:999px;
   border:1.5px solid var(--line); background:var(--surface); font-size:.82rem; font-weight:700; color:var(--muted); cursor:pointer; white-space:nowrap; }
 .status-pill.live{ color:var(--ok); border-color:color-mix(in srgb, var(--ok) 35%, var(--line)); }
 .status-pill.practice{ color:var(--sample); border-color:var(--sample-line); background:var(--sample-soft); }
@@ -181,7 +181,7 @@ button{ font:inherit; color:inherit; }
 .j-sep{ color:var(--muted); }
 .j-checks{ list-style:none; margin:0; padding:12px 0 0; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:9px; }
 .j-checks li{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; }
-.j-role{ width:4.4em; flex:none; font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.j-role{ width:6em; flex:none; font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
 .j-st{ font-weight:700; min-width:0; overflow-wrap:anywhere; }
 .j-note{ font-size:.82rem; color:var(--muted); }
 .j-steps summary{ cursor:pointer; font-weight:700; color:var(--accent); font-size:.92rem; }
@@ -314,10 +314,43 @@ button{ font:inherit; color:inherit; }
 .wx-ic .sun{ fill:var(--sun); } .wx-ic .cloud{ fill:var(--unk-soft); stroke:var(--muted); stroke-width:1.5; }
 .wx-ic .drop{ stroke:var(--focus); stroke-width:2; stroke-linecap:round; fill:none; } .wx-ic .flake{ fill:var(--focus); }
 .wx-ic .bolt{ fill:var(--sun); stroke:var(--warn); stroke-width:1; } .wx-ic .fog{ stroke:var(--muted); stroke-width:2; stroke-linecap:round; }
-.j-facts{ flex-basis:100%; padding-left:calc(4.4em + 8px); display:flex; flex-wrap:wrap; gap:2px 12px; font-size:.8rem; color:var(--muted); }
+.lc-list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.lc{ display:inline-flex; align-items:center; gap:7px; padding:3px 10px 3px 3px; border-radius:9px; background:var(--bg); border:1px solid var(--line); }
+.lc-s{ display:inline-flex; align-items:center; gap:4px; font-size:.84rem; font-weight:700; white-space:nowrap; }
+.lc-s svg{ width:16px; height:16px; flex:none; }
+.lc-s.yes{ color:var(--focus); } .lc-s.part{ color:var(--muted); } .lc-s.no{ color:var(--warn); }
+.staff{ display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border-radius:12px; background:var(--unk-soft); font-size:.94rem; }
+.staff svg{ width:22px; height:22px; flex:none; color:var(--muted); margin-top:1px; }
+.staff.yes{ background:var(--ok-soft); } .staff.yes svg{ color:var(--ok); }
+.staff p{ margin:0; }
+.ver{ text-align:center; font-size:.72rem; color:var(--muted); letter-spacing:.04em; padding-top:6px; }
+.report{ width:100%; box-sizing:border-box; min-height:140px; font:.74rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:8px; }
+.j-facts{ flex-basis:100%; padding-left:calc(4.2rem + 8px); display:flex; flex-wrap:wrap; gap:2px 12px; font-size:.8rem; color:var(--muted); }
 .jf.staff{ color:var(--ink); }
 .jf.cool{ color:var(--accent); } .jf.warm{ color:var(--warn); }
 @media (max-width:380px){ .j-facts{ padding-left:0; } }
+
+.top-row{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:8px; }
+.lang{ display:inline-flex; border:1.5px solid var(--line); border-radius:999px; overflow:hidden; background:var(--surface); }
+.lang button{ border:0; background:none; min-height:32px; min-width:38px; padding:2px 8px; font-size:.76rem; font-weight:700; letter-spacing:.05em; color:var(--muted); cursor:pointer; }
+.lang button + button{ border-left:1px solid var(--line); }
+.lang button[aria-pressed="true"]{ background:var(--plaque); color:var(--plaque-ink); }
+
+.ent{ display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:12px; background:var(--accent-soft); }
+.ent > svg{ width:24px; height:24px; flex:none; color:var(--accent); margin-top:1px; }
+.ent-body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.ent-k{ font-size:.7rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--accent); }
+.ent-name{ font-weight:700; font-size:1.02rem; overflow-wrap:anywhere; }
+.ent-why{ font-size:.88rem; color:var(--muted); }
+.ent.warn{ background:var(--warn-soft); } .ent.warn > svg, .ent.warn .ent-k{ color:var(--warn); }
+.ent-all summary{ cursor:pointer; font-weight:700; color:var(--accent); font-size:.92rem; }
+.ent-list{ list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; }
+.ent-list li{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; padding:8px 0; border-top:1px solid var(--line); font-size:.94rem; }
+.ent-list li:first-child{ border-top:0; }
+.ent-list .ent-n{ flex:1; min-width:0; overflow-wrap:anywhere; }
+.ent-list a, .jf-link{ font-weight:700; font-size:.85rem; color:var(--accent); }
+.jf.ent-in{ color:var(--accent); font-weight:700; }
+.chip.closed{ background:var(--bad-soft); color:var(--bad); } .chip.open{ background:var(--ok-soft); color:var(--ok); }
 
 @media (prefers-reduced-motion: reduce){ .pulse, .rolling .wheel{ animation:none; } }
 </style>
@@ -335,54 +368,61 @@ button{ font:inherit; color:inherit; }
       </svg>
       <div>
         <h1>Matteo in Transit</h1>
-        <p class="lede">Lift-friendly routes around Paris for Maria &amp; Matteo</p>
-        <button type="button" id="source" class="status-pill" data-view="settings" aria-label="Data status"><span class="dot pulse"></span>Waking up the lifts…</button>
+        <p class="lede" data-i18n="lede">Lift-friendly routes around Paris for Maria &amp; Matteo</p>
+        <div class="top-row">
+          <button type="button" id="source" class="status-pill" data-view="settings" data-i18n-aria="dataStatus" aria-label="Data status"><span class="dot pulse"></span>Waking up the lifts…</button>
+          <div class="lang" role="group" data-i18n-aria="langAria" aria-label="Language">
+            <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+            <button type="button" data-lang="fr" aria-pressed="false" lang="fr">FR</button>
+            <button type="button" data-lang="it" aria-pressed="false" lang="it">IT</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
   <div id="view-trip" class="view" role="tabpanel" aria-labelledby="tab-trip">
-    <section id="wx" class="wx" aria-label="Today's weather in Paris" aria-live="polite"><p class="label">Today in Paris</p><p class="hint">Checking the sky…</p></section>
-    <div class="pass" aria-label="Matteo's boarding pass">
+    <section id="wx" class="wx" aria-live="polite"><p class="label">Today in Paris</p><p class="hint">Checking the sky…</p></section>
+    <div class="pass" data-i18n-aria="pass.aria" aria-label="Matteo's boarding pass">
       <div class="pass-fields">
-        <div><p class="pass-k">Passenger</p><p class="pass-v">Matteo</p></div>
-        <div><p class="pass-k">Class</p><p class="pass-v">Pram, first</p></div>
-        <div class="pass-wide"><p class="pass-k">Departs</p><p class="pass-v">After the nap</p></div>
+        <div><p class="pass-k" data-i18n="pass.passenger">Passenger</p><p class="pass-v">Matteo</p></div>
+        <div><p class="pass-k" data-i18n="pass.class">Class</p><p class="pass-v" data-i18n="pass.classV">Pram, first</p></div>
+        <div class="pass-wide"><p class="pass-k" data-i18n="pass.departs">Departs</p><p class="pass-v" data-i18n="pass.departsV">After the nap</p></div>
       </div>
-      <div class="pass-stub"><p class="pass-k">Gate</p><p class="pass-v">Lifts only</p></div>
+      <div class="pass-stub"><p class="pass-k" data-i18n="pass.gate">Gate</p><p class="pass-v" data-i18n="pass.gateV">Lifts only</p></div>
     </div>
 
     <section class="panel" aria-labelledby="trip-h">
-      <h2 id="trip-h" class="panel-h">Where to, Matteo?</h2>
+      <h2 id="trip-h" class="panel-h" data-i18n="tripH">Where to, Matteo?</h2>
       <form id="trip-form" class="trip-form" autocomplete="off" novalidate>
         <div class="od">
           <div class="od-rail" aria-hidden="true"><span class="o"></span><span class="track"></span><span class="d"></span></div>
           <div>
             <div class="tf">
-              <label for="from" class="label">From</label>
-              <input id="from" class="input" type="text" autocomplete="off" spellcheck="false" enterkeyhint="next" placeholder="Station, address or place">
+              <label for="from" class="label" data-i18n="from">From</label>
+              <input id="from" class="input" type="text" autocomplete="off" spellcheck="false" enterkeyhint="next" data-i18n-ph="placePh" placeholder="Station, address or place">
               <ul id="from-sug" class="results" hidden></ul>
             </div>
             <div class="tf">
-              <label for="to" class="label">To</label>
-              <input id="to" class="input" type="text" autocomplete="off" spellcheck="false" enterkeyhint="search" placeholder="Station, address or place">
+              <label for="to" class="label" data-i18n="to">To</label>
+              <input id="to" class="input" type="text" autocomplete="off" spellcheck="false" enterkeyhint="search" data-i18n-ph="placePh" placeholder="Station, address or place">
               <ul id="to-sug" class="results" hidden></ul>
             </div>
           </div>
-          <button type="button" id="swap" class="swap" aria-label="Swap start and destination"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v15M8 4 4.5 7.5M8 4l3.5 3.5M16 20V5m0 15-3.5-3.5M16 20l3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" id="swap" class="swap" data-i18n-aria="swapAria" aria-label="Swap start and destination"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v15M8 4 4.5 7.5M8 4l3.5 3.5M16 20V5m0 15-3.5-3.5M16 20l3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
         <div id="trip-favs" class="quick"></div>
         <div class="trip-opts">
-          <label class="check" for="bus"><input type="checkbox" id="bus" checked>Buses</label>
+          <label class="check" for="bus"><input type="checkbox" id="bus" checked><span data-i18n="buses">Buses</span></label>
           <div class="opt">
-            <label for="stairs-pref" class="label">Stairs</label>
+            <label for="stairs-pref" class="label" data-i18n="stairs">Stairs</label>
             <select id="stairs-pref" class="select">
-              <option value="avoid">Avoid</option>
-              <option value="ok">A few are OK</option>
+              <option value="avoid" data-i18n="stairsAvoid">Avoid</option>
+              <option value="ok" data-i18n="stairsOk">A few are OK</option>
             </select>
           </div>
           <div class="opt">
-            <label for="maxwalk" class="label">Walk</label>
+            <label for="maxwalk" class="label" data-i18n="walk">Walk</label>
             <select id="maxwalk" class="select">
               <option value="10">≤ 10 min</option>
               <option value="15" selected>≤ 15 min</option>
@@ -391,7 +431,7 @@ button{ font:inherit; color:inherit; }
             </select>
           </div>
         </div>
-        <button type="submit" class="btn-primary">Find Matteo's route</button>
+        <button type="submit" class="btn-primary" data-i18n="findRoute">Find Matteo's route</button>
       </form>
     </section>
     <div id="trip-status" class="trip-status" role="status"></div>
@@ -400,26 +440,27 @@ button{ font:inherit; color:inherit; }
       <summary id="trip-more-label">Show more routes</summary>
       <ol id="trip-more-list" class="journeys"></ol>
     </details>
+    <p class="ver" id="ver"></p>
   </div>
 
   <div id="view-station" class="view" role="tabpanel" aria-labelledby="tab-station" hidden>
     <section class="panel" aria-labelledby="st-h">
-      <h2 id="st-h" class="panel-h">Station check</h2>
+      <h2 id="st-h" class="panel-h" data-i18n="stH">Station check</h2>
       <div class="field">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="q" class="input" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search" placeholder="Which station?" aria-label="Station">
+        <input id="q" class="input" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search" data-i18n-ph="stPh" placeholder="Which station?" data-i18n-aria="stAria" aria-label="Station">
       </div>
       <ul id="results" class="results" hidden></ul>
       <div id="favs" class="favs"></div>
     </section>
     <section id="station" class="panel" aria-live="polite">
-      <p class="hint">Search for a station to check its lifts.</p>
+      <p class="hint" data-i18n="stEmpty">Search for a station to check its lifts.</p>
     </section>
   </div>
 
   <div id="view-out" class="view" role="tabpanel" aria-labelledby="tab-out" hidden>
     <section class="panel" aria-labelledby="out-h">
-      <div class="sec-head"><h2 id="out-h" class="panel-h">Lifts out today</h2><span id="out-count" class="count tnum"></span></div>
+      <div class="sec-head"><h2 id="out-h" class="panel-h" data-i18n="outH">Lifts out today</h2><span id="out-count" class="count tnum"></span></div>
       <div id="summary"></div>
       <ul id="outages" class="rows"></ul>
     </section>
@@ -427,59 +468,60 @@ button{ font:inherit; color:inherit; }
 
   <div id="view-settings" class="view" role="tabpanel" aria-labelledby="tab-settings" hidden>
     <section id="conn" class="panel" aria-labelledby="conn-h">
-      <h2 id="conn-h" class="panel-h">Connect to IDFM</h2>
-      <p id="conn-proxy" class="hint" hidden>Connected through Matteo's own server, so nobody needs a key. <button type="button" id="show-key" class="linkbtn">Use a personal key instead</button></p>
+      <h2 id="conn-h" class="panel-h" data-i18n="connH">Connect to IDFM</h2>
+      <p id="conn-proxy" class="hint" hidden><span id="conn-proxy-text" data-i18n="connProxy">Connected through Matteo's own server, so nobody needs a key.</span> <button type="button" id="show-key" class="linkbtn" data-i18n="useOwnKey">Use a personal key instead</button></p>
       <form id="conn-form" class="conn-form" novalidate>
-        <p class="hint">Live lifts and route planning use a free key from <a href="https://prim.iledefrance-mobilites.fr/" target="_blank" rel="noopener">PRIM</a>, IDFM's open data site. It stays on this device.</p>
-        <label for="k" class="label">PRIM API key</label>
-        <input id="k" class="input" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your key">
-        <label for="k2" class="label">Route planner key (only if different)</label>
-        <input id="k2" class="input" type="password" autocomplete="off" spellcheck="false" placeholder="Leave empty to use the same key">
-        <label for="u" class="label">Lift data address (optional)</label>
-        <input id="u" class="input" type="url" autocomplete="off" spellcheck="false" placeholder="Leave empty for IDFM's standard one">
+        <p class="hint" data-i18n-html="connHint">Live lifts and route planning use a free key from <a href="https://prim.iledefrance-mobilites.fr/" target="_blank" rel="noopener">PRIM</a>, IDFM's open data site. It stays on this device.</p>
+        <label for="k" class="label" data-i18n="keyLabel">PRIM API key</label>
+        <input id="k" class="input" type="password" autocomplete="off" spellcheck="false" data-i18n-ph="keyPh" placeholder="Paste your key">
+        <label for="k2" class="label" data-i18n="key2Label">Route planner key (only if different)</label>
+        <input id="k2" class="input" type="password" autocomplete="off" spellcheck="false" data-i18n-ph="key2Ph" placeholder="Leave empty to use the same key">
+        <label for="u" class="label" data-i18n="urlLabel">Lift data address (optional)</label>
+        <input id="u" class="input" type="url" autocomplete="off" spellcheck="false" data-i18n-ph="urlPh" placeholder="Leave empty for IDFM's standard one">
         <div class="src-actions">
-          <button type="submit" class="btn">Save and load live data</button>
-          <button type="button" id="forget" class="btn">Remove key</button>
+          <button type="submit" class="btn" data-i18n="saveLoad">Save and load live data</button>
+          <button type="button" id="forget" class="btn" data-i18n="removeKey">Remove key</button>
         </div>
         <p id="conn-status" class="conn-status" role="status"></p>
       </form>
     </section>
 
     <section class="panel" aria-labelledby="data-h">
-      <h2 id="data-h" class="panel-h">Data</h2>
+      <h2 id="data-h" class="panel-h" data-i18n="dataH">Data</h2>
       <div id="data-panel"></div>
     </section>
 
     <section class="panel">
       <details class="how">
-        <summary>How routes are ranked</summary>
+        <summary data-i18n="howH">How routes are ranked</summary>
         <ol>
-          <li>Time comes first: each route starts from the minutes until you arrive, including any wait.</li>
-          <li>Extra minutes are added for what's harder with a pram. Stairs where a lift is missing or out: ~1 flight +8, 2–3 flights +15, a deep or large station +22 (with “A few are OK”: +3, +6, +10). Lifts partly out or with no status +6, step-free only with staff help +5, each change +4, each bus ride +2, a station with a single lift +2.</li>
-          <li>Walking up to 10 minutes counts as normal, a little more up to your limit, and double past it.</li>
-          <li>A station with high particle levels on the platform adds +4. On hot days (feels like 27°C or more), each ride on a train without cooling adds +4, and +1 where only some trains are cooled.</li>
-          <li>Stair sizes come from the station type: deep RER and train stations in Paris and big hubs 4+ flights, suburban train stations about 1, metro stations 2–3.</li>
+          <li data-i18n="how1"></li>
+          <li data-i18n="how2"></li>
+          <li data-i18n="how3"></li>
+          <li data-i18n="how4"></li>
+          <li data-i18n="how5"></li>
         </ol>
       </details>
     </section>
 
     <section class="panel about">
-      <p class="made"><svg class="mini-pram" viewBox="0 0 54 46" aria-hidden="true"><path d="M9 23 A15 15 0 0 1 24 8 L24 23 Z" fill="var(--sun)"/><path d="M6 23 H42 Q42 34 30 34 H18 Q6 34 6 23 Z" fill="var(--plaque)"/><path d="M42 23 L48 12" fill="none" stroke="var(--plaque)" stroke-width="3.5" stroke-linecap="round"/><circle cx="15" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><circle cx="34" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/></svg>Made for Maria &amp; Matteo</p>
-      <p>Lift status, stations and accessibility ratings: <a href="https://prim.iledefrance-mobilites.fr/en/jeux-de-donnees/etat-des-ascenseurs" target="_blank" rel="noopener">Île-de-France Mobilités open data</a>. Routes: IDFM's journey planner.</p>
+      <p class="made"><svg class="mini-pram" viewBox="0 0 54 46" aria-hidden="true"><path d="M9 23 A15 15 0 0 1 24 8 L24 23 Z" fill="var(--sun)"/><path d="M6 23 H42 Q42 34 30 34 H18 Q6 34 6 23 Z" fill="var(--plaque)"/><path d="M42 23 L48 12" fill="none" stroke="var(--plaque)" stroke-width="3.5" stroke-linecap="round"/><circle cx="15" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><circle cx="34" cy="39" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/></svg><span data-i18n="made">Made for Maria &amp; Matteo</span></p>
+      <p id="ver-about"></p>
+      <p data-i18n-html="aboutData"></p>
     </section>
   </div>
 </div>
 
-<nav class="tabbar" aria-label="Sections">
+<nav class="tabbar" data-i18n-aria="tabsAria" aria-label="Sections">
   <div class="tabbar-in" role="tablist">
     <button type="button" class="tab" role="tab" id="tab-trip" aria-controls="view-trip" aria-selected="true" data-view="trip">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6" r="2.5" fill="currentColor"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Trip</button>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6" r="2.5" fill="currentColor"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="tabTrip">Trip</span></button>
     <button type="button" class="tab" role="tab" id="tab-station" aria-controls="view-station" aria-selected="false" data-view="station">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 12h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Stations</button>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 12h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="tabStations">Stations</span></button>
     <button type="button" class="tab" role="tab" id="tab-out" aria-controls="view-out" aria-selected="false" data-view="out">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v18M8 9.5l-1.5 2h3zM16 14.5l-1.5-2h3z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>Lifts out<span id="tab-out-count" class="tab-count tnum"></span></button>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v18M8 9.5l-1.5 2h3zM16 14.5l-1.5-2h3z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg><span data-i18n="tabOut">Lifts out</span><span id="tab-out-count" class="tab-count tnum"></span></button>
     <button type="button" class="tab" role="tab" id="tab-settings" aria-controls="view-settings" aria-selected="false" data-view="settings">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Settings</button>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="tabSettings">Settings</span></button>
   </div>
 </nav>
 
@@ -490,6 +532,447 @@ button{ font:inherit; color:inherit; }
 /* ---------- Config ---------- */
 // IDFM lift-status endpoints (Opendatasoft API). The feed refuses anonymous requests, so the page sends a free PRIM API key
 // that the viewer types in; it stays in their browser only. Add ?src=<url> to the page address to try another endpoint first.
+// Bump on every update so you can see which version a phone is running.
+const APP_VERSION = '2.0';
+const APP_DATE = '2026-11-02';
+/* ---------- Languages: English, French, Italian ---------- */
+const LANG_KEY = 'lift-or-stairs:lang';
+const LANGS = ['en', 'fr', 'it'];
+const LOCALE = { en:'en-GB', fr:'fr-FR', it:'it-IT' };
+function initialLang(){
+  try { const v = localStorage.getItem(LANG_KEY); if (LANGS.includes(v)) return v; } catch (e){}
+  try {
+    const n = String((navigator.languages && navigator.languages[0]) || navigator.language || '').slice(0, 2).toLowerCase();
+    if (LANGS.includes(n)) return n;
+  } catch (e){}
+  return 'en';
+}
+let LANG = initialLang();
+const pl = (n, one, many) => n === 1 ? one : many;
+
+const I18N = {
+  en:{
+    lede:'Lift-friendly routes around Paris for Maria & Matteo',
+    langAria:'Language', dataStatus:'Data status',
+    'pass.aria':"Matteo's boarding pass", 'pass.passenger':'Passenger', 'pass.class':'Class', 'pass.classV':'Pram, first',
+    'pass.departs':'Departs', 'pass.departsV':'After the nap', 'pass.gate':'Gate', 'pass.gateV':'Lifts only',
+    tripH:'Where to, Matteo?', from:'From', to:'To', placePh:'Station, address or place', swapAria:'Swap start and destination',
+    buses:'Buses', stairs:'Stairs', stairsAvoid:'Avoid', stairsOk:'A few are OK', walk:'Walk', findRoute:"Find Matteo's route",
+    stH:'Station check', stPh:'Which station?', stAria:'Station', stEmpty:'Search for a station to check its lifts.',
+    outH:'Lifts out today',
+    connH:'Connect to IDFM', connProxy:"Connected through Matteo's own server, so nobody needs a key.",
+    connBuiltin:'Connected with the key built into the app, so nobody needs to enter one.', useOwnKey:'Use a personal key instead',
+    connHint:'Live lifts and route planning use a free key from <a href="https://prim.iledefrance-mobilites.fr/" target="_blank" rel="noopener">PRIM</a>, IDFM’s open data site. It stays on this device.',
+    keyLabel:'PRIM API key', keyPh:'Paste your key', key2Label:'Route planner key (only if different)', key2Ph:'Leave empty to use the same key',
+    urlLabel:'Lift data address (optional)', urlPh:'Leave empty for IDFM’s standard one', saveLoad:'Save and load live data', removeKey:'Remove key',
+    dataH:'Data', howH:'How routes are ranked',
+    how1:'Time comes first: each route starts from the minutes until you arrive, including any wait.',
+    how2:'Extra minutes are added for what’s harder with a pram. Stairs where a lift is missing or out: ~1 flight +8, 2–3 flights +15, a deep or large station +22 (with “A few are OK”: +3, +6, +10). Lifts partly out or with no status +6, step-free only with staff help +5, each change +4, each bus ride +2, a station with a single lift +2.',
+    how3:'Walking up to 10 minutes counts as normal, a little more up to your limit, and double past it.',
+    how4:'A station with high particle levels on the platform adds +4. On hot days (feels like 27°C or more), each ride on a train without cooling adds +4, and +1 where only some trains are cooled.',
+    how5:'Stair sizes come from the station type: deep RER and train stations in Paris and big hubs 4+ flights, suburban train stations about 1, metro stations 2–3.',
+    made:'Made for Maria & Matteo', versionLine:v => `Version ${v.ver} · updated ${v.date}`,
+    aboutData:'Lift status, stations, air and accessibility: <a href="https://prim.iledefrance-mobilites.fr/en/jeux-de-donnees/etat-des-ascenseurs" target="_blank" rel="noopener">Île-de-France Mobilités open data</a>. Routes: IDFM’s journey planner. Weather: Open-Meteo.',
+    tabTrip:'Trip', tabStations:'Stations', tabOut:'Lifts out', tabSettings:'Settings', tabsAria:'Sections',
+    'pill.loading':'Waking up the lifts…', 'pill.live':'Live', 'pill.file':'From a file', 'pill.practice':'Practice mode', practice:'Practice',
+    refresh:'Refresh now', copyReport:'Copy data report', loadFile:'Load an IDFM export file', loading:'Loading…',
+    dataLive:v => `Live from Île-de-France Mobilités, loaded at ${v.time}: ${v.st} stations and ${v.lifts} lifts.`,
+    dataFile:v => `Using the file “${v.file}”: ${v.st} stations and ${v.lifts} lifts. It won’t update by itself.`,
+    dataPracticeKey:'Live data didn’t load, so the app is in practice mode with made-up lift statuses.',
+    dataPracticeNoKey:'Practice mode: lift statuses and staffed counters are made up so you can try the app. Add a PRIM key above to switch to live data.',
+    whatIdfm:'What IDFM answered',
+    'src.lifts':'Lift status', 'src.rail':'Stations and lines', 'src.access':'Accessibility ratings', 'src.air':'Air on the platforms', 'src.counters':'Staffed counters', 'src.weather':'Weather',
+    reportCopied:'Copied. Paste it to Claude.', reportSelect:'Select all and copy this, then paste it to Claude.',
+    connected:'Connected. Live data loaded.', stillNoLive:'Still no live data. See “What IDFM answered” under Data below.',
+    savedLoading:'Saved on this device. Loading…', keyRemoved:'Key removed from this device.',
+    noMatchStation:v => `No station matches “${v.q}”.`,
+    noLiftsListed:v => `No lifts listed for “${v.q}”. If that station has no lift, it isn’t in the lift feed: expect stairs there.`,
+    favsEmpty:'Tap Save on a station and it becomes one of Matteo’s stations, one tap away here and in the trip planner.', favsLabel:'Matteo’s stations',
+    'v.tram.t':'Street-level tram stop', 'v.tram.s':'Tram stops are at street level, so no lift is needed.',
+    'v.free.t':'Step-free without a lift', 'v.free.s':'IDFM rates this station accessible on your own: you can reach the platform without stairs.',
+    'v.help.t':'Step-free with staff help', 'v.help.s':'IDFM rates this station accessible with help from station staff, for example a ramp. Ask at the ticket office.',
+    'v.nolift.t':'No lift at this station',
+    'v.nolift.s':v => `Expect ${v.stairs} between the street and the platform.${v.assist ? ' Assistance is only available by booking ahead through Assist’enGare.' : ''} Plan B shows the nearest stations with working lifts.`,
+    'v.some.t':'Some lifts out', 'v.some.s':v => `${v.out} of ${v.n} lifts out of service. Check whether it’s the one you need, or use Plan B.`,
+    'v.none.t':'No working lift', 'v.none.s':v => v.n === 1 ? 'The only lift here is out of service.' : `All ${v.n} lifts are out of service.`,
+    'v.working.t':'Lifts working', 'v.working.s':v => `${v.ok} working at the last check, ${v.unk} with no status.`,
+    'v.nostatus.t':'No status right now', 'v.nostatus.s':'The last check gave no status. Ask station staff, or pick a station from Plan B.',
+    'v.all.t':'All lifts working', 'v.all.s':v => v.n === 1 ? 'The lift was working at the last check.' : `All ${v.n} lifts were working at the last check.`,
+    'ss.street':'Street level', 'ss.free':'Step-free', 'ss.help':'Staff help', 'ss.nolift':'No lift', 'ss.someout':v => `${v.n} out`, 'ss.out':'Out',
+    'ss.working':'Working', 'ss.all':'All working', 'ss.nostatus':'No status',
+    'ago.now':'just now', 'ago.min':v => `${v.n} min ago`, 'ago.h':v => `${v.n} h ago`, 'ago.d':v => `${v.n} days ago`,
+    checked:v => `checked ${v.when}`, checkMissing:'check time not given', oldInfo:'old info',
+    'status.ok':'Working', 'status.out':'Out of service', 'status.unknown':'No status',
+    'reason.fault':'Technical fault', 'reason.works':'Works or maintenance', 'reason.other':'Other problem',
+    liftsN:v => pl(v.n, '1 lift', `${v.n} lifts`), noLifts:'No lifts', save:'Save', saved:'Saved',
+    tripFromHere:'Trip from here', tripToHere:'Trip to here', backTrip:'‹ Back to your trip', liftsHere:'Lifts at this station', noLiftsHere:'No lifts here.',
+    atStation:'At this station', airPlatforms:'Air on platforms',
+    'air.low':'Low particles', 'air.medium':'Medium particles', 'air.high':'High particles',
+    'airShort.low':'low', 'airShort.medium':'medium', 'airShort.high':'high',
+    airNotMeasured:'Not measured (above ground or a new station)',
+    coolYes:'Cooled', coolPart:'Some cooled', coolNo:'Not cooled', linesAria:'Lines and train cooling',
+    staffHere:'Staff here', staffNone:'No staffed counter listed here, so plan to open the wide gate yourself.', staffChecking:'Checking for staff…',
+    staffFailed:'Staff info didn’t load.', seeWhy:'See why in Settings', staffed:v => `Staffed: ${v.type}`, noStaffed:'No staffed counter',
+    planBH:'Plan B for Matteo · nearby stations with working lifts',
+    planBNoLoc:'This station has no location in the feed, so nearby options can’t be worked out.',
+    planBNone:'No station within 2 km has its lifts confirmed working. A bus or tram may be easier today.',
+    aboutMin:v => `about ${v.m} min with a pram`, stepFreeNoLift:'step-free, no lift needed',
+    liftsWorkingN:v => pl(v.n, '1 lift working', `${v.n} lifts working`), noStatusN:v => `${v.n} no status`, walkThere:'Walk there',
+    barAria:v => `${v.ok} lifts working, ${v.out} out of service, ${v.unk} with no status`,
+    legWorking:v => `${v.n} working`, legOut:v => `${v.n} out of service`, legUnk:v => `${v.n} no status`,
+    stationsN:v => pl(v.n, '1 station', `${v.n} stations`), outOfN:v => `${v.out} of ${v.n} out`, allAwake:'Every lift is awake. Smooth rolling!',
+    todayParis:'Today in Paris', checkingSky:'Checking the sky…', wxFailed:'The forecast didn’t load. It will try again next time you open the app.',
+    'wx.clear':'Clear', 'wx.partly':'Partly cloudy', 'wx.cloudy':'Cloudy', 'wx.fog':'Fog', 'wx.drizzle':'Drizzle', 'wx.rain':'Rain', 'wx.snow':'Snow',
+    'wx.showers':'Showers', 'wx.snowShowers':'Snow showers', 'wx.storm':'Thunderstorm', 'wx.now':'Now',
+    feels:v => `feels ${v.t}°`, highLow:v => `High ${v.max}° · Low ${v.min}°`, rainPct:v => `Rain ${v.p}%`, outsideAir:v => `Outside air ${v.l}`, nextHours:'Next hours',
+    'aqi.good':'good', 'aqi.fair':'fair', 'aqi.moderate':'moderate', 'aqi.poor':'poor', 'aqi.vpoor':'very poor', 'aqi.epoor':'extremely poor',
+    'tip.hot':'Hot one: cooled lines get priority today. Shade and water for Matteo.', 'tip.snow':'Snow about: footmuff and rain cover on.',
+    'tip.rain':'Rain likely today: pack the pram cover.', 'tip.sun':'Strong sun today: hat and shade for Matteo.',
+    'tip.cold':'Chilly: an extra layer for Matteo.', 'tip.nice':'Nice day for the walking bits.',
+    'place.station':'Station', 'place.stop':'Stop', 'place.address':'Address', 'place.place':'Place', 'place.area':'Area', 'place.withLifts':'Station with lifts',
+    noMatch:v => `No match for “${v.q}”.`,
+    'chip.street':'Street level', 'chip.noLiftListed':'No lift listed', 'chip.freeNoLift':'Step-free, no lift needed', 'chip.help':'Step-free with staff help',
+    'chip.noLift':'No lift', 'chip.someOut':v => `${v.out} of ${v.n} lifts out`, 'chip.liftOut':'Lift out', 'chip.workingSome':'Lifts working (some unconfirmed)',
+    'chip.working':'Lifts working', 'chip.noStatus':'No lift status', 'chip.highParticles':'High particles',
+    'stairs.short.chip':'~1 flight', 'stairs.medium.chip':'~2–3 flights', 'stairs.long.chip':'4+ flights',
+    'stairs.short.text':'about 1 flight of stairs', 'stairs.medium.text':'about 2–3 flights of stairs', 'stairs.long.text':'4 or more flights of stairs (deep or large station)',
+    'role.Start':'Start', 'role.Change':'Change', 'role.Arrive':'Arrive',
+    'tag.approved':'Matteo-approved', 'tag.best':'Best option', 'tag.fastest':'Fastest', 'tag.stairs':v => `Stairs at ${pl(v.n, '1 station', `${v.n} stations`)}`,
+    'tag.longWalk':'Long walk', 'tag.particles':'High particles', 'tag.warm':'Warm trains', 'tag.smooth':'Smooth ride', 'tag.street':'Street level', 'tag.notFree':'Not marked step-free',
+    walkOnly:'Walk only', direct:'direct', changesN:v => pl(v.n, '1 change', `${v.n} changes`), minWalking:v => `${v.m} min walking`,
+    seePlanB:'See Plan B', expectStairs:'expect stairs', mayMeanStairs:'may mean stairs', stepByStep:'Step by step',
+    stepWalk:'Walk', walkTo:v => `${v.m} min to ${v.to}`, stepChange:'Change', walkToPlatform:v => `Walk ${v.m} min to the next platform`,
+    towards:v => `towards ${v.d}`, stopsN:v => pl(v.n, '1 stop', `${v.n} stops`),
+    lineN:v => `line ${v.c}`, busN:v => `bus ${v.c}`, colon:': ',
+    'cool.yes':'cooled', 'cool.partTrains':'some trains cooled', 'cool.partBuses':'some buses cooled', 'cool.no':'not cooled',
+    findingRoute:'Finding Matteo’s smoothest route…', noRoute:'No route found between these places. Try a nearby station or address.',
+    keyHelp:v => `The route planner is a separate API on PRIM. Log in, open the API “Calculateur Île-de-France Mobilités – Accès générique”, and make sure your account has access to it. If PRIM gives you a separate token for it, paste it as the ${v.btn} in Settings.`,
+    keyHelpBtn:'route planner key', connectSettings:'connect to IDFM in Settings', practiceRun:'Practice run:', planOwn:'Plan your own trip above.',
+    toPlanReal:v => `To plan real trips, ${v.link}.`, hotPriority:v => `It’s ${v.t}°C, so cooled lines get priority.`,
+    allStairs:'Every route has stairs or a broken lift right now, so the quickest is first. Tap a station for its Plan B.',
+    showMore:v => pl(v.n, 'Show 1 more route', `Show ${v.n} more routes`),
+    enterBoth:'Enter a start and a destination.', pickStart:'Choose a start from the suggestions.', pickDest:'Choose a destination from the suggestions.',
+    keyRefused:v => `IDFM’s route planner refused your key (HTTP ${v.s}).`, plannerDown:v => `IDFM’s route planner didn’t answer. ${v.d}`,
+    'c.fastestStairs':'Fastest route, even counting the stairs.', 'c.fastestSmooth':'Fastest route, and smooth rolling all the way.',
+    'c.afterFastest':v => `Arrives ${v.d} min after the fastest route, but ${v.adv}.`,
+    'c.fasterThanTop':v => `${v.d} min faster than the top route, but ${v.adv}.`,
+    'c.afterTop':v => `Arrives ${v.d} min after the top route.`, 'c.sameTime':v => `Arrives at the same time as the top route, but ${v.adv}.`,
+    'adv.stairsAt':v => `${v.top ? 'the top route' : 'it'} avoids the stairs at ${v.list}`,
+    'adv.fewerStairs':v => `${v.top ? 'the top route' : 'it'} has fewer stairs`,
+    'adv.cleanerAir':v => `${v.top ? 'the top route' : 'it'} has cleaner air on the platforms`,
+    'adv.cooled':v => v.top ? 'the top route’s trains are cooled' : 'its trains are cooled',
+    'adv.fewerChanges':v => `${v.top ? 'the top route' : 'it'} has ${v.n} fewer ${pl(v.n, 'change', 'changes')}`,
+    'adv.lessWalking':v => `${v.top ? 'the top route' : 'it'} has ${v.m} min less walking`,
+    'adv.reliable':v => v.top ? 'the top route’s lifts are more reliable' : 'its lifts are more reliable',
+    'adv.avoidsBus':v => `${v.top ? 'the top route' : 'it'} avoids a bus ride`,
+    'adv.easier':v => `${v.top ? 'the top route' : 'it'} is easier with a pram`,
+    'd.liftOut':v => `the lift at ${v.name} is out, so expect ${v.stairs}`, 'd.noLift':v => `${v.name} has no lift, so expect ${v.stairs}`,
+    'd.someOut':v => `some lifts are out at ${v.list}`, 'd.noStatus':v => `no lift status for ${v.list}`,
+    'd.help':v => `${v.list} ${pl(v.n, 'is', 'are')} step-free only with staff help`, 'd.stale':v => `lift info for ${v.list} is over ${v.h} h old`,
+    'd.single':v => `only one lift at ${v.list}`, 'd.walkOnly':'walking only',
+    'd.everyStreet':'lifts working at every station, plus street-level bus or tram stops',
+    'd.workingAt':v => v.n === 1 ? 'lifts working at the station' : v.n === 2 ? 'lifts working at both stations' : `lifts working at all ${v.n} stations`,
+    'd.streetNoStairs':'street-level bus or tram stops, so no stairs', 'd.air':v => `high particle levels at ${v.list}`,
+    'd.hot':v => `it’s ${v.t}°C and ${v.list} ${pl(v.n, 'isn’t', 'aren’t')} cooled`, 'd.noChanges':'no changes',
+    'd.bus':v => v.n > 1 ? `${v.n} bus rides` : 'one bus ride', 'd.walkOver':v => `${v.m} min of walking, over your ${v.lim} min limit`,
+    'src.entrances':'Station entrances',
+    entBest:'Best entrance for the pram', entLift:'street lift, working', entStepFree:'step-free entrance (IDFM)',
+    entUseLift:v => `Use the entrance with the street lift: ${v.side}`, entLiftOut:v => `The street lift (${v.side}) is out of service.`,
+    entAll:v => `All entrances (${v.n})`, entStepChip:'Step-free', entLiftChip:'Street lift', map:'Map',
+    enterBy:v => `Enter by: ${v.e}`, leaveBy:v => `Leave by: ${v.e}`, viaLift:'(street lift)', viaStepFree:'(step-free)',
+    openNow:v => `Open now · until ${v.t}`, closedNow:v => v.t ? `Closed now · opens ${v.t}` : 'Closed now', closedShort:'closed now',
+    'd.walk':v => `${v.m} min of walking`, 'd.notFree':'not marked step-free by IDFM', and:'and'
+  },
+
+  fr:{
+    lede:'Itinéraires avec ascenseurs dans Paris pour Maria et Matteo',
+    langAria:'Langue', dataStatus:'État des données',
+    'pass.aria':'Carte d’embarquement de Matteo', 'pass.passenger':'Passager', 'pass.class':'Classe', 'pass.classV':'Poussette 1re',
+    'pass.departs':'Départ', 'pass.departsV':'Après la sieste', 'pass.gate':'Porte', 'pass.gateV':'Ascenseurs seulement',
+    tripH:'On va où, Matteo ?', from:'Départ', to:'Arrivée', placePh:'Station, adresse ou lieu', swapAria:'Inverser départ et arrivée',
+    buses:'Bus', stairs:'Escaliers', stairsAvoid:'Éviter', stairsOk:'Quelques marches, ça va', walk:'Marche', findRoute:'Trouver le trajet de Matteo',
+    stH:'Vérifier une station', stPh:'Quelle station ?', stAria:'Station', stEmpty:'Cherchez une station pour vérifier ses ascenseurs.',
+    outH:'Ascenseurs en panne',
+    connH:'Connexion à IDFM', connProxy:'Connecté via le serveur de Matteo : aucune clé à saisir.',
+    connBuiltin:'Connecté avec la clé intégrée à l’app : personne n’a besoin d’en saisir une.', useOwnKey:'Utiliser une clé personnelle',
+    connHint:'Les ascenseurs en direct et les itinéraires utilisent une clé gratuite de <a href="https://prim.iledefrance-mobilites.fr/" target="_blank" rel="noopener">PRIM</a>, le site open data d’IDFM. Elle reste sur cet appareil.',
+    keyLabel:'Clé API PRIM', keyPh:'Collez votre clé', key2Label:'Clé du calculateur d’itinéraires (si différente)', key2Ph:'Laisser vide pour utiliser la même clé',
+    urlLabel:'Adresse des données ascenseurs (facultatif)', urlPh:'Laisser vide pour l’adresse standard d’IDFM', saveLoad:'Enregistrer et charger les données', removeKey:'Supprimer la clé',
+    dataH:'Données', howH:'Comment les trajets sont classés',
+    how1:'Le temps d’abord : chaque trajet part des minutes avant l’arrivée, attente comprise.',
+    how2:'On ajoute des minutes pour ce qui est difficile avec une poussette. Escaliers quand un ascenseur manque ou est en panne : ~1 volée +8, 2 à 3 volées +15, station profonde ou grande +22 (avec « Quelques marches, ça va » : +3, +6, +10). Ascenseurs en partie en panne ou sans info +6, sans marches seulement avec un agent +5, chaque correspondance +4, chaque trajet en bus +2, station avec un seul ascenseur +2.',
+    how3:'Jusqu’à 10 minutes de marche, rien en plus ; un peu plus jusqu’à votre limite, et le double au-delà.',
+    how4:'Une station avec beaucoup de particules sur le quai ajoute +4. Par forte chaleur (ressenti 27 °C ou plus), chaque trajet dans une rame non climatisée ajoute +4, et +1 si seulement certaines rames le sont.',
+    how5:'La taille des escaliers dépend du type de station : RER et gares profondes dans Paris et grands pôles 4+ volées, gares de banlieue environ 1, métro 2 à 3.',
+    made:'Fait pour Maria et Matteo', versionLine:v => `Version ${v.ver} · mise à jour le ${v.date}`,
+    aboutData:'Ascenseurs, stations, air et accessibilité : <a href="https://prim.iledefrance-mobilites.fr/jeux-de-donnees/etat-des-ascenseurs" target="_blank" rel="noopener">open data Île-de-France Mobilités</a>. Itinéraires : calculateur IDFM. Météo : Open-Meteo.',
+    tabTrip:'Trajet', tabStations:'Stations', tabOut:'Pannes', tabSettings:'Réglages', tabsAria:'Sections',
+    'pill.loading':'On réveille les ascenseurs…', 'pill.live':'En direct', 'pill.file':'Depuis un fichier', 'pill.practice':'Mode essai', practice:'Essai',
+    refresh:'Actualiser', copyReport:'Copier le rapport', loadFile:'Charger un fichier IDFM', loading:'Chargement…',
+    dataLive:v => `En direct d’Île-de-France Mobilités, chargé à ${v.time} : ${v.st} stations et ${v.lifts} ascenseurs.`,
+    dataFile:v => `Fichier « ${v.file} » : ${v.st} stations et ${v.lifts} ascenseurs. Il ne se met pas à jour tout seul.`,
+    dataPracticeKey:'Les données en direct n’ont pas chargé : l’app est en mode essai, avec des états d’ascenseurs inventés.',
+    dataPracticeNoKey:'Mode essai : les états des ascenseurs et les guichets sont inventés pour tester l’app. Ajoutez une clé PRIM ci-dessus pour passer en direct.',
+    whatIdfm:'Ce qu’IDFM a répondu',
+    'src.lifts':'État des ascenseurs', 'src.rail':'Stations et lignes', 'src.access':'Accessibilité', 'src.air':'Air sur les quais', 'src.counters':'Guichets avec agents', 'src.weather':'Météo',
+    reportCopied:'Copié. Collez-le à Claude.', reportSelect:'Sélectionnez tout, copiez, puis collez-le à Claude.',
+    connected:'Connecté. Données en direct chargées.', stillNoLive:'Toujours pas de données en direct. Voir « Ce qu’IDFM a répondu » dans Données ci-dessous.',
+    savedLoading:'Enregistré sur cet appareil. Chargement…', keyRemoved:'Clé supprimée de cet appareil.',
+    noMatchStation:v => `Aucune station ne correspond à « ${v.q} ».`,
+    noLiftsListed:v => `Aucun ascenseur pour « ${v.q} ». Si la station n’en a pas, elle n’est pas dans le flux : prévoyez des escaliers.`,
+    favsEmpty:'Touchez Enregistrer sur une station : elle devient une station de Matteo, à portée de doigt ici et dans le trajet.', favsLabel:'Les stations de Matteo',
+    'v.tram.t':'Arrêt de tram de plain-pied', 'v.tram.s':'Les arrêts de tram sont au niveau de la rue : pas besoin d’ascenseur.',
+    'v.free.t':'Sans marches, sans ascenseur', 'v.free.s':'IDFM juge cette station accessible en autonomie : on rejoint le quai sans escaliers.',
+    'v.help.t':'Sans marches avec un agent', 'v.help.s':'IDFM juge cette station accessible avec l’aide du personnel, par exemple une rampe. Demandez au guichet.',
+    'v.nolift.t':'Pas d’ascenseur dans cette station',
+    'v.nolift.s':v => `Prévoyez ${v.stairs} entre la rue et le quai.${v.assist ? ' L’assistance se réserve à l’avance via Assist’enGare.' : ''} Le plan B montre les stations proches avec ascenseurs en service.`,
+    'v.some.t':'Certains ascenseurs en panne', 'v.some.s':v => `${v.out} ascenseur(s) sur ${v.n} hors service. Vérifiez si c’est celui qu’il vous faut, ou prenez le plan B.`,
+    'v.none.t':'Aucun ascenseur en service', 'v.none.s':v => v.n === 1 ? 'Le seul ascenseur est hors service.' : `Les ${v.n} ascenseurs sont hors service.`,
+    'v.working.t':'Ascenseurs en service', 'v.working.s':v => `${v.ok} en service au dernier contrôle, ${v.unk} sans info.`,
+    'v.nostatus.t':'Pas d’info pour l’instant', 'v.nostatus.s':'Le dernier contrôle n’a rien donné. Demandez au personnel ou choisissez une station du plan B.',
+    'v.all.t':'Tous les ascenseurs fonctionnent', 'v.all.s':v => v.n === 1 ? 'L’ascenseur fonctionnait au dernier contrôle.' : `Les ${v.n} ascenseurs fonctionnaient au dernier contrôle.`,
+    'ss.street':'Plain-pied', 'ss.free':'Sans marches', 'ss.help':'Avec un agent', 'ss.nolift':'Sans ascenseur', 'ss.someout':v => `${v.n} en panne`, 'ss.out':'En panne',
+    'ss.working':'En service', 'ss.all':'Tout fonctionne', 'ss.nostatus':'Sans info',
+    'ago.now':'à l’instant', 'ago.min':v => `il y a ${v.n} min`, 'ago.h':v => `il y a ${v.n} h`, 'ago.d':v => `il y a ${v.n} jours`,
+    checked:v => `vérifié ${v.when}`, checkMissing:'heure de contrôle inconnue', oldInfo:'info ancienne',
+    'status.ok':'En service', 'status.out':'Hors service', 'status.unknown':'Sans info',
+    'reason.fault':'Panne technique', 'reason.works':'Travaux ou maintenance', 'reason.other':'Autre problème',
+    liftsN:v => pl(v.n, '1 ascenseur', `${v.n} ascenseurs`), noLifts:'Aucun ascenseur', save:'Enregistrer', saved:'Enregistrée',
+    tripFromHere:'Partir d’ici', tripToHere:'Aller ici', backTrip:'‹ Retour au trajet', liftsHere:'Ascenseurs de la station', noLiftsHere:'Pas d’ascenseur ici.',
+    atStation:'Dans cette station', airPlatforms:'Air sur les quais',
+    'air.low':'Peu de particules', 'air.medium':'Particules moyennes', 'air.high':'Beaucoup de particules',
+    'airShort.low':'faible', 'airShort.medium':'moyen', 'airShort.high':'élevé',
+    airNotMeasured:'Non mesuré (en surface ou station récente)',
+    coolYes:'Climatisé', coolPart:'En partie', coolNo:'Non climatisé', linesAria:'Lignes et climatisation',
+    staffHere:'Personnel présent', staffNone:'Aucun guichet avec agent ici : prévoyez d’ouvrir le portillon large vous-même.', staffChecking:'Recherche du personnel…',
+    staffFailed:'Les infos sur le personnel n’ont pas chargé.', seeWhy:'Voir pourquoi dans Réglages', staffed:v => `Agent : ${v.type}`, noStaffed:'Pas de guichet avec agent',
+    planBH:'Plan B pour Matteo · stations proches avec ascenseurs en service',
+    planBNoLoc:'Cette station n’a pas de position dans les données : impossible de trouver des alternatives proches.',
+    planBNone:'Aucune station à moins de 2 km n’a d’ascenseur confirmé en service. Le bus ou le tram sera peut-être plus simple aujourd’hui.',
+    aboutMin:v => `environ ${v.m} min en poussette`, stepFreeNoLift:'sans marches, pas besoin d’ascenseur',
+    liftsWorkingN:v => pl(v.n, '1 ascenseur en service', `${v.n} ascenseurs en service`), noStatusN:v => `${v.n} sans info`, walkThere:'Y aller à pied',
+    barAria:v => `${v.ok} ascenseurs en service, ${v.out} hors service, ${v.unk} sans info`,
+    legWorking:v => `${v.n} en service`, legOut:v => `${v.n} hors service`, legUnk:v => `${v.n} sans info`,
+    stationsN:v => pl(v.n, '1 station', `${v.n} stations`), outOfN:v => `${v.out} sur ${v.n} en panne`, allAwake:'Tous les ascenseurs sont réveillés. Bonne route !',
+    todayParis:'Aujourd’hui à Paris', checkingSky:'On regarde le ciel…', wxFailed:'La météo n’a pas chargé. Nouvel essai à la prochaine ouverture.',
+    'wx.clear':'Dégagé', 'wx.partly':'Éclaircies', 'wx.cloudy':'Nuageux', 'wx.fog':'Brouillard', 'wx.drizzle':'Bruine', 'wx.rain':'Pluie', 'wx.snow':'Neige',
+    'wx.showers':'Averses', 'wx.snowShowers':'Averses de neige', 'wx.storm':'Orage', 'wx.now':'Maintenant',
+    feels:v => `ressenti ${v.t}°`, highLow:v => `Max ${v.max}° · Min ${v.min}°`, rainPct:v => `Pluie ${v.p} %`, outsideAir:v => `Air extérieur ${v.l}`, nextHours:'Prochaines heures',
+    'aqi.good':'bon', 'aqi.fair':'correct', 'aqi.moderate':'moyen', 'aqi.poor':'mauvais', 'aqi.vpoor':'très mauvais', 'aqi.epoor':'extrêmement mauvais',
+    'tip.hot':'Grosse chaleur : priorité aux lignes climatisées aujourd’hui. Ombre et eau pour Matteo.', 'tip.snow':'Neige en vue : chancelière et habillage pluie.',
+    'tip.rain':'Pluie probable : prenez l’habillage pluie de la poussette.', 'tip.sun':'Grand soleil : chapeau et ombre pour Matteo.',
+    'tip.cold':'Il fait frais : une couche de plus pour Matteo.', 'tip.nice':'Belle journée pour les bouts à pied.',
+    'place.station':'Station', 'place.stop':'Arrêt', 'place.address':'Adresse', 'place.place':'Lieu', 'place.area':'Zone', 'place.withLifts':'Station avec ascenseurs',
+    noMatch:v => `Aucun résultat pour « ${v.q} ».`,
+    'chip.street':'Plain-pied', 'chip.noLiftListed':'Aucun ascenseur listé', 'chip.freeNoLift':'Sans marches, sans ascenseur', 'chip.help':'Sans marches avec un agent',
+    'chip.noLift':'Sans ascenseur', 'chip.someOut':v => `${v.out} sur ${v.n} en panne`, 'chip.liftOut':'Ascenseur en panne', 'chip.workingSome':'Ascenseurs en service (certains non confirmés)',
+    'chip.working':'Ascenseurs en service', 'chip.noStatus':'Pas d’info ascenseur', 'chip.highParticles':'Beaucoup de particules',
+    'stairs.short.chip':'~1 volée', 'stairs.medium.chip':'~2–3 volées', 'stairs.long.chip':'4+ volées',
+    'stairs.short.text':'environ 1 volée de marches', 'stairs.medium.text':'environ 2 à 3 volées de marches', 'stairs.long.text':'4 volées de marches ou plus (station profonde ou grande)',
+    'role.Start':'Départ', 'role.Change':'Corresp.', 'role.Arrive':'Arrivée',
+    'tag.approved':'Validé par Matteo', 'tag.best':'Meilleure option', 'tag.fastest':'Le plus rapide', 'tag.stairs':v => `Escaliers dans ${pl(v.n, '1 station', `${v.n} stations`)}`,
+    'tag.longWalk':'Longue marche', 'tag.particles':'Particules élevées', 'tag.warm':'Rames chaudes', 'tag.smooth':'Tout en douceur', 'tag.street':'Plain-pied', 'tag.notFree':'Non indiqué sans marches',
+    walkOnly:'À pied uniquement', direct:'direct', changesN:v => pl(v.n, '1 correspondance', `${v.n} correspondances`), minWalking:v => `${v.m} min à pied`,
+    seePlanB:'Voir le plan B', expectStairs:'prévoir des escaliers', mayMeanStairs:'escaliers possibles', stepByStep:'Étape par étape',
+    stepWalk:'À pied', walkTo:v => `${v.m} min jusqu’à ${v.to}`, stepChange:'Corresp.', walkToPlatform:v => `${v.m} min à pied jusqu’au quai suivant`,
+    towards:v => `direction ${v.d}`, stopsN:v => pl(v.n, '1 arrêt', `${v.n} arrêts`),
+    lineN:v => `ligne ${v.c}`, busN:v => `bus ${v.c}`, colon:' : ',
+    'cool.yes':'rames climatisées', 'cool.partTrains':'certaines rames climatisées', 'cool.partBuses':'certains bus climatisés', 'cool.no':'rames non climatisées',
+    findingRoute:'On cherche le trajet le plus doux pour Matteo…', noRoute:'Aucun trajet trouvé entre ces lieux. Essayez une station ou une adresse proche.',
+    keyHelp:v => `Le calculateur d’itinéraires est une API à part sur PRIM. Connectez-vous, ouvrez l’API « Calculateur Île-de-France Mobilités – Accès générique » et vérifiez que votre compte y a accès. Si PRIM vous donne un jeton séparé, collez-le comme ${v.btn} dans Réglages.`,
+    keyHelpBtn:'clé du calculateur', connectSettings:'connectez IDFM dans Réglages', practiceRun:'Essai :', planOwn:'Planifiez votre trajet ci-dessus.',
+    toPlanReal:v => `Pour de vrais trajets, ${v.link}.`, hotPriority:v => `Il fait ${v.t} °C : priorité aux lignes climatisées.`,
+    allStairs:'Tous les trajets ont des escaliers ou un ascenseur en panne : le plus rapide est en tête. Touchez une station pour son plan B.',
+    showMore:v => pl(v.n, 'Voir 1 autre trajet', `Voir ${v.n} autres trajets`),
+    enterBoth:'Indiquez un départ et une arrivée.', pickStart:'Choisissez un départ dans les suggestions.', pickDest:'Choisissez une arrivée dans les suggestions.',
+    keyRefused:v => `Le calculateur d’IDFM a refusé votre clé (HTTP ${v.s}).`, plannerDown:v => `Le calculateur d’IDFM n’a pas répondu. ${v.d}`,
+    'c.fastestStairs':'Le plus rapide, même avec les escaliers.', 'c.fastestSmooth':'Le plus rapide, et tout en douceur.',
+    'c.afterFastest':v => `Arrive ${v.d} min après le plus rapide, mais ${v.adv}.`,
+    'c.fasterThanTop':v => `${v.d} min plus rapide que le trajet conseillé, mais ${v.adv}.`,
+    'c.afterTop':v => `Arrive ${v.d} min après le trajet conseillé.`, 'c.sameTime':v => `Arrive en même temps que le trajet conseillé, mais ${v.adv}.`,
+    'adv.stairsAt':v => `${v.top ? 'le trajet conseillé' : 'il'} évite les escaliers à ${v.list}`,
+    'adv.fewerStairs':v => `${v.top ? 'le trajet conseillé' : 'il'} a moins d’escaliers`,
+    'adv.cleanerAir':v => `${v.top ? 'le trajet conseillé' : 'il'} a un air plus sain sur les quais`,
+    'adv.cooled':v => v.top ? 'les rames du trajet conseillé sont climatisées' : 'ses rames sont climatisées',
+    'adv.fewerChanges':v => `${v.top ? 'le trajet conseillé' : 'il'} a ${pl(v.n, '1 correspondance', `${v.n} correspondances`)} en moins`,
+    'adv.lessWalking':v => `${v.top ? 'le trajet conseillé' : 'il'} a ${v.m} min de marche en moins`,
+    'adv.reliable':v => v.top ? 'les ascenseurs du trajet conseillé sont plus fiables' : 'ses ascenseurs sont plus fiables',
+    'adv.avoidsBus':v => `${v.top ? 'le trajet conseillé' : 'il'} évite un trajet en bus`,
+    'adv.easier':v => `${v.top ? 'le trajet conseillé' : 'il'} est plus simple avec une poussette`,
+    'd.liftOut':v => `l’ascenseur de ${v.name} est en panne : prévoir ${v.stairs}`, 'd.noLift':v => `${v.name} n’a pas d’ascenseur : prévoir ${v.stairs}`,
+    'd.someOut':v => `ascenseurs en partie en panne à ${v.list}`, 'd.noStatus':v => `pas d’info ascenseur pour ${v.list}`,
+    'd.help':v => `${v.list} : sans marches seulement avec l’aide d’un agent`, 'd.stale':v => `info ascenseur de plus de ${v.h} h pour ${v.list}`,
+    'd.single':v => `un seul ascenseur à ${v.list}`, 'd.walkOnly':'uniquement à pied',
+    'd.everyStreet':'ascenseurs en service partout, et arrêts de bus ou tram de plain-pied',
+    'd.workingAt':v => v.n === 1 ? 'ascenseurs en service à la station' : v.n === 2 ? 'ascenseurs en service dans les deux stations' : `ascenseurs en service dans les ${v.n} stations`,
+    'd.streetNoStairs':'arrêts de bus ou tram de plain-pied, donc pas d’escaliers', 'd.air':v => `beaucoup de particules à ${v.list}`,
+    'd.hot':v => `il fait ${v.t} °C et pas de clim sur ${v.list}`, 'd.noChanges':'sans correspondance',
+    'd.bus':v => v.n > 1 ? `${v.n} trajets en bus` : 'un trajet en bus', 'd.walkOver':v => `${v.m} min de marche, au-delà de votre limite de ${v.lim} min`,
+    'src.entrances':'Entrées des stations',
+    entBest:'Meilleure entrée pour la poussette', entLift:'ascenseur depuis la rue, en service', entStepFree:'entrée sans marches (IDFM)',
+    entUseLift:v => `Prenez l’entrée avec l’ascenseur depuis la rue : ${v.side}`, entLiftOut:v => `L’ascenseur depuis la rue (${v.side}) est hors service.`,
+    entAll:v => `Toutes les entrées (${v.n})`, entStepChip:'Sans marches', entLiftChip:'Ascenseur', map:'Plan',
+    enterBy:v => `Entrer par : ${v.e}`, leaveBy:v => `Sortir par : ${v.e}`, viaLift:'(ascenseur)', viaStepFree:'(sans marches)',
+    openNow:v => `Ouvert · jusqu’à ${v.t}`, closedNow:v => v.t ? `Fermé · ouvre à ${v.t}` : 'Fermé maintenant', closedShort:'fermé',
+    'd.walk':v => `${v.m} min de marche`, 'd.notFree':'non indiqué sans marches par IDFM', and:'et'
+  },
+
+  it:{
+    lede:'Percorsi con ascensori a Parigi per Maria e Matteo',
+    langAria:'Lingua', dataStatus:'Stato dei dati',
+    'pass.aria':'Carta d’imbarco di Matteo', 'pass.passenger':'Passeggero', 'pass.class':'Classe', 'pass.classV':'Passeggino 1ª',
+    'pass.departs':'Partenza', 'pass.departsV':'Dopo il pisolino', 'pass.gate':'Gate', 'pass.gateV':'Solo ascensori',
+    tripH:'Dove andiamo, Matteo?', from:'Da', to:'A', placePh:'Stazione o indirizzo', swapAria:'Inverti partenza e arrivo',
+    buses:'Autobus', stairs:'Scale', stairsAvoid:'Evitare', stairsOk:'Qualche gradino va bene', walk:'A piedi', findRoute:'Trova il percorso di Matteo',
+    stH:'Controlla una stazione', stPh:'Quale stazione?', stAria:'Stazione', stEmpty:'Cerca una stazione per controllare i suoi ascensori.',
+    outH:'Ascensori fuori servizio',
+    connH:'Connessione a IDFM', connProxy:'Connesso tramite il server di Matteo: nessuna chiave da inserire.',
+    connBuiltin:'Connesso con la chiave integrata nell’app: nessuno deve inserirne una.', useOwnKey:'Usa una chiave personale',
+    connHint:'Ascensori in tempo reale e percorsi usano una chiave gratuita di <a href="https://prim.iledefrance-mobilites.fr/" target="_blank" rel="noopener">PRIM</a>, il sito open data di IDFM. Resta su questo dispositivo.',
+    keyLabel:'Chiave API PRIM', keyPh:'Incolla la tua chiave', key2Label:'Chiave del calcolo percorsi (solo se diversa)', key2Ph:'Lascia vuoto per usare la stessa chiave',
+    urlLabel:'Indirizzo dati ascensori (facoltativo)', urlPh:'Lascia vuoto per quello standard di IDFM', saveLoad:'Salva e carica i dati', removeKey:'Rimuovi la chiave',
+    dataH:'Dati', howH:'Come vengono ordinati i percorsi',
+    how1:'Prima il tempo: ogni percorso parte dai minuti che mancano all’arrivo, attese comprese.',
+    how2:'Si aggiungono minuti per ciò che è scomodo col passeggino. Scale dove l’ascensore manca o è guasto: ~1 rampa +8, 2–3 rampe +15, stazione profonda o grande +22 (con «Qualche gradino va bene»: +3, +6, +10). Ascensori in parte guasti o senza info +6, senza gradini solo con il personale +5, ogni cambio +4, ogni tragitto in bus +2, stazione con un solo ascensore +2.',
+    how3:'Fino a 10 minuti a piedi nessun extra; un po’ di più fino al tuo limite, e il doppio oltre.',
+    how4:'Una stazione con molte particelle sulla banchina aggiunge +4. Nei giorni caldi (percepita 27 °C o più), ogni tragitto su un treno non climatizzato aggiunge +4, e +1 se solo alcuni treni lo sono.',
+    how5:'Le dimensioni delle scale dipendono dal tipo di stazione: RER e stazioni profonde a Parigi e grandi nodi 4+ rampe, stazioni di periferia circa 1, metro 2–3.',
+    made:'Fatto per Maria e Matteo', versionLine:v => `Versione ${v.ver} · aggiornata il ${v.date}`,
+    aboutData:'Ascensori, stazioni, aria e accessibilità: <a href="https://prim.iledefrance-mobilites.fr/jeux-de-donnees/etat-des-ascenseurs" target="_blank" rel="noopener">open data Île-de-France Mobilités</a>. Percorsi: calcolo percorsi IDFM. Meteo: Open-Meteo.',
+    tabTrip:'Percorso', tabStations:'Stazioni', tabOut:'Guasti', tabSettings:'Impostazioni', tabsAria:'Sezioni',
+    'pill.loading':'Svegliamo gli ascensori…', 'pill.live':'In diretta', 'pill.file':'Da un file', 'pill.practice':'Modalità prova', practice:'Prova',
+    refresh:'Aggiorna ora', copyReport:'Copia il rapporto', loadFile:'Carica un file IDFM', loading:'Caricamento…',
+    dataLive:v => `In diretta da Île-de-France Mobilités, caricato alle ${v.time}: ${v.st} stazioni e ${v.lifts} ascensori.`,
+    dataFile:v => `File «${v.file}»: ${v.st} stazioni e ${v.lifts} ascensori. Non si aggiorna da solo.`,
+    dataPracticeKey:'I dati in diretta non sono arrivati: l’app è in modalità prova con stati degli ascensori inventati.',
+    dataPracticeNoKey:'Modalità prova: stati degli ascensori e sportelli sono inventati per provare l’app. Aggiungi una chiave PRIM qui sopra per i dati in diretta.',
+    whatIdfm:'Cosa ha risposto IDFM',
+    'src.lifts':'Stato degli ascensori', 'src.rail':'Stazioni e linee', 'src.access':'Accessibilità', 'src.air':'Aria sulle banchine', 'src.counters':'Sportelli con personale', 'src.weather':'Meteo',
+    reportCopied:'Copiato. Incollalo a Claude.', reportSelect:'Seleziona tutto, copia e incollalo a Claude.',
+    connected:'Connesso. Dati in diretta caricati.', stillNoLive:'Ancora nessun dato in diretta. Vedi «Cosa ha risposto IDFM» in Dati qui sotto.',
+    savedLoading:'Salvato su questo dispositivo. Caricamento…', keyRemoved:'Chiave rimossa da questo dispositivo.',
+    noMatchStation:v => `Nessuna stazione corrisponde a «${v.q}».`,
+    noLiftsListed:v => `Nessun ascensore per «${v.q}». Se la stazione non ne ha, non è nei dati: aspettati scale.`,
+    favsEmpty:'Tocca Salva su una stazione: diventa una stazione di Matteo, a portata di dito qui e nel percorso.', favsLabel:'Le stazioni di Matteo',
+    'v.tram.t':'Fermata del tram a livello strada', 'v.tram.s':'Le fermate del tram sono a livello della strada: niente ascensore.',
+    'v.free.t':'Senza gradini, senza ascensore', 'v.free.s':'IDFM la considera accessibile in autonomia: si arriva al binario senza scale.',
+    'v.help.t':'Senza gradini con il personale', 'v.help.s':'IDFM la considera accessibile con l’aiuto del personale, per esempio una rampa. Chiedi allo sportello.',
+    'v.nolift.t':'Nessun ascensore in questa stazione',
+    'v.nolift.s':v => `Aspettati ${v.stairs} tra la strada e il binario.${v.assist ? ' L’assistenza va prenotata in anticipo con Assist’enGare.' : ''} Il piano B mostra le stazioni vicine con ascensori funzionanti.`,
+    'v.some.t':'Alcuni ascensori guasti', 'v.some.s':v => `${v.out} su ${v.n} fuori servizio. Controlla se è quello che ti serve, o usa il piano B.`,
+    'v.none.t':'Nessun ascensore funzionante', 'v.none.s':v => v.n === 1 ? 'L’unico ascensore è fuori servizio.' : `Tutti i ${v.n} ascensori sono fuori servizio.`,
+    'v.working.t':'Ascensori funzionanti', 'v.working.s':v => `${v.ok} funzionanti all’ultimo controllo, ${v.unk} senza informazioni.`,
+    'v.nostatus.t':'Nessuna informazione al momento', 'v.nostatus.s':'L’ultimo controllo non ha dato informazioni. Chiedi al personale o scegli una stazione del piano B.',
+    'v.all.t':'Tutti gli ascensori funzionano', 'v.all.s':v => v.n === 1 ? 'L’ascensore funzionava all’ultimo controllo.' : `Tutti i ${v.n} ascensori funzionavano all’ultimo controllo.`,
+    'ss.street':'A livello strada', 'ss.free':'Senza gradini', 'ss.help':'Con personale', 'ss.nolift':'Senza ascensore', 'ss.someout':v => `${v.n} guasti`, 'ss.out':'Guasto',
+    'ss.working':'Funziona', 'ss.all':'Tutto funziona', 'ss.nostatus':'Senza info',
+    'ago.now':'proprio ora', 'ago.min':v => `${v.n} min fa`, 'ago.h':v => `${v.n} h fa`, 'ago.d':v => `${v.n} giorni fa`,
+    checked:v => `controllato ${v.when}`, checkMissing:'orario del controllo non indicato', oldInfo:'info vecchia',
+    'status.ok':'Funziona', 'status.out':'Fuori servizio', 'status.unknown':'Senza info',
+    'reason.fault':'Guasto tecnico', 'reason.works':'Lavori o manutenzione', 'reason.other':'Altro problema',
+    liftsN:v => pl(v.n, '1 ascensore', `${v.n} ascensori`), noLifts:'Nessun ascensore', save:'Salva', saved:'Salvata',
+    tripFromHere:'Parti da qui', tripToHere:'Arriva qui', backTrip:'‹ Torna al percorso', liftsHere:'Ascensori della stazione', noLiftsHere:'Nessun ascensore qui.',
+    atStation:'In questa stazione', airPlatforms:'Aria sulle banchine',
+    'air.low':'Poche particelle', 'air.medium':'Particelle medie', 'air.high':'Molte particelle',
+    'airShort.low':'basso', 'airShort.medium':'medio', 'airShort.high':'alto',
+    airNotMeasured:'Non misurata (in superficie o stazione nuova)',
+    coolYes:'Climatizzato', coolPart:'In parte', coolNo:'Non climatizzato', linesAria:'Linee e climatizzazione',
+    staffHere:'Personale presente', staffNone:'Nessuno sportello con personale qui: preparati ad aprire da solo il varco largo.', staffChecking:'Verifica del personale…',
+    staffFailed:'Le info sul personale non sono arrivate.', seeWhy:'Vedi perché in Impostazioni', staffed:v => `Personale: ${v.type}`, noStaffed:'Nessuno sportello con personale',
+    planBH:'Piano B per Matteo · stazioni vicine con ascensori funzionanti',
+    planBNoLoc:'Questa stazione non ha una posizione nei dati: impossibile trovare alternative vicine.',
+    planBNone:'Nessuna stazione entro 2 km ha ascensori confermati funzionanti. Oggi bus o tram potrebbero essere più comodi.',
+    aboutMin:v => `circa ${v.m} min col passeggino`, stepFreeNoLift:'senza gradini, niente ascensore',
+    liftsWorkingN:v => pl(v.n, '1 ascensore funzionante', `${v.n} ascensori funzionanti`), noStatusN:v => `${v.n} senza info`, walkThere:'Vai a piedi',
+    barAria:v => `${v.ok} ascensori funzionanti, ${v.out} fuori servizio, ${v.unk} senza info`,
+    legWorking:v => `${v.n} funzionanti`, legOut:v => `${v.n} fuori servizio`, legUnk:v => `${v.n} senza info`,
+    stationsN:v => pl(v.n, '1 stazione', `${v.n} stazioni`), outOfN:v => `${v.out} su ${v.n} guasti`, allAwake:'Tutti gli ascensori sono svegli. Buon viaggio!',
+    todayParis:'Oggi a Parigi', checkingSky:'Guardiamo il cielo…', wxFailed:'Il meteo non è arrivato. Riproverà alla prossima apertura.',
+    'wx.clear':'Sereno', 'wx.partly':'Parzialmente nuvoloso', 'wx.cloudy':'Nuvoloso', 'wx.fog':'Nebbia', 'wx.drizzle':'Pioviggine', 'wx.rain':'Pioggia', 'wx.snow':'Neve',
+    'wx.showers':'Rovesci', 'wx.snowShowers':'Rovesci di neve', 'wx.storm':'Temporale', 'wx.now':'Adesso',
+    feels:v => `percepita ${v.t}°`, highLow:v => `Max ${v.max}° · Min ${v.min}°`, rainPct:v => `Pioggia ${v.p}%`, outsideAir:v => `Aria esterna ${v.l}`, nextHours:'Prossime ore',
+    'aqi.good':'buona', 'aqi.fair':'discreta', 'aqi.moderate':'moderata', 'aqi.poor':'scadente', 'aqi.vpoor':'molto scadente', 'aqi.epoor':'pessima',
+    'tip.hot':'Fa caldo: oggi precedenza alle linee climatizzate. Ombra e acqua per Matteo.', 'tip.snow':'Neve in arrivo: sacco termico e parapioggia.',
+    'tip.rain':'Probabile pioggia: porta il parapioggia del passeggino.', 'tip.sun':'Sole forte: cappellino e ombra per Matteo.',
+    'tip.cold':'Fa freschino: uno strato in più per Matteo.', 'tip.nice':'Bella giornata per i tratti a piedi.',
+    'place.station':'Stazione', 'place.stop':'Fermata', 'place.address':'Indirizzo', 'place.place':'Luogo', 'place.area':'Zona', 'place.withLifts':'Stazione con ascensori',
+    noMatch:v => `Nessun risultato per «${v.q}».`,
+    'chip.street':'A livello strada', 'chip.noLiftListed':'Nessun ascensore elencato', 'chip.freeNoLift':'Senza gradini, niente ascensore', 'chip.help':'Senza gradini con il personale',
+    'chip.noLift':'Senza ascensore', 'chip.someOut':v => `${v.out} su ${v.n} guasti`, 'chip.liftOut':'Ascensore guasto', 'chip.workingSome':'Ascensori funzionanti (alcuni non confermati)',
+    'chip.working':'Ascensori funzionanti', 'chip.noStatus':'Nessuna info ascensori', 'chip.highParticles':'Molte particelle',
+    'stairs.short.chip':'~1 rampa', 'stairs.medium.chip':'~2–3 rampe', 'stairs.long.chip':'4+ rampe',
+    'stairs.short.text':'circa 1 rampa di scale', 'stairs.medium.text':'circa 2–3 rampe di scale', 'stairs.long.text':'4 o più rampe di scale (stazione profonda o grande)',
+    'role.Start':'Partenza', 'role.Change':'Cambio', 'role.Arrive':'Arrivo',
+    'tag.approved':'Approvato da Matteo', 'tag.best':'Opzione migliore', 'tag.fastest':'Il più veloce', 'tag.stairs':v => `Scale in ${pl(v.n, '1 stazione', `${v.n} stazioni`)}`,
+    'tag.longWalk':'Lunga camminata', 'tag.particles':'Molte particelle', 'tag.warm':'Treni caldi', 'tag.smooth':'Viaggio comodo', 'tag.street':'A livello strada', 'tag.notFree':'Non segnato senza gradini',
+    walkOnly:'Solo a piedi', direct:'diretto', changesN:v => pl(v.n, '1 cambio', `${v.n} cambi`), minWalking:v => `${v.m} min a piedi`,
+    seePlanB:'Vedi piano B', expectStairs:'aspettati scale', mayMeanStairs:'possibili scale', stepByStep:'Passo passo',
+    stepWalk:'A piedi', walkTo:v => `${v.m} min fino a ${v.to}`, stepChange:'Cambio', walkToPlatform:v => `${v.m} min a piedi fino al binario successivo`,
+    towards:v => `direzione ${v.d}`, stopsN:v => pl(v.n, '1 fermata', `${v.n} fermate`),
+    lineN:v => `linea ${v.c}`, busN:v => `bus ${v.c}`, colon:': ',
+    'cool.yes':'treni climatizzati', 'cool.partTrains':'alcuni treni climatizzati', 'cool.partBuses':'alcuni bus climatizzati', 'cool.no':'treni non climatizzati',
+    findingRoute:'Cerchiamo il percorso più comodo per Matteo…', noRoute:'Nessun percorso trovato tra questi luoghi. Prova una stazione o un indirizzo vicino.',
+    keyHelp:v => `Il calcolo percorsi è un’API separata su PRIM. Accedi, apri l’API «Calculateur Île-de-France Mobilités – Accès générique» e verifica che il tuo account vi abbia accesso. Se PRIM ti dà un token separato, incollalo come ${v.btn} in Impostazioni.`,
+    keyHelpBtn:'chiave del calcolo percorsi', connectSettings:'collega IDFM in Impostazioni', practiceRun:'Prova:', planOwn:'Pianifica il tuo percorso qui sopra.',
+    toPlanReal:v => `Per percorsi reali, ${v.link}.`, hotPriority:v => `Ci sono ${v.t} °C: precedenza alle linee climatizzate.`,
+    allStairs:'Tutti i percorsi hanno scale o un ascensore guasto: il più veloce è in cima. Tocca una stazione per il suo piano B.',
+    showMore:v => pl(v.n, 'Mostra 1 altro percorso', `Mostra altri ${v.n} percorsi`),
+    enterBoth:'Inserisci partenza e arrivo.', pickStart:'Scegli una partenza dai suggerimenti.', pickDest:'Scegli un arrivo dai suggerimenti.',
+    keyRefused:v => `Il calcolo percorsi di IDFM ha rifiutato la chiave (HTTP ${v.s}).`, plannerDown:v => `Il calcolo percorsi di IDFM non ha risposto. ${v.d}`,
+    'c.fastestStairs':'Il più veloce, anche contando le scale.', 'c.fastestSmooth':'Il più veloce, e comodo dall’inizio alla fine.',
+    'c.afterFastest':v => `Arriva ${v.d} min dopo il più veloce, ma ${v.adv}.`,
+    'c.fasterThanTop':v => `${v.d} min più veloce del percorso consigliato, ma ${v.adv}.`,
+    'c.afterTop':v => `Arriva ${v.d} min dopo il percorso consigliato.`, 'c.sameTime':v => `Arriva insieme al percorso consigliato, ma ${v.adv}.`,
+    'adv.stairsAt':v => `${v.top ? 'il percorso consigliato ' : ''}evita le scale a ${v.list}`,
+    'adv.fewerStairs':v => `${v.top ? 'il percorso consigliato ' : ''}ha meno scale`,
+    'adv.cleanerAir':v => `${v.top ? 'il percorso consigliato ' : ''}ha aria più pulita sulle banchine`,
+    'adv.cooled':v => v.top ? 'i treni del percorso consigliato sono climatizzati' : 'i suoi treni sono climatizzati',
+    'adv.fewerChanges':v => `${v.top ? 'il percorso consigliato ' : ''}ha ${pl(v.n, '1 cambio', `${v.n} cambi`)} in meno`,
+    'adv.lessWalking':v => `${v.top ? 'il percorso consigliato ' : ''}ha ${v.m} min a piedi in meno`,
+    'adv.reliable':v => v.top ? 'gli ascensori del percorso consigliato sono più affidabili' : 'i suoi ascensori sono più affidabili',
+    'adv.avoidsBus':v => `${v.top ? 'il percorso consigliato ' : ''}evita un tragitto in bus`,
+    'adv.easier':v => `${v.top ? 'il percorso consigliato ' : ''}è più comodo col passeggino`,
+    'd.liftOut':v => `l’ascensore di ${v.name} è guasto: aspettati ${v.stairs}`, 'd.noLift':v => `${v.name} non ha ascensore: aspettati ${v.stairs}`,
+    'd.someOut':v => `alcuni ascensori guasti a ${v.list}`, 'd.noStatus':v => `nessuna info ascensori per ${v.list}`,
+    'd.help':v => `${v.list}: senza gradini solo con l’aiuto del personale`, 'd.stale':v => `info ascensori più vecchie di ${v.h} h per ${v.list}`,
+    'd.single':v => `un solo ascensore a ${v.list}`, 'd.walkOnly':'solo a piedi',
+    'd.everyStreet':'ascensori funzionanti ovunque, più fermate di bus o tram a livello strada',
+    'd.workingAt':v => v.n === 1 ? 'ascensori funzionanti nella stazione' : v.n === 2 ? 'ascensori funzionanti in entrambe le stazioni' : `ascensori funzionanti in tutte le ${v.n} stazioni`,
+    'd.streetNoStairs':'fermate di bus o tram a livello strada, quindi niente scale', 'd.air':v => `molte particelle a ${v.list}`,
+    'd.hot':v => `ci sono ${v.t} °C e niente aria condizionata su ${v.list}`, 'd.noChanges':'nessun cambio',
+    'd.bus':v => v.n > 1 ? `${v.n} tragitti in bus` : 'un tragitto in bus', 'd.walkOver':v => `${v.m} min a piedi, oltre il tuo limite di ${v.lim} min`,
+    'src.entrances':'Ingressi delle stazioni',
+    entBest:'Ingresso migliore per il passeggino', entLift:'ascensore dalla strada, funzionante', entStepFree:'ingresso senza gradini (IDFM)',
+    entUseLift:v => `Usa l’ingresso con l’ascensore dalla strada: ${v.side}`, entLiftOut:v => `L’ascensore dalla strada (${v.side}) è fuori servizio.`,
+    entAll:v => `Tutti gli ingressi (${v.n})`, entStepChip:'Senza gradini', entLiftChip:'Ascensore', map:'Mappa',
+    enterBy:v => `Entra da: ${v.e}`, leaveBy:v => `Esci da: ${v.e}`, viaLift:'(ascensore)', viaStepFree:'(senza gradini)',
+    openNow:v => `Aperto · fino alle ${v.t}`, closedNow:v => v.t ? `Chiuso · apre alle ${v.t}` : 'Chiuso ora', closedShort:'chiuso',
+    'd.walk':v => `${v.m} min a piedi`, 'd.notFree':'non segnato senza gradini da IDFM', and:'e'
+  }
+};
+
+function t(key, v){
+  const d = I18N[LANG] || I18N.en;
+  let s = key in d ? d[key] : I18N.en[key];
+  if (s === undefined) return key;
+  if (typeof s === 'function') return s(v || {});
+  return s;
+}
+const fmtDateLong = iso => { try { return new Date(iso + 'T12:00:00').toLocaleDateString(LOCALE[LANG], { day:'numeric', month:'short', year:'numeric' }); } catch (e){ return iso; } };
+const fmtHour = h => LANG === 'fr' ? `${h}h` : `${String(h).padStart(2, '0')}:00`;
+
+// Fill every element marked with data-i18n (text), data-i18n-html, data-i18n-ph (placeholder) or data-i18n-aria.
+function applyStatic(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.getAttribute('data-i18n-html')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph'))); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))); });
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === LANG)));
+  const ver = document.getElementById('ver'); if (ver) ver.textContent = `v${APP_VERSION} · ${fmtDateLong(APP_DATE)}`;
+  const ver2 = document.getElementById('ver-about'); if (ver2) ver2.textContent = t('versionLine', { ver:APP_VERSION, date:fmtDateLong(APP_DATE) });
+}
+
 const IDFM = 'https://data.iledefrance-mobilites.fr';
 // Shared proxy: the address of your Cloudflare Worker (worker.js), which holds the PRIM key.
 // With it set, anyone who opens the app gets live data without entering a key.
@@ -530,7 +1013,6 @@ const ICON = {
   star:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="var(--star-fill, none)" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   chev:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 };
-const STATUS_LABEL = { ok:'Working', out:'Out of service', unknown:'No status' };
 
 /* ---------- Pure helpers ---------- */
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -562,11 +1044,12 @@ function normStatus(v){
 function reasonLabel(v){
   const s = fold(v);
   if (!s) return '';
-  if (/failure|technique/.test(s)) return 'Technical fault';
-  if (/maintenance|travaux/.test(s)) return 'Works or maintenance';
-  if (/undefined|autre/.test(s)) return 'Other problem';
+  if (/failure|technique/.test(s)) return 'fault';
+  if (/maintenance|travaux/.test(s)) return 'works';
+  if (/undefined|autre/.test(s)) return 'other';
   return String(v);
 }
+const reasonText = r => ['fault', 'works', 'other'].includes(r) ? t('reason.' + r) : r;
 
 // Lambert-93 (EPSG:2154) to WGS84, the projection IDFM uses for ZdCXEpsg2154 / ZdCYEpsg2154.
 function l93ToWgs84(X, Y){
@@ -594,7 +1077,13 @@ function coordsOf(rec){
       if (isFinite(a) && isFinite(b)) return { lat:a, lon:b };
     }
   }
-  const x = parseFloat(pick(rec, ['ZdCXEpsg2154', 'zdcx', 'x_l93', 'coord_x', 'x'])), y = parseFloat(pick(rec, ['ZdCYEpsg2154', 'zdcy', 'y_l93', 'coord_y', 'y']));
+  let x = parseFloat(pick(rec, ['ZdCXEpsg2154', 'zdcx', 'x_l93', 'coord_x', 'x'])), y = parseFloat(pick(rec, ['ZdCYEpsg2154', 'zdcy', 'y_l93', 'coord_y', 'y']));
+  if (!isFinite(x) || !isFinite(y)){
+    for (const k in rec){
+      if (/x.?epsg.?2154|^x_?l93/i.test(k)) x = parseFloat(rec[k]);
+      if (/y.?epsg.?2154|^y_?l93/i.test(k)) y = parseFloat(rec[k]);
+    }
+  }
   if (isFinite(x) && isFinite(y)){
     if (x > 1e5 && y > 6e6) return l93ToWgs84(x, y);
     if (Math.abs(x) <= 180 && y > 40 && y <= 90) return { lat:y, lon:x };
@@ -765,35 +1254,28 @@ function sampleRailRecords(){
 
 function verdict(st){
   const { ok, out, unk, n } = st.counts;
+  const V = (cls, dot, icon, key, vars) => ({ cls, dot, icon, title:t(key + '.t', vars), sub:t(key + '.s', vars) });
   if (n === 0){
-    if (st.tramOnly) return { cls:'ok', dot:'ok', icon:ICON.check, title:'Street-level tram stop', sub:'Tram stops are at street level, so no lift is needed.' };
-    if (st.access === 6) return { cls:'ok', dot:'ok', icon:ICON.check, title:'Step-free without a lift',
-      sub:'IDFM rates this station accessible on your own: you can reach the platform without stairs.' };
-    if (st.access === 4) return { cls:'warn', dot:'warn', icon:ICON.alert, title:'Step-free with staff help',
-      sub:'IDFM rates this station accessible with help from station staff, for example a ramp. Ask at the ticket office.' };
+    if (st.tramOnly) return V('ok', 'ok', ICON.check, 'v.tram');
+    if (st.access === 6) return V('ok', 'ok', ICON.check, 'v.free');
+    if (st.access === 4) return V('warn', 'warn', ICON.alert, 'v.help');
     const size = stairEstimate(st, st, '');
-    return { cls:'bad', dot:'bad', icon:ICON.x, title:'No lift at this station',
-      sub:`Expect ${STAIRS[size].text} between the street and the platform.${st.access === 3 ? ' Assistance is only available by booking ahead through Assist\'enGare.' : ''} Plan B shows the nearest stations with working lifts.` };
+    return V('bad', 'bad', ICON.x, 'v.nolift', { stairs:t('stairs.' + size + '.text'), assist:st.access === 3 });
   }
-  if (out > 0 && ok > 0) return { cls:'warn', dot:'warn', icon:ICON.alert, title:'Some lifts out',
-    sub:`${out} of ${n} lifts out of service. Check whether it's the one you need, or use Plan B.` };
-  if (out > 0) return { cls:'bad', dot:'bad', icon:ICON.x, title:'No working lift',
-    sub: n === 1 ? 'The only lift here is out of service.' : `All ${n} lifts are out of service.` };
-  if (unk > 0 && ok > 0) return { cls:'ok', dot:'ok', icon:ICON.check, title:'Lifts working',
-    sub:`${ok} working at the last check, ${unk} with no status.` };
-  if (unk > 0) return { cls:'unk', dot:'', icon:ICON.q, title:'No status right now',
-    sub:'The last check gave no status. Ask station staff, or pick a station from Plan B.' };
-  return { cls:'ok', dot:'ok', icon:ICON.check, title:'All lifts working',
-    sub: n === 1 ? 'The lift was working at the last check.' : `All ${n} lifts were working at the last check.` };
+  if (out > 0 && ok > 0) return V('warn', 'warn', ICON.alert, 'v.some', { out, n });
+  if (out > 0) return V('bad', 'bad', ICON.x, 'v.none', { n });
+  if (unk > 0 && ok > 0) return V('ok', 'ok', ICON.check, 'v.working', { ok, unk });
+  if (unk > 0) return V('unk', '', ICON.q, 'v.nostatus');
+  return V('ok', 'ok', ICON.check, 'v.all', { n });
 }
 
 function shortStatus(st){
   const { ok, out, unk, n } = st.counts;
-  if (n === 0) return st.tramOnly ? { cls:'ok', text:'Street level' } : st.access === 6 ? { cls:'ok', text:'Step-free' }
-    : st.access === 4 ? { cls:'warn', text:'Staff help' } : { cls:'warn', text:'No lift' };
-  if (out > 0) return ok > 0 ? { cls:'warn', text:`${out} out` } : { cls:'out', text:'Out' };
-  if (ok > 0) return { cls:'ok', text: unk ? 'Working' : 'All working' };
-  return { cls:'unknown', text:'No status' };
+  if (n === 0) return st.tramOnly ? { cls:'ok', text:t('ss.street') } : st.access === 6 ? { cls:'ok', text:t('ss.free') }
+    : st.access === 4 ? { cls:'warn', text:t('ss.help') } : { cls:'warn', text:t('ss.nolift') };
+  if (out > 0) return ok > 0 ? { cls:'warn', text:t('ss.someout', { n:out }) } : { cls:'out', text:t('ss.out') };
+  if (ok > 0) return { cls:'ok', text:unk ? t('ss.working') : t('ss.all') };
+  return { cls:'unknown', text:t('ss.nostatus') };
 }
 
 function distM(a, b){
@@ -804,7 +1286,7 @@ function distM(a, b){
 }
 const walkMin = d => Math.max(1, Math.round(d * DETOUR / PRAM_M_PER_MIN));
 const fmtDist = d => d < 1000 ? `${Math.round(d / 10) * 10} m` : `${(d / 1000).toFixed(1)} km`;
-const fmtNum = n => n.toLocaleString('en-GB');
+const fmtNum = n => n.toLocaleString(LOCALE[LANG]);
 
 function planB(st, stations){
   if (st.lat == null) return null;
@@ -818,11 +1300,11 @@ function planB(st, stations){
 
 function ago(d){
   const m = Math.round((Date.now() - d.getTime()) / 60000);
-  if (m < 1) return 'just now';
-  if (m < 60) return `${m} min ago`;
+  if (m < 1) return t('ago.now');
+  if (m < 60) return t('ago.min', { n:m });
   const h = Math.round(m / 60);
-  if (h < 36) return `${h} h ago`;
-  return `${Math.round(h / 24)} days ago`;
+  if (h < 36) return t('ago.h', { n:h });
+  return t('ago.d', { n:Math.round(h / 24) });
 }
 const isStale = d => !!d && (Date.now() - d.getTime()) > STALE_HOURS * 3600000;
 
@@ -900,17 +1382,17 @@ function renderSource(){
   const el = $('#source');
   if (state.mode === 'loading'){
     el.className = 'status-pill';
-    el.innerHTML = '<span class="dot pulse"></span>Waking up the lifts…';
+    el.innerHTML = `<span class="dot pulse"></span>${t('pill.loading')}`;
   } else if (state.mode === 'live'){
     const time = state.loadedAt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
     el.className = 'status-pill live';
-    el.innerHTML = `<span class="dot ok"></span>Live · <span class="tnum">${time}</span>`;
+    el.innerHTML = `<span class="dot ok"></span>${t('pill.live')} · <span class="tnum">${time}</span>`;
   } else if (state.mode === 'file'){
     el.className = 'status-pill live';
-    el.innerHTML = '<span class="dot ok"></span>From a file';
+    el.innerHTML = `<span class="dot ok"></span>${t('pill.file')}`;
   } else {
     el.className = 'status-pill practice';
-    el.innerHTML = '<span class="dot"></span>Practice mode';
+    el.innerHTML = `<span class="dot"></span>${t('pill.practice')}`;
   }
   renderDataPanel();
 }
@@ -920,25 +1402,29 @@ function renderDataPanel(){
   if (!el) return;
   const lifts = state.stations.reduce((n, s) => n + s.counts.n, 0);
   const actions = `<div class="src-actions">
-      <button type="button" id="retry" class="btn">Refresh now</button>
-      <input id="file" type="file" class="vh" accept=".json,.geojson,.csv,application/json,text/csv"><label for="file" class="btn">Load an IDFM export file</label>
-    </div>${state.fileError ? `<p class="diag-err">${esc(state.fileError)}</p>` : ''}`;
+      <button type="button" id="retry" class="btn">${t('refresh')}</button>
+      <button type="button" id="copy-report" class="btn">${t('copyReport')}</button>
+      <input id="file" type="file" class="vh" accept=".json,.geojson,.csv,application/json,text/csv"><label for="file" class="btn">${t('loadFile')}</label>
+    </div>${state.fileError ? `<p class="diag-err">${esc(state.fileError)}</p>` : ''}
+    <p id="report-status" class="conn-status" role="status"></p><textarea id="report-box" class="report" readonly hidden aria-label="${t('copyReport')}"></textarea>`;
+  // Status details stay in English: they are technical notes for debugging.
   const row = (label, x) => x ? `<li><span class="dot ${x.ok === true ? 'ok' : x.ok === null ? 'pulse' : ''}"></span><span><b>${label}:</b> ${x.ok === false ? `<span class="diag-err">${esc(x.text)}</span>` : esc(x.text)}</span></li>` : '';
-  if (state.mode === 'loading'){ el.innerHTML = '<p class="hint">Loading…</p>'; return; }
+  if (state.mode === 'loading'){ el.innerHTML = `<p class="hint">${t('loading')}</p>`; return; }
+  const n = v => `<span class="tnum">${fmtNum(v)}</span>`;
   if (state.mode === 'live'){
     const time = state.loadedAt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
     const src = state.sources || {};
-    el.innerHTML = `<p>Live from Île-de-France Mobilités, loaded at <span class="tnum">${time}</span>: <span class="tnum">${fmtNum(state.stations.length)}</span> stations and <span class="tnum">${fmtNum(lifts)}</span> lifts.</p>
-      <ul class="data-list">${row('Lift status', src.lifts)}${row('Stations and lines', src.rail)}${row('Accessibility ratings', src.access)}${row('Air on the platforms', src.air)}${row('Staffed counters', src.counters)}${row('Weather', src.weather)}</ul>${actions}`;
+    el.innerHTML = `<p>${t('dataLive', { time:`<span class="tnum">${time}</span>`, st:n(state.stations.length), lifts:n(lifts) })}</p>
+      <ul class="data-list">${row(t('src.lifts'), src.lifts)}${row(t('src.rail'), src.rail)}${row(t('src.access'), src.access)}${row(t('src.air'), src.air)}${row(t('src.counters'), src.counters)}${row(t('src.entrances'), src.entrances)}${row(t('src.weather'), src.weather)}</ul>${actions}`;
     return;
   }
   if (state.mode === 'file'){
-    el.innerHTML = `<p>Using the file “${esc(state.source)}”: <span class="tnum">${fmtNum(state.stations.length)}</span> stations and <span class="tnum">${fmtNum(lifts)}</span> lifts. It won't update by itself.</p>${actions}`;
+    el.innerHTML = `<p>${t('dataFile', { file:esc(state.source), st:n(state.stations.length), lifts:n(lifts) })}</p>${actions}`;
     return;
   }
   const steps = state.diag.map(d => `<li><b>${esc(d.label)}</b><br><span class="diag-url">${esc(d.url)}</span><br>${esc(d.detail)}</li>`).join('');
-  el.innerHTML = `<p>${hasLiveAccess() ? "Live data didn't load, so the app is in practice mode with made-up lift statuses." : 'Practice mode: lift statuses and staffed counters are made up so you can try the app. Add a PRIM key above to switch to live data.'}</p>
-    ${hasLiveAccess() && steps ? `<details class="diag"><summary>What IDFM answered</summary><ol>${steps}</ol></details>` : ''}${actions}`;
+  el.innerHTML = `<p>${hasLiveAccess() ? t('dataPracticeKey') : t('dataPracticeNoKey')}</p>
+    ${hasLiveAccess() && steps ? `<details class="diag"><summary>${t('whatIdfm')}</summary><ol>${steps}</ol></details>` : ''}${actions}`;
 }
 
 function renderResults(){
@@ -952,9 +1438,7 @@ function renderResults(){
     .slice(0, 8);
   ul.hidden = false;
   if (!hits.length){
-    ul.innerHTML = state.railOk
-      ? `<li class="noresult">No station matches “${esc(input.trim())}”.</li>`
-      : `<li class="noresult">No lifts listed for “${esc(input.trim())}”. If that station has no lift, it isn't in the lift feed: expect stairs there.</li>`;
+    ul.innerHTML = `<li class="noresult">${state.railOk ? t('noMatchStation', { q:esc(input.trim()) }) : t('noLiftsListed', { q:esc(input.trim()) })}</li>`;
     return;
   }
   ul.innerHTML = hits.map(s => {
@@ -969,10 +1453,10 @@ function renderFavs(){
   const quick = $('#trip-favs');
   if (quick) quick.innerHTML = list.length ? list.map(s => `<button type="button" class="fav" data-fill="${esc(s.id)}"><span class="sdot ${verdict(s).dot}"></span>${esc(s.name)}</button>`).join('') : '';
   if (!list.length){
-    el.innerHTML = state.mode === 'loading' ? '' : '<p class="hint">Tap Save on a station and it becomes one of Matteo\'s stations, one tap away here and in the trip planner.</p>';
+    el.innerHTML = state.mode === 'loading' ? '' : `<p class="hint">${t('favsEmpty')}</p>`;
     return;
   }
-  el.innerHTML = '<p class="label">Matteo\'s stations</p><div class="chips">' + list.map(s => {
+  el.innerHTML = `<p class="label">${t('favsLabel')}</p><div class="chips">` + list.map(s => {
     const v = verdict(s);
     return `<button type="button" class="fav${s === state.selected ? ' is-current' : ''}" data-id="${esc(s.id)}"><span class="sdot ${v.dot}"></span>${esc(s.name)}</button>`;
   }).join('') + '</div>';
@@ -982,88 +1466,125 @@ function renderPlanB(st){
   const opts = planB(st, state.stations);
   let body;
   if (opts === null){
-    body = '<p class="hint">This station has no location in the feed, so nearby options can\'t be worked out.</p>';
+    body = `<p class="hint">${t('planBNoLoc')}</p>`;
   } else if (!opts.length){
-    body = '<p class="hint">No station within 2 km has its lifts confirmed working. A bus or tram may be easier today.</p>';
+    body = `<p class="hint">${t('planBNone')}</p>`;
   } else {
     body = '<ul class="rows">' + opts.map(({ s, d }) => {
-      const extra = s.counts.unk ? `, ${s.counts.unk} no status` : '';
-      if (s.counts.n === 0){
-        const maps0 = `https://www.google.com/maps/dir/?api=1&destination=${s.lat.toFixed(5)},${s.lon.toFixed(5)}&travelmode=walking`;
-        return `<li class="rowwrap"><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta tnum">${fmtDist(d)} · about ${walkMin(d)} min with a pram · step-free, no lift needed</span></span>${ICON.chev}</button><a class="walk" href="${maps0}" target="_blank" rel="noopener">Walk there</a></li>`;
-      }
       const maps = `https://www.google.com/maps/dir/?api=1&destination=${s.lat.toFixed(5)},${s.lon.toFixed(5)}&travelmode=walking`;
-      return `<li class="rowwrap"><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta tnum">${fmtDist(d)} · about ${walkMin(d)} min with a pram · ${s.counts.ok} lift${s.counts.ok > 1 ? 's' : ''} working${extra}</span></span>${ICON.chev}</button><a class="walk" href="${maps}" target="_blank" rel="noopener">Walk there</a></li>`;
+      const what = s.counts.n === 0 ? t('stepFreeNoLift')
+        : t('liftsWorkingN', { n:s.counts.ok }) + (s.counts.unk ? `, ${t('noStatusN', { n:s.counts.unk })}` : '');
+      return `<li class="rowwrap"><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta tnum">${fmtDist(d)} · ${t('aboutMin', { m:walkMin(d) })} · ${what}</span></span>${ICON.chev}</button><a class="walk" href="${maps}" target="_blank" rel="noopener">${t('walkThere')}</a></li>`;
     }).join('') + '</ul>';
   }
-  return `<div class="planb"><h3 class="sub-h">Plan B for Matteo · nearby stations with working lifts</h3>${body}</div>`;
+  return `<div class="planb"><h3 class="sub-h">${t('planBH')}</h3>${body}</div>`;
+}
+
+const ICON_SNOW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5v19M4 7l16 10M20 7 4 17M9 4l3 2.5L15 4M9 20l3-2.5 3 2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_THERMO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.2V5a2 2 0 0 1 4 0v9.2a4 4 0 1 1-4 0z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="17.3" r="1.9" fill="currentColor"/><path d="M12 9v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const ICON_PERSON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 20.5c.8-3.6 3.6-5.6 7-5.6s6.2 2 7 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+// Each line at the station with its train cooling, right under the station name.
+function lineCoolChips(st){
+  if (!st.lines.length) return '';
+  return `<ul class="lc-list" aria-label="${t('linesAria')}">${st.lines.map(l => {
+    const c = coolingFor(l.mode, l.code);
+    const tag = c === 'yes' ? `<span class="lc-s yes">${ICON_SNOW}${t('coolYes')}</span>`
+      : c === 'partial' ? `<span class="lc-s part">${ICON_SNOW}${t('coolPart')}</span>`
+      : c === 'no' ? `<span class="lc-s no">${ICON_THERMO}${t('coolNo')}</span>` : '';
+    return `<li class="lc">${lineBadge(l)}${tag}</li>`;
+  }).join('')}</ul>`;
+}
+
+// Staff presence, always shown so it's clear whether the data loaded.
+const ICON_DOOR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4.5A1.5 1.5 0 0 1 6.5 3h11A1.5 1.5 0 0 1 19 4.5V21M3 21h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="12.5" r="1.3" fill="currentColor"/></svg>';
+function entranceBlock(st){
+  const be = bestEntrance(st);
+  const ents = st.entrances || [];
+  let html = '';
+  if (be && be.kind !== 'none'){
+    const why = be.kind === 'lift' ? t('entLift') : t('entStepFree');
+    const link = be.entrance ? `<a class="walk" href="${mapsUrl(be.entrance)}" target="_blank" rel="noopener">${t('walkThere')}</a>` : '';
+    const name = be.entrance ? esc(be.entrance.name) : esc(be.label);
+    html += `<div class="ent">${ICON_DOOR}<div class="ent-body"><p class="ent-k">${t('entBest')}</p><p class="ent-name">${name}</p><p class="ent-why">${why}</p></div>${link}</div>`;
+  }
+  if (be && be.broken.length && be.kind !== 'lift'){
+    html += `<div class="ent warn">${ICON_DOOR}<div class="ent-body"><p class="ent-why">${esc(t('entLiftOut', { side:be.broken.join(', ') }))}</p></div></div>`;
+  }
+  if (ents.length){
+    const rec = be && be.entrance;
+    const sorted = [...ents].sort((a, b) => (b === rec) - (a === rec) || (b.step === 'yes') - (a.step === 'yes') || a.name.localeCompare(b.name, 'fr'));
+    html += `<details class="ent-all"><summary>${t('entAll', { n:ents.length })}</summary><ul class="ent-list">${sorted.slice(0, 12).map(e => `<li><span class="ent-n">${esc(e.name)}</span>${
+      e === rec && be.kind === 'lift' ? `<span class="chip ok">${t('entLiftChip')}</span>` : ''}${e.step === 'yes' ? `<span class="chip ok">${t('entStepChip')}</span>` : ''}<a href="${mapsUrl(e)}" target="_blank" rel="noopener">${t('map')}</a></li>`).join('')}</ul></details>`;
+  }
+  return html;
+}
+
+function staffBlock(st){
+  if (st.counters && st.counters.length){
+    const c = st.counters[0];
+    const title = c.name && fold(c.name) !== fold(c.type) ? `${c.type} · ${c.name}` : c.type;
+    const now = counterOpenNow(c);
+    const status = now ? (now.open ? `<span class="chip open">${t('openNow', { t:now.until })}</span>` : `<span class="chip closed">${t('closedNow', { t:now.opens })}</span>`) : '';
+    return `<div class="staff yes">${ICON_PERSON}<div><p><b>${t('staffHere')}</b> · ${esc(title)}</p>${status ? `<p>${status}</p>` : ''}${c.hours ? `<p class="fine">${esc(c.hours)}</p>` : ''}</div></div>`;
+  }
+  if (st.tramOnly) return '';
+  if (state.countersStatus === 'ok') return `<div class="staff">${ICON_PERSON}<p>${t('staffNone')}</p></div>`;
+  if (state.countersStatus === 'loading') return `<div class="staff">${ICON_PERSON}<p>${t('staffChecking')}</p></div>`;
+  return `<div class="staff">${ICON_PERSON}<p>${t('staffFailed')} <button type="button" class="linkbtn open-conn">${t('seeWhy')}</button></p></div>`;
 }
 
 function stationFacts(st){
   const rows = [];
   if (st.air){
     const per = Object.entries(st.airLines || {}).filter(([l]) => l);
-    const detail = per.length > 1 ? per.map(([l, a]) => `${l}: ${a}`).join(' · ') : '';
-    rows.push(`<li><span class="fact-k">Air on platforms</span><span class="fact-v"><span class="chip ${AIR_CLS[st.air]}">${AIR_LABEL[st.air]}</span>${detail ? `<span class="fine">${esc(detail)}</span>` : ''}</span></li>`);
+    const detail = per.length > 1 ? per.map(([l, a]) => `${l}: ${t('airShort.' + a)}`).join(' · ') : '';
+    rows.push(`<li><span class="fact-k">${t('airPlatforms')}</span><span class="fact-v"><span class="chip ${AIR_CLS[st.air]}">${t('air.' + st.air)}</span>${detail ? `<span class="fine">${esc(detail)}</span>` : ''}</span></li>`);
   } else if (state.airOk){
-    rows.push('<li><span class="fact-k">Air on platforms</span><span class="fact-v"><span class="fine">Not measured (above ground or a new station)</span></span></li>');
+    rows.push(`<li><span class="fact-k">${t('airPlatforms')}</span><span class="fact-v"><span class="fine">${t('airNotMeasured')}</span></span></li>`);
   }
-  if (st.counters && st.counters.length){
-    const c = st.counters[0];
-    const title = c.name && fold(c.name) !== fold(c.type) ? `${c.type} · ${c.name}` : c.type;
-    rows.push(`<li><span class="fact-k">Staff</span><span class="fact-v"><b>${esc(title)}</b>${c.hours ? `<span class="fine">${esc(c.hours)}</span>` : ''}</span></li>`);
-  } else if (state.countersOk){
-    rows.push('<li><span class="fact-k">Staff</span><span class="fact-v">No staffed counter listed</span></li>');
-  }
-  const cool = st.lines.map(l => [l.label, coolingFor(l.mode, l.code)]).filter(([, c]) => c);
-  if (cool.length){
-    const by = k => cool.filter(([, c]) => c === k).map(([l]) => l);
-    const parts = [];
-    if (by('yes').length) parts.push(`Cooled: ${by('yes').join(', ')}`);
-    if (by('partial').length) parts.push(`Some cooled: ${by('partial').join(', ')}`);
-    if (by('no').length) parts.push(`Not cooled: ${by('no').join(', ')}`);
-    rows.push(`<li><span class="fact-k">Trains</span><span class="fact-v">${esc(parts.join(' · '))}</span></li>`);
-  }
-  return rows.length ? `<h3 class="sub-h">At this station</h3><ul class="facts">${rows.join('')}</ul>` : '';
+  return rows.length ? `<h3 class="sub-h">${t('atStation')}</h3><ul class="facts">${rows.join('')}</ul>` : '';
 }
 
 function renderStation(){
   const el = $('#station');
   const st = state.selected;
   if (!st){
-    el.innerHTML = state.mode === 'loading' ? '<p class="hint">Waking up the lifts…</p>' : '<p class="hint">Search for a station to check its lifts.</p>';
+    el.innerHTML = `<p class="hint">${state.mode === 'loading' ? t('pill.loading') : t('stEmpty')}</p>`;
     return;
   }
   const v = verdict(st);
   const saved = state.favs.includes(st.name);
   const lifts = st.lifts.map(l => {
     const bits = [];
-    if (l.status === 'out' && l.reason) bits.push(esc(l.reason));
-    bits.push(l.updated ? `checked ${ago(l.updated)}` : 'check time not given');
+    if (l.status === 'out' && l.reason) bits.push(esc(reasonText(l.reason)));
+    bits.push(l.updated ? t('checked', { when:ago(l.updated) }) : t('checkMissing'));
     return `<li class="lift">
-      <div class="lift-top"><p class="lift-where">${esc(l.where)}</p><span class="chip ${l.status}">${STATUS_LABEL[l.status]}</span></div>
+      <div class="lift-top"><p class="lift-where">${esc(l.where)}</p><span class="chip ${l.status}">${t('status.' + l.status)}</span></div>
       ${l.dir ? `<p class="lift-dir">${esc(l.dir)}</p>` : ''}
-      <p class="lift-meta tnum">${bits.join(' · ')}${isStale(l.updated) ? ' <span class="tag">old info</span>' : ''}</p>
+      <p class="lift-meta tnum">${bits.join(' · ')}${isStale(l.updated) ? ` <span class="tag">${t('oldInfo')}</span>` : ''}</p>
     </li>`;
   }).join('');
-  const meta = [st.counts.n ? `<span class="tnum">${st.counts.n} lift${st.counts.n > 1 ? 's' : ''}</span>` : '<span>No lifts</span>'];
-  if (st.last) meta.push(`<span>checked ${ago(st.last)}</span>`);
-  if (state.mode === 'sample') meta.push('<span class="tag sample">Practice</span>');
+  const meta = [st.counts.n ? `<span class="tnum">${t('liftsN', { n:st.counts.n })}</span>` : `<span>${t('noLifts')}</span>`];
+  if (st.last) meta.push(`<span>${t('checked', { when:ago(st.last) })}</span>`);
+  if (state.mode === 'sample') meta.push(`<span class="tag sample">${t('practice')}</span>`);
   const showPlanB = (st.counts.out > 0 || st.counts.ok === 0) && !(st.counts.n === 0 && (st.tramOnly || st.access === 6));
-  const lines = st.lines.length ? `<div class="j-lines" aria-label="Lines at this station">${st.lines.map(lineBadge).join('')}</div>` : '';
-  const liftList = st.counts.n ? `<ul class="lifts">${lifts}</ul>` : '<p class="hint">No lifts here.</p>';
+  const lines = lineCoolChips(st) + staffBlock(st);
+  const entrances = entranceBlock(st);
+  const liftList = st.counts.n ? `<ul class="lifts">${lifts}</ul>` : `<p class="hint">${t('noLiftsHere')}</p>`;
   el.innerHTML = `
-    ${state.backToTrip ? '<button type="button" id="back-trip" class="linkbtn back">‹ Back to your trip</button>' : ''}
+    ${state.backToTrip ? `<button type="button" id="back-trip" class="linkbtn back">${t('backTrip')}</button>` : ''}
     <div class="st-head">
       <h2 class="plaque plaque-lg">${esc(st.name)}</h2>
-      <button type="button" class="save" id="save" aria-pressed="${saved}">${ICON.star}<span>${saved ? 'Saved' : 'Save'}</span></button>
+      <button type="button" class="save" id="save" aria-pressed="${saved}">${ICON.star}<span>${saved ? t('saved') : t('save')}</span></button>
     </div>
     ${lines}
     <p class="st-meta">${meta.join('<span aria-hidden="true">·</span>')}</p>
-    <div class="st-actions"><button type="button" class="btn" data-trip="from">Trip from here</button><button type="button" class="btn" data-trip="to">Trip to here</button></div>
+    <div class="st-actions"><button type="button" class="btn" data-trip="from">${t('tripFromHere')}</button><button type="button" class="btn" data-trip="to">${t('tripToHere')}</button></div>
     <div class="verdict ${v.cls}">${v.icon}<div><p class="v-title">${v.title}</p><p class="v-sub">${v.sub}</p></div></div>
+    ${entrances}
     ${stationFacts(st)}
-    <h3 class="sub-h">Lifts at this station</h3>
+    <h3 class="sub-h">${t('liftsHere')}</h3>
     ${liftList}
     ${showPlanB ? renderPlanB(st) : ''}`;
 }
@@ -1075,18 +1596,18 @@ function renderOutages(){
   if (!tot){ $('#summary').innerHTML = ''; $('#outages').innerHTML = ''; return; }
   const pct = n => (n / tot * 100).toFixed(2) + '%';
   $('#summary').innerHTML = `
-    <div class="bar" role="img" aria-label="${ok} lifts working, ${out} out of service, ${unk} with no status">
+    <div class="bar" role="img" aria-label="${t('barAria', { ok, out, unk })}">
       <span class="seg ok" style="width:${pct(ok)}"></span><span class="seg out${out ? '' : ' zero'}" style="width:${pct(out)}"></span><span class="seg unknown" style="width:${pct(unk)}"></span>
     </div>
-    <p class="legend tnum"><span><i class="sw ok"></i>${fmtNum(ok)} working</span><span><i class="sw out"></i>${fmtNum(out)} out of service</span><span><i class="sw unknown"></i>${fmtNum(unk)} no status</span></p>`;
+    <p class="legend tnum"><span><i class="sw ok"></i>${t('legWorking', { n:fmtNum(ok) })}</span><span><i class="sw out"></i>${t('legOut', { n:fmtNum(out) })}</span><span><i class="sw unknown"></i>${t('legUnk', { n:fmtNum(unk) })}</span></p>`;
   const list = state.stations.filter(s => s.counts.out > 0)
     .sort((a, b) => b.counts.out - a.counts.out || a.name.localeCompare(b.name, 'fr'));
-  $('#out-count').textContent = list.length ? `${list.length} station${list.length > 1 ? 's' : ''}` : '';
+  $('#out-count').textContent = list.length ? t('stationsN', { n:list.length }) : '';
   $('#tab-out-count').textContent = list.length ? String(list.length) : '';
   $('#outages').innerHTML = list.length ? list.map(s => {
-    const reasons = [...new Set(s.lifts.filter(l => l.status === 'out').map(l => l.reason).filter(Boolean))].join(', ');
-    return `<li><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta"><span class="chip out tnum">${s.counts.out} of ${s.counts.n} out</span>${reasons ? `<span>${esc(reasons)}</span>` : ''}</span></span>${ICON.chev}</button></li>`;
-  }).join('') : `<li class="happy">${PRAM_SVG}Every lift is awake. Smooth rolling!</li>`;
+    const reasons = [...new Set(s.lifts.filter(l => l.status === 'out').map(l => reasonText(l.reason)).filter(Boolean))].join(', ');
+    return `<li><button type="button" class="row" data-id="${esc(s.id)}"><span class="row-main"><span class="plaque plaque-sm">${esc(s.name)}</span><span class="row-meta"><span class="chip out tnum">${t('outOfN', { out:s.counts.out, n:s.counts.n })}</span>${reasons ? `<span>${esc(reasons)}</span>` : ''}</span></span>${ICON.chev}</button></li>`;
+  }).join('') : `<li class="happy">${PRAM_SVG}${t('allAwake')}</li>`;
 }
 
 function renderAll(){ renderSource(); renderResults(); renderFavs(); renderStation(); renderOutages(); renderTrip(); renderWeather(); }
@@ -1324,6 +1845,7 @@ function applyAirFallback(){
 }
 async function loadAir(){
   const { recs, detail } = await loadDataset(AIR_DATASET);
+  state.debug.air = sampleRecs(recs);
   const matched = recs.length ? applyAir(recs) : 0;
   if (matched){ state.airOk = true; state.sources.air = { ok:true, text:`${fmtNum(matched)} ${plural(matched, 'platform', 'platforms')} matched to stations` }; return; }
   applyAirFallback();
@@ -1333,12 +1855,36 @@ async function loadAir(){
 
 /* ---------- Staffed counters (IDFM sales points) ---------- */
 const COUNTER_DATASET = 'points-de-vente';
-const STAFF_YES = /guichet|comptoir|agence|accueil|espace (client|service)|boutique|bureau|point (d )?information|service client|avec agent/;
-const STAFF_NO = /automat|distributeur|machine|borne|commerce|tabac|presse|relais|buraliste|librairie|e ?shop|internet|appli|mobile|depositaire|partenaire|epicerie|supermarche/;
-function counterFromRecord(rec){
-  const typeRaw = pick(rec, ['type', 'type_point_de_vente', 'type_pdv', 'libelle_type', 'type_de_point_de_vente', 'categorie', 'nature', 'canal']);
+const TYPES_DATASET = 'types-des-points-de-vente';
+const STAFF_YES = /guichet|comptoir|agence|accueil|espace (client|service)|boutique|bureau|point (d )?information|service client|avec agent|vente physique|personnel/;
+const STAFF_NO = /automat|distributeur|\bdat\b|libre service|machine|borne|commerce|tabac|presse|relais|buraliste|librairie|e ?shop|internet|appli|mobile|depositaire|partenaire|epicerie|supermarche/;
+state.countersStatus = 'loading';
+state.debug = {};
+const sampleRecs = recs => recs.slice(0, 2).map(r => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, typeof v === 'string' ? v.slice(0, 80) : v])));
+
+// IDFM's companion list maps type codes to labels such as "Comptoir" or "Distributeur".
+function buildTypeMap(recs){
+  const map = new Map();
+  for (const r of recs){
+    const label = pick(r, ['libelle', 'libelle_type', 'label', 'nom', 'nom_type', 'type', 'name', 'description', 'type_point_de_vente']);
+    if (!label) continue;
+    for (const k in r){
+      const v = r[k];
+      if (/id|code|type/i.test(k) && v != null && v !== '' && String(v) !== String(label)) map.set(String(v), String(label));
+    }
+  }
+  return map;
+}
+function typeLabelOf(rec, typeMap){
+  const raw = pick(rec, ['type', 'type_point_de_vente', 'type_pdv', 'libelle_type', 'type_de_point_de_vente', 'categorie', 'nature', 'canal', 'id_type', 'code_type', 'type_id']);
+  if (raw != null && typeMap.has(String(raw))) return typeMap.get(String(raw));
+  for (const k in rec){ if (/type|categ|nature/i.test(k) && rec[k] != null && typeMap.has(String(rec[k]))) return typeMap.get(String(rec[k])); }
+  return raw != null && isNaN(Number(raw)) ? String(raw) : '';
+}
+function counterFromRecord(rec, typeMap){
+  const typeLabel = typeLabelOf(rec, typeMap || new Map());
   const all = Object.values(rec).filter(v => typeof v === 'string').join(' | ');
-  const txt = fold(typeRaw ? String(typeRaw) : all);
+  const txt = fold(typeLabel || all);
   if (!STAFF_YES.test(txt) || STAFF_NO.test(txt)) return null;
   const hours = [];
   for (const k in rec){
@@ -1347,15 +1893,15 @@ function counterFromRecord(rec){
     if (/horaire|ouverture|hours|heure|lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|semaine|week/i.test(k)) hours.push(/horaire|ouverture|hours/i.test(k) ? v.trim() : `${k.replace(/_/g, ' ')}: ${v.trim()}`);
   }
   const name = pick(rec, ['nom', 'nom_point_de_vente', 'nom_pdv', 'libelle', 'name', 'denomination', 'raison_sociale']);
-  return { type:typeRaw ? String(typeRaw) : 'Staffed counter', name:name ? String(name) : '', hours:hours.join(' · ').slice(0, 220) };
+  return { type:typeLabel || 'Staffed counter', name:name ? String(name) : '', hours:hours.join(' · ').slice(0, 220) };
 }
-function applyCounters(recs){
+function applyCounters(recs, typeMap){
   let matched = 0;
   for (const rec of recs){
-    const ctr = counterFromRecord(rec);
+    const ctr = counterFromRecord(rec, typeMap);
     if (!ctr) continue;
     const c = coordsOf(rec);
-    const where = pick(rec, ['nom_zdc', 'nom_gare', 'gare', 'station', 'nom_station', 'nom_arret', 'arret', 'zdc']) || ctr.name;
+    const where = pick(rec, ['nom_zdc', 'nom_zda', 'nom_gare', 'gare', 'station', 'nom_station', 'nom_arret', 'arret', 'zdc']) || ctr.name;
     const st = matchStation({ name:String(where || ''), lat:c ? c.lat : null, lon:c ? c.lon : null });
     if (!st) continue;
     st.counters = st.counters || [];
@@ -1364,18 +1910,168 @@ function applyCounters(recs){
   return matched;
 }
 async function loadCounters(){
-  const { recs, detail } = await loadDataset(COUNTER_DATASET);
-  const matched = recs.length ? applyCounters(recs) : 0;
+  state.countersStatus = 'loading';
+  const [main, types] = await Promise.all([loadDataset(COUNTER_DATASET), loadDataset(TYPES_DATASET)]);
+  const recs = main.recs;
+  const typeMap = buildTypeMap(types.recs);
+  state.debug.counters = sampleRecs(recs);
+  state.debug.counterTypes = sampleRecs(types.recs);
+  const matched = recs.length ? applyCounters(recs, typeMap) : 0;
   state.countersOk = matched > 0;
+  state.countersStatus = matched ? 'ok' : 'error';
   state.sources.counters = matched
-    ? { ok:true, text:`${fmtNum(matched)} staffed ${plural(matched, 'counter', 'counters')} matched to stations (from ${fmtNum(recs.length)} sales points)` }
-    : { ok:false, text:recs.length ? `Got ${recs.length} sales points but found no staffed counters in stations. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${detail}` };
+    ? { ok:true, text:`${fmtNum(matched)} staffed ${plural(matched, 'counter', 'counters')} matched to stations (from ${fmtNum(recs.length)} sales points, ${fmtNum(typeMap.size)} type labels)` }
+    : { ok:false, text:recs.length ? `Got ${recs.length} sales points but found no staffed counters in stations. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${main.detail}` };
 }
+/* ---------- Station entrances (IDFM "Référentiel des arrêts : Accès") ---------- */
+const ENTRANCE_DATASET = 'acces';
+state.entrancesOk = false;
+const ENT_STOP = new Set(['acces', 'sortie', 'entree', 'rue', 'avenue', 'boulevard', 'place', 'parvis', 'square', 'cours', 'quai', 'quais',
+  'des', 'les', 'cote', 'vers', 'niveau', 'salle', 'echanges', 'billets', 'gare', 'station', 'metro', 'rer', 'ligne', 'bis', 'face', 'angle']);
+const sigTokens = str => String(str || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+  .replace(/[^a-z0-9]+/g, ' ').split(' ').filter(w => w.length >= 3 && !ENT_STOP.has(w) && !/^\d+$/.test(w));
+
+// The street end of a lift, e.g. "Accès rue de Dunkerque ↔ salle d'échanges" → "Accès rue de Dunkerque".
+function streetSide(where){
+  const first = String(where || '').split(/↔|<->|<=>|\s[-–]>\s|\s\/\s/)[0].trim();
+  const f = fold(first);
+  if (/^(acces|sortie|entree|rue|avenue|boulevard|place|parvis|esplanade|voirie|exterieur|surface|niveau rue)\b/.test(f)) return first;
+  if (/\b(salle|quai|quais|couloir|mezzanine|correspondance|hall|souterrain|billets)\b/.test(f)) return null;
+  return /\b(rue|avenue|boulevard|place|parvis|esplanade|voirie|exterieur|surface|forum|square|cours|pont)\b/.test(f) ? first : null;
+}
+function entranceFromRecord(rec){
+  const name = pick(rec, ['accname', 'acc_name', 'nom_acces', 'accnom', 'nom', 'name', 'libelle']);
+  const c = coordsOf(rec);
+  if (!name || !c) return null;
+  let step = null;
+  for (const k in rec){
+    if (!/access|pmr|ufr|fauteuil|wheelchair/i.test(k)) continue;
+    const v = fold(rec[k]);
+    if (/^(true|1|oui|yes|accessible|complete)/.test(v)) step = 'yes';
+    else if (/^(false|0|non|no|inaccessible|partial)/.test(v) && !step) step = 'no';
+  }
+  return { name:String(name).trim(), lat:c.lat, lon:c.lon, step, zdc:digits(pick(rec, ['zdcid', 'zdc_id', 'id_ref_zdc', 'zdc'])) };
+}
+function applyEntrances(recs){
+  const byZdc = new Map(), grid = new Map();
+  const cell = (lat, lon) => `${Math.floor(lat / 0.005)}:${Math.floor(lon / 0.007)}`;
+  for (const st of state.stations){
+    st.entrances = [];
+    if (st.zdc && st.zdc.forEach) st.zdc.forEach(z => byZdc.set(z, st));
+    if (st.lat == null || st.tramOnly) continue;
+    const k = cell(st.lat, st.lon);
+    if (!grid.has(k)) grid.set(k, []);
+    grid.get(k).push(st);
+  }
+  let matched = 0;
+  for (const rec of recs){
+    const e = entranceFromRecord(rec);
+    if (!e) continue;
+    let st = e.zdc ? byZdc.get(e.zdc) : null;
+    if (!st){
+      // Otherwise the nearest station within 350 m.
+      const ci = Math.floor(e.lat / 0.005), cj = Math.floor(e.lon / 0.007);
+      let bd = 350;
+      for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++){
+        for (const s2 of grid.get(`${ci + di}:${cj + dj}`) || []){ const d = distM(e, s2); if (d < bd){ bd = d; st = s2; } }
+      }
+    }
+    if (!st || st.entrances.some(x => fold(x.name) === fold(e.name))) continue;
+    st.entrances.push(e);
+    matched++;
+  }
+  return matched;
+}
+async function loadEntrances(){
+  const { recs, detail } = await loadDataset(ENTRANCE_DATASET);
+  state.debug.entrances = sampleRecs(recs);
+  const matched = recs.length ? applyEntrances(recs) : 0;
+  state.entrancesOk = matched > 0;
+  state.sources.entrances = matched
+    ? { ok:true, text:`${fmtNum(matched)} entrances matched to stations (from ${fmtNum(recs.length)})` }
+    : { ok:false, text:recs.length ? `Got ${recs.length} rows but couldn't place them. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${detail}` };
+}
+function applySampleEntrances(){
+  const add = (name, list) => { const st = matchStation({ name }); if (st) st.entrances = list.map(([n, lat, lon]) => ({ name:n, lat, lon, step:null })); };
+  add('Gare du Nord', [['Rue de Dunkerque', 48.8806, 2.3547], ['Boulevard de Denain', 48.8797, 2.3549], ['Rue de Maubeuge', 48.8803, 2.3539]]);
+  add('Madeleine', [['Boulevard Malesherbes', 48.8712, 2.3240], ['Place de la Madeleine', 48.8700, 2.3247], ['Rue Tronchet', 48.8714, 2.3262]]);
+  state.entrancesOk = true;
+}
+
+// Pick the entrance to use with a pram: one with a working street lift first, then one IDFM marks step-free.
+function matchEntrance(ents, side){
+  const want = sigTokens(side);
+  let best = null, bestScore = 0;
+  for (const e of ents){
+    const have = new Set(sigTokens(e.name));
+    const score = want.filter(w => have.has(w)).length;
+    if (score > bestScore){ best = e; bestScore = score; }
+  }
+  return best;
+}
+function bestEntrance(st){
+  if (!st) return null;
+  const ents = st.entrances || [];
+  const street = st.lifts.map(l => ({ l, side:streetSide(l.where) })).filter(x => x.side);
+  const working = street.find(x => x.l.status === 'ok');
+  const broken = street.filter(x => x.l.status === 'out').map(x => x.side);
+  if (working){
+    const e = matchEntrance(ents, working.side);
+    return { kind:'lift', entrance:e, label:e ? e.name : working.side, broken };
+  }
+  const sf = ents.find(e => e.step === 'yes');
+  if (sf) return { kind:'stepfree', entrance:sf, label:sf.name, broken };
+  return broken.length ? { kind:'none', entrance:null, label:'', broken } : null;
+}
+const mapsUrl = p => `https://www.google.com/maps/dir/?api=1&destination=${p.lat.toFixed(5)},${p.lon.toFixed(5)}&travelmode=walking`;
+
+/* ---------- Counter opening hours: "Lun-Ven 6h30-20h", "Mon–Fri 7:00–20:00", "Tous les jours 6h30-21h30"… ---------- */
+const DAY_IDX = { lun:1, mon:1, mar:2, tue:2, mer:3, wed:3, jeu:4, thu:4, ven:5, fri:5, sam:6, sat:6, dim:0, sun:0 };
+function parseHours(str){
+  if (!str) return null;
+  const rules = [];
+  for (const seg of String(str).split(/\s·\s|;|\n|\|/)){
+    const n = seg.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[–—]/g, '-');
+    const ranges = [];
+    const re = /(\d{1,2})\s*[h:]\s*(\d{2})?\s*(?:-|a|to|au|>)\s*(\d{1,2})\s*[h:]?\s*(\d{2})?/g;
+    let m;
+    while ((m = re.exec(n))) ranges.push([+m[1] * 60 + (+m[2] || 0), +m[3] * 60 + (+m[4] || 0)]);
+    if (!ranges.length) continue;
+    let days = null;
+    if (/every day|tous les jours|7 ?j ?\/ ?7|7\/7|daily|tutti i giorni/.test(n)) days = new Set([0, 1, 2, 3, 4, 5, 6]);
+    else {
+      const found = [...n.matchAll(/\b(lun|mon|mar|tue|mer|wed|jeu|thu|ven|fri|sam|sat|dim|sun)[a-z]*\.?/g)];
+      if (found.length){
+        days = new Set();
+        const between = found.length >= 2 ? n.slice(found[0].index + found[0][0].length, found[1].index) : '';
+        if (found.length === 2 && /-|\bau\b|\ba\b|\bto\b/.test(between)){
+          for (let d = DAY_IDX[found[0][1]], k = 0; k < 7; d = (d + 1) % 7, k++){ days.add(d); if (d === DAY_IDX[found[1][1]]) break; }
+        } else found.forEach(f => days.add(DAY_IDX[f[1]]));
+      } else days = new Set([0, 1, 2, 3, 4, 5, 6]);
+    }
+    rules.push({ days, ranges });
+  }
+  return rules.length ? rules : null;
+}
+const fmtClock = mins => { const h = Math.floor(mins / 60) % 24, m = mins % 60; return LANG === 'fr' ? `${h}h${m ? String(m).padStart(2, '0') : ''}` : `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`; };
+function counterOpenNow(c, now){
+  const rules = parseHours(c && c.hours);
+  if (!rules) return null;
+  now = now || new Date();
+  const day = now.getDay(), mins = now.getHours() * 60 + now.getMinutes();
+  const today = rules.filter(r => r.days.has(day)).flatMap(r => r.ranges).sort((a, b) => a[0] - b[0]);
+  const cur = today.find(([a, b]) => mins >= a && mins < b);
+  if (cur) return { open:true, until:fmtClock(cur[1]) };
+  const next = today.find(([a]) => a > mins);
+  return { open:false, opens:next ? fmtClock(next[0]) : '' };
+}
+
 function applySampleCounters(){
   const add = (name, type, hours) => { const st = matchStation({ name }); if (st) st.counters = [{ type, name:'', hours }]; };
   add('Gare du Nord', 'Comptoir RATP', 'Every day 6:30–21:30');
   add('Châtelet - Les Halles', 'Agence RATP', 'Mon–Fri 7:00–20:00');
   state.countersOk = true;
+  state.countersStatus = 'ok';
 }
 
 /* ---------- Cooled trains by line (RATP, summer 2026) ---------- */
@@ -1393,9 +2089,9 @@ function coolingFor(mode, code){
 }
 function lineName(l){
   const f = fold(l.mode);
-  if (/metro/.test(f)) return `line ${l.code}`;
+  if (/metro/.test(f)) return t('lineN', { c:l.code });
   if (/rer/.test(f)) return `RER ${l.code}`;
-  if (/bus|noctilien/.test(f)) return `bus ${l.code}`;
+  if (/bus|noctilien/.test(f)) return t('busN', { c:l.code });
   return l.code || l.mode;
 }
 
@@ -1417,17 +2113,10 @@ async function plainJson(url){
   finally { clearTimeout(timer); }
 }
 function wxText(code){
-  if (code === 0) return 'Clear';
-  if (code <= 2) return 'Partly cloudy';
-  if (code === 3) return 'Cloudy';
-  if (code === 45 || code === 48) return 'Fog';
-  if (code >= 51 && code <= 57) return 'Drizzle';
-  if (code >= 61 && code <= 67) return 'Rain';
-  if (code >= 71 && code <= 77) return 'Snow';
-  if (code >= 80 && code <= 82) return 'Showers';
-  if (code >= 85 && code <= 86) return 'Snow showers';
-  if (code >= 95) return 'Thunderstorm';
-  return '';
+  const k = code === 0 ? 'clear' : code <= 2 ? 'partly' : code === 3 ? 'cloudy' : (code === 45 || code === 48) ? 'fog'
+    : (code >= 51 && code <= 57) ? 'drizzle' : (code >= 61 && code <= 67) ? 'rain' : (code >= 71 && code <= 77) ? 'snow'
+    : (code >= 80 && code <= 82) ? 'showers' : (code >= 85 && code <= 86) ? 'snowShowers' : code >= 95 ? 'storm' : 'now';
+  return t('wx.' + k);
 }
 const isRainCode = c => (c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95;
 const isSnowCode = c => (c >= 71 && c <= 77) || c === 85 || c === 86;
@@ -1444,7 +2133,7 @@ function wxIcon(code){
   else body = cloud(0);
   return `<svg class="wx-ic" viewBox="0 0 24 24" aria-hidden="true">${body}</svg>`;
 }
-const aqiLabel = v => v <= 20 ? 'good' : v <= 40 ? 'fair' : v <= 60 ? 'moderate' : v <= 80 ? 'poor' : v <= 100 ? 'very poor' : 'extremely poor';
+const aqiLabel = v => t('aqi.' + (v <= 20 ? 'good' : v <= 40 ? 'fair' : v <= 60 ? 'moderate' : v <= 80 ? 'poor' : v <= 100 ? 'vpoor' : 'epoor'));
 const aqiCls = v => v <= 40 ? 'ok' : v <= 60 ? 'warn' : 'out';
 
 function parseForecast(wv, aqi){
@@ -1456,7 +2145,7 @@ function parseForecast(wv, aqi){
     let i = h.time.findIndex(t => t > cur.time);
     if (i < 0) i = 0;
     for (let k = i; k < h.time.length && hours.length < 5; k += 3){
-      hours.push({ label:`${parseInt(String(h.time[k]).slice(11, 13), 10)}h`, temp:h.temperature_2m[k], code:h.weather_code[k], rain:h.precipitation_probability ? h.precipitation_probability[k] : null });
+      hours.push({ hour:parseInt(String(h.time[k]).slice(11, 13), 10), temp:h.temperature_2m[k], code:h.weather_code[k], rain:h.precipitation_probability ? h.precipitation_probability[k] : null });
     }
   }
   const first = (arr) => Array.isArray(arr) && arr.length ? arr[0] : null;
@@ -1470,7 +2159,7 @@ function sampleForecast(){
   const hours = [];
   for (let k = 1; k <= 13; k += 3){
     const t = new Date(now.getTime() + k * 3600000);
-    hours.push({ label:`${t.getHours()}h`, temp:[15, 14, 12, 10, 9][hours.length], code:[3, 61, 61, 3, 2][hours.length], rain:[20, 70, 60, 30, 10][hours.length] });
+    hours.push({ hour:t.getHours(), temp:[15, 14, 12, 10, 9][hours.length], code:[3, 61, 61, 3, 2][hours.length], rain:[20, 70, 60, 30, 10][hours.length] });
   }
   return { temp:14, feels:12, code:3, aqi:28, max:16, min:9, rain:70, uv:2, dayCode:61, hours, sample:true };
 }
@@ -1490,32 +2179,33 @@ async function loadWeather(){
 }
 function weatherTip(w){
   const rainToday = isRainCode(w.code) || (w.rain != null && w.rain >= 50) || w.hours.some(h => h.rain >= 60);
-  if (w.feels >= HOT_C) return 'Hot one: cooled lines get priority today. Shade and water for Matteo.';
-  if (isSnowCode(w.code) || isSnowCode(w.dayCode)) return 'Snow about: footmuff and rain cover on.';
-  if (rainToday) return 'Rain likely today: pack the pram cover.';
-  if (w.uv != null && w.uv >= 6) return 'Strong sun today: hat and shade for Matteo.';
-  if (w.feels <= COLD_C) return 'Chilly: an extra layer for Matteo.';
-  return 'Nice day for the walking bits.';
+  if (w.feels >= HOT_C) return t('tip.hot');
+  if (isSnowCode(w.code) || isSnowCode(w.dayCode)) return t('tip.snow');
+  if (rainToday) return t('tip.rain');
+  if (w.uv != null && w.uv >= 6) return t('tip.sun');
+  if (w.feels <= COLD_C) return t('tip.cold');
+  return t('tip.nice');
 }
 function renderWeather(){
   const el = $('#wx');
+  el.setAttribute('aria-label', t('todayParis'));
   let w = state.weather;
   if (!w && state.weatherStatus === 'error' && state.mode === 'sample') w = sampleForecast();
   if (!w){
     el.className = 'wx';
-    el.innerHTML = `<p class="label">Today in Paris</p><p class="hint">${state.weatherStatus === 'loading' ? 'Checking the sky…' : "The forecast didn't load. It will try again next time you open the app."}</p>`;
+    el.innerHTML = `<p class="label">${t('todayParis')}</p><p class="hint">${state.weatherStatus === 'loading' ? t('checkingSky') : t('wxFailed')}</p>`;
     return;
   }
   const hot = w.feels >= HOT_C, cold = w.feels <= COLD_C;
   const day = [];
-  if (w.max != null && w.min != null) day.push(`<span class="tnum">High ${Math.round(w.max)}° · Low ${Math.round(w.min)}°</span>`);
-  if (w.rain != null) day.push(`<span class="tnum">Rain ${Math.round(w.rain)}%</span>`);
+  if (w.max != null && w.min != null) day.push(`<span class="tnum">${t('highLow', { max:Math.round(w.max), min:Math.round(w.min) })}</span>`);
+  if (w.rain != null) day.push(`<span class="tnum">${t('rainPct', { p:Math.round(w.rain) })}</span>`);
   if (w.uv != null) day.push(`<span class="tnum">UV ${Math.round(w.uv)}</span>`);
-  const hours = w.hours.length ? `<ul class="wx-hours" aria-label="Next hours">${w.hours.map(h => `<li><span class="wx-h-t tnum">${esc(h.label)}</span>${wxIcon(h.code)}<span class="wx-h-temp tnum">${Math.round(h.temp)}°</span><span class="wx-h-rain tnum">${h.rain != null && h.rain >= 10 ? `${Math.round(h.rain)}%` : ''}</span></li>`).join('')}</ul>` : '';
+  const hours = w.hours.length ? `<ul class="wx-hours" aria-label="${t('nextHours')}">${w.hours.map(h => `<li><span class="wx-h-t tnum">${fmtHour(h.hour)}</span>${wxIcon(h.code)}<span class="wx-h-temp tnum">${Math.round(h.temp)}°</span><span class="wx-h-rain tnum">${h.rain != null && h.rain >= 10 ? `${Math.round(h.rain)}%` : ''}</span></li>`).join('')}</ul>` : '';
   el.className = 'wx' + (hot ? ' hot' : cold ? ' cold' : '');
-  el.innerHTML = `<div class="wx-head"><p class="label">Today in Paris${w.sample ? ' <span class="tag sample">Practice</span>' : ''}</p>${w.aqi != null ? `<span class="chip ${aqiCls(w.aqi)}">Outside air ${aqiLabel(w.aqi)}</span>` : ''}</div>
+  el.innerHTML = `<div class="wx-head"><p class="label">${t('todayParis')}${w.sample ? ` <span class="tag sample">${t('practice')}</span>` : ''}</p>${w.aqi != null ? `<span class="chip ${aqiCls(w.aqi)}">${t('outsideAir', { l:aqiLabel(w.aqi) })}</span>` : ''}</div>
     <div class="wx-now">${wxIcon(w.code)}<p class="wx-temp tnum">${Math.round(w.temp)}°</p>
-      <div class="wx-body"><p class="wx-cond">${esc(wxText(w.code) || 'Now')} · feels ${Math.round(w.feels)}°</p><p class="wx-line">${day.join('')}</p></div></div>
+      <div class="wx-body"><p class="wx-cond">${esc(wxText(w.code))} · ${t('feels', { t:Math.round(w.feels) })}</p><p class="wx-line">${day.join('')}</p></div></div>
     ${hours}
     <p class="wx-tip">${weatherTip(w)}</p>`;
 }
@@ -1526,11 +2216,11 @@ function loadAll(){
     if (r.mode === 'live'){
       const lifts = r.stations.reduce((n, s) => n + s.counts.n, 0);
       state.sources = { lifts:{ ok:true, text:`${fmtNum(lifts)} lifts at ${fmtNum(r.stations.length)} stations` },
-        rail:{ ok:null, text:'Loading…' }, access:{ ok:null, text:'Waiting…' }, air:{ ok:null, text:'Waiting…' }, counters:{ ok:null, text:'Waiting…' },
+        rail:{ ok:null, text:'Loading…' }, access:{ ok:null, text:'Waiting…' }, air:{ ok:null, text:'Waiting…' }, counters:{ ok:null, text:'Waiting…' }, entrances:{ ok:null, text:'Waiting…' },
         weather:state.sources && state.sources.weather };
     }
     setData(r);
-    if (r.mode !== 'live'){ applyAirFallback(); applySampleCounters(); renderAll(); return r; }
+    if (r.mode !== 'live'){ applyAirFallback(); applySampleCounters(); applySampleEntrances(); renderAll(); return r; }
     return loadRail().then(rail => {
       state.sources.access = { ok:null, text:'Loading…' };
       if (rail.length) setData(Object.assign({}, r, { stations:mergeStations(r.stations, rail), railOk:true }));
@@ -1543,7 +2233,7 @@ function loadAll(){
             : { ok:false, text:`Got ${acc.length} rows but couldn't match them to stations. Fields: ${fieldsOf(acc)}.` };
         }
         renderAll();
-        return Promise.all([loadAir(), loadCounters()]).then(() => { renderAll(); return r; });
+        return Promise.all([loadAir(), loadCounters(), loadEntrances()]).then(() => { renderAll(); return r; });
       });
     });
   });
@@ -1591,22 +2281,42 @@ async function loadFile(file){
   applyAirFallback(); renderAll();
 }
 
+// A short technical summary to paste back to Claude when something doesn't load. Never includes keys.
+function setLang(l){
+  if (!LANGS.includes(l) || l === LANG) return;
+  LANG = l;
+  try { localStorage.setItem(LANG_KEY, l); } catch (e){}
+  applyStatic();
+  renderAll();
+}
+
+function dataReport(){
+  return JSON.stringify({ app:`Matteo in Transit v${APP_VERSION} (${APP_DATE})`, at:new Date().toISOString(), mode:state.mode,
+    stations:state.stations.length, sources:state.sources, samples:state.debug }, null, 1);
+}
+function copyReport(){
+  const text = dataReport();
+  const box = $('#report-box'), msg = $('#report-status');
+  const showBox = () => { box.hidden = false; box.value = text; box.focus(); box.select(); msg.textContent = t('reportSelect'); };
+  try {
+    navigator.clipboard.writeText(text).then(() => { msg.textContent = t('reportCopied'); }, showBox);
+  } catch (e){ showBox(); }
+}
+
 function retryLive(){
   state.fileError = '';
   state.mode = 'loading';
   renderSource();
   loadAll().then(r => {
     const msg = $('#conn-status');
-    if (msg) msg.textContent = r.mode === 'live'
-      ? 'Connected. Live data loaded.'
-      : 'Still no live data. See “What IDFM answered” under Data below.';
+    if (msg) msg.textContent = r.mode === 'live' ? t('connected') : t('stillNoLive');
   });
 }
 
 function wireConnection(){
   if ((PROXY_URL || BUILT_IN_KEY) && !state.cfg.key){
     $('#conn-proxy').hidden = false; $('#conn-form').hidden = true;
-    if (!PROXY_URL) $('#conn-proxy').firstChild.textContent = 'Connected with the key built into the app, so nobody needs to enter one. ';
+    $('#conn-proxy-text').setAttribute('data-i18n', PROXY_URL ? 'connProxy' : 'connBuiltin');
   }
   $('#show-key').addEventListener('click', () => { $('#conn-form').hidden = false; $('#conn-proxy').hidden = true; });
   $('#k').value = state.cfg.key;
@@ -1617,7 +2327,7 @@ function wireConnection(){
     state.cfg = { key:$('#k').value.trim(), navKey:$('#k2').value.trim(), url:$('#u').value.trim() };
     state.trip.status = state.trip.status === 'error' ? 'example' : state.trip.status;
     saveCfg();
-    $('#conn-status').textContent = 'Saved on this device. Loading…';
+    $('#conn-status').textContent = t('savedLoading');
     retryLive();
     window.scrollTo({ top:0, behavior:reduceMotion ? 'auto' : 'smooth' });
   });
@@ -1625,22 +2335,18 @@ function wireConnection(){
     state.cfg = { key:'', navKey:'', url:'' };
     saveCfg();
     $('#k').value = ''; $('#k2').value = ''; $('#u').value = '';
-    $('#conn-status').textContent = 'Key removed from this device.';
+    $('#conn-status').textContent = t('keyRemoved');
     retryLive();
   });
 }
 
 /* ---------- Trip planner: IDFM journey planner (Navitia via PRIM), each station checked against lift status ---------- */
 const NAVITIA = 'https://prim.iledefrance-mobilites.fr/marketplace/v2/navitia';
-const PLACE_TYPES = { stop_area:'Station', stop_point:'Stop', address:'Address', poi:'Place', administrative_region:'Area' };
+const PLACE_TYPES = { stop_area:'station', stop_point:'stop', address:'address', poi:'place', administrative_region:'area' };
 // Ranking model (time-led). Score = minutes until you arrive + "effort minutes" for what makes the trip harder with a
 // pram. Effort is bounded, so time stays the main criterion: a much faster route can still win with some stairs.
 // Stair size is an estimate from the station type, because no open dataset gives step counts.
-const STAIRS = {
-  short:{ chip:'~1 flight', text:'about 1 flight of stairs', avoid:8, ok:3 },
-  medium:{ chip:'~2–3 flights', text:'about 2–3 flights of stairs', avoid:15, ok:6 },
-  long:{ chip:'4+ flights', text:'4 or more flights of stairs (deep or large station)', avoid:22, ok:10 }
-};
+const STAIRS = { short:{ avoid:8, ok:3 }, medium:{ avoid:15, ok:6 }, long:{ avoid:22, ok:10 } };
 const EFFORT = {
   liftStation:1,       // each station that depends on a lift
   singleLift:2,        // only one lift at the station, so no backup if it breaks
@@ -1691,7 +2397,7 @@ async function searchPlaces(q){
   const json = await navitia('/places', [['q', q], ['count', '6']]);
   return ((json && json.places) || []).map(p => {
     const pl = navPlace(p);
-    return { name:p.name || pl.name, label:PLACE_TYPES[p.embedded_type] || 'Place', id:p.id, lat:pl.lat, lon:pl.lon };
+    return { name:p.name || pl.name, kind:PLACE_TYPES[p.embedded_type] || 'place', id:p.id, lat:pl.lat, lon:pl.lon };
   }).filter(p => p.id || p.lat != null);
 }
 
@@ -1791,23 +2497,23 @@ function stairEstimate(st, p, mode){
 
 function checkStop(p, mode){
   const st = matchStation(p);
-  if (isStreetMode(mode)) return { kind:'street', cls:'ok', label:'Street level', st };
+  if (isStreetMode(mode)) return { kind:'street', cls:'ok', label:t('chip.street'), st };
   const withStairs = (kind, cls, prefix, s) => {
     const size = stairEstimate(s, p, mode);
-    return { kind, cls, label:`${prefix} · ${STAIRS[size].chip}`, st:s, stairs:size };
+    return { kind, cls, label:`${prefix} · ${t('stairs.' + size + '.chip')}`, st:s, stairs:size };
   };
-  if (!st) return withStairs('none', 'warn', 'No lift listed', null);
+  if (!st) return withStairs('none', 'warn', t('chip.noLiftListed'), null);
   const { ok, out, unk, n } = st.counts;
   if (n === 0){
-    if (st.tramOnly) return { kind:'street', cls:'ok', label:'Street level', st };
-    if (st.access === 6) return { kind:'ok', cls:'ok', label:'Step-free, no lift needed', st };
-    if (st.access === 4) return { kind:'help', cls:'warn', label:'Step-free with staff help', st };
-    return withStairs('none', 'warn', 'No lift', st);
+    if (st.tramOnly) return { kind:'street', cls:'ok', label:t('chip.street'), st };
+    if (st.access === 6) return { kind:'ok', cls:'ok', label:t('chip.freeNoLift'), st };
+    if (st.access === 4) return { kind:'help', cls:'warn', label:t('chip.help'), st };
+    return withStairs('none', 'warn', t('chip.noLift'), st);
   }
-  if (out > 0 && ok > 0) return { kind:'warn', cls:'warn', label:`${out} of ${n} lifts out`, st };
-  if (out > 0) return withStairs('bad', 'out', 'Lift out', st);
-  if (ok > 0) return { kind:'ok', cls:'ok', label:unk ? 'Lifts working (some unconfirmed)' : 'Lifts working', st };
-  return { kind:'unk', cls:'unknown', label:'No lift status', st };
+  if (out > 0 && ok > 0) return { kind:'warn', cls:'warn', label:t('chip.someOut', { out, n }), st };
+  if (out > 0) return withStairs('bad', 'out', t('chip.liftOut'), st);
+  if (ok > 0) return { kind:'ok', cls:'ok', label:unk ? t('chip.workingSome') : t('chip.working'), st };
+  return { kind:'unk', cls:'unknown', label:t('chip.noStatus'), st };
 }
 
 function journeyChecks(j){
@@ -1887,79 +2593,90 @@ function rankJourneys(list){
   return items;
 }
 
-const listJoin = x => x.length <= 1 ? (x[0] || '') : `${x.slice(0, -1).join(', ')} and ${x[x.length - 1]}`;
+const listJoin = x => x.length <= 1 ? (x[0] || '') : `${x.slice(0, -1).join(', ')} ${t('and')} ${x[x.length - 1]}`;
 const plural = (n, one, many) => n === 1 ? one : many;
 
 // What makes route a easier than route b, phrased as "it …".
 function advantage(a, b){
   const bs = b.notes.stairs.map(c => c.name), as = a.notes.stairs.map(c => c.name);
-  if (bs.length && !as.length) return `it avoids the stairs at ${listJoin(bs)}`;
-  if (bs.length > as.length) return 'it has fewer stairs';
-  if (b.notes.air.length > a.notes.air.length) return 'it has cleaner air on the platforms';
-  if (b.notes.hot.length > a.notes.hot.length) return 'its trains are cooled';
-  if (b.j.transfers > a.j.transfers){ const d = b.j.transfers - a.j.transfers; return `it has ${d} fewer ${plural(d, 'change', 'changes')}`; }
-  if (b.j.walkMin - a.j.walkMin >= 3) return `it has ${b.j.walkMin - a.j.walkMin} min less walking`;
-  if (b.notes.someOut.length + b.notes.noStatus.length > a.notes.someOut.length + a.notes.noStatus.length) return 'its lifts are more reliable';
-  if (b.busLegs > a.busLegs) return 'it avoids a bus ride';
-  return 'it is easier with a pram';
+  if (bs.length && !as.length) return { k:'stairsAt', v:{ list:listJoin(bs) } };
+  if (bs.length > as.length) return { k:'fewerStairs' };
+  if (b.notes.air.length > a.notes.air.length) return { k:'cleanerAir' };
+  if (b.notes.hot.length > a.notes.hot.length) return { k:'cooled' };
+  if (b.j.transfers > a.j.transfers) return { k:'fewerChanges', v:{ n:b.j.transfers - a.j.transfers } };
+  if (b.j.walkMin - a.j.walkMin >= 3) return { k:'lessWalking', v:{ m:b.j.walkMin - a.j.walkMin } };
+  if (b.notes.someOut.length + b.notes.noStatus.length > a.notes.someOut.length + a.notes.noStatus.length) return { k:'reliable' };
+  if (b.busLegs > a.busLegs) return { k:'avoidsBus' };
+  return { k:'easier' };
 }
-const asTop = s => s.replace(/^its /, "the top route's ").replace(/^it /, 'the top route ');
+const advText = (adv, top) => t('adv.' + adv.k, Object.assign({ top }, adv.v || {}));
 
 // Two short sentences: where the route stands on time, then what it's like with a pram.
 function tripComment(a, top, fastest, prefs){
   const { j, notes } = a;
   const s = [];
   if (a === top){
-    if (!fastest || a.arriveIn <= fastest.arriveIn) s.push(a.hasStairs ? 'Fastest route, even counting the stairs.' : 'Fastest route, and smooth rolling all the way.');
-    else s.push(`Arrives ${a.arriveIn - fastest.arriveIn} min after the fastest route, but ${advantage(a, fastest)}.`);
+    if (!fastest || a.arriveIn <= fastest.arriveIn) s.push(a.hasStairs ? t('c.fastestStairs') : t('c.fastestSmooth'));
+    else s.push(t('c.afterFastest', { d:a.arriveIn - fastest.arriveIn, adv:advText(advantage(a, fastest), false) }));
   } else {
     const d = a.arriveIn - top.arriveIn;
-    if (d < 0) s.push(`${-d} min faster than the top route, but ${asTop(advantage(top, a))}.`);
-    else if (d > 0) s.push(`Arrives ${d} min after the top route.`);
-    else s.push(`Arrives at the same time as the top route, but ${asTop(advantage(top, a))}.`);
+    if (d < 0) s.push(t('c.fasterThanTop', { d:-d, adv:advText(advantage(top, a), true) }));
+    else if (d > 0) s.push(t('c.afterTop', { d }));
+    else s.push(t('c.sameTime', { adv:advText(advantage(top, a), true) }));
   }
   const d = [];
-  for (const c of notes.stairs) d.push(c.kind === 'bad' ? `the lift at ${c.name} is out, so expect ${STAIRS[c.stairs].text}` : `${c.name} has no lift, so expect ${STAIRS[c.stairs].text}`);
-  if (notes.someOut.length) d.push(`some lifts are out at ${listJoin(notes.someOut)}`);
-  if (notes.noStatus.length) d.push(`no lift status for ${listJoin(notes.noStatus)}`);
-  if (notes.help.length) d.push(`${listJoin(notes.help)} ${plural(notes.help.length, 'is', 'are')} step-free only with staff help`);
-  if (notes.stale.length) d.push(`lift info for ${listJoin(notes.stale)} is over ${STALE_HOURS} h old`);
-  if (notes.single.length) d.push(`only one lift at ${listJoin(notes.single)}`);
+  for (const c of notes.stairs){
+    const stairs = t('stairs.' + c.stairs + '.text');
+    d.push(c.kind === 'bad' ? t('d.liftOut', { name:c.name, stairs }) : t('d.noLift', { name:c.name, stairs }));
+  }
+  if (notes.someOut.length) d.push(t('d.someOut', { list:listJoin(notes.someOut) }));
+  if (notes.noStatus.length) d.push(t('d.noStatus', { list:listJoin(notes.noStatus) }));
+  if (notes.help.length) d.push(t('d.help', { list:listJoin(notes.help), n:notes.help.length }));
+  if (notes.stale.length) d.push(t('d.stale', { list:listJoin(notes.stale), h:STALE_HOURS }));
+  if (notes.single.length) d.push(t('d.single', { list:listJoin(notes.single) }));
   if (!d.length){
     const okN = a.checks.filter(c => c.kind === 'ok').length;
-    if (!a.checks.length) d.push('walking only');
-    else if (okN && a.checks.some(c => c.kind === 'street')) d.push('lifts working at every station, plus street-level bus or tram stops');
-    else if (okN) d.push(`lifts working at ${okN === 1 ? 'the station' : okN === 2 ? 'both stations' : `all ${okN} stations`}`);
-    else d.push('street-level bus or tram stops, so no stairs');
+    if (!a.checks.length) d.push(t('d.walkOnly'));
+    else if (okN && a.checks.some(c => c.kind === 'street')) d.push(t('d.everyStreet'));
+    else if (okN) d.push(t('d.workingAt', { n:okN }));
+    else d.push(t('d.streetNoStairs'));
   }
-  if (notes.air.length) d.push(`high particle levels at ${listJoin(notes.air)}`);
-  if (notes.hot.length) d.push(`it's ${Math.round(state.weather.feels)}°C and ${listJoin(notes.hot)} ${plural(notes.hot.length, "isn't", "aren't")} cooled`);
-  if (a.checks.length) d.push(j.transfers === 0 ? 'no changes' : `${j.transfers} ${plural(j.transfers, 'change', 'changes')}`);
-  if (a.busLegs) d.push(a.busLegs > 1 ? `${a.busLegs} bus rides` : 'one bus ride');
-  if (a.over > 0) d.push(`${j.walkMin} min of walking, over your ${prefs.maxWalk} min limit`);
-  else if (j.walkMin >= EFFORT.walkEasy) d.push(`${j.walkMin} min of walking`);
-  if (j.legs.some(l => l.type === 'pt') && !j.stepFree && !a.allStreet && !a.hasStairs) d.push('not marked step-free by IDFM');
-  s.push(d.join('; ').replace(/^./, ch => ch.toUpperCase()) + '.');
+  if (notes.air.length) d.push(t('d.air', { list:listJoin(notes.air) }));
+  if (notes.hot.length) d.push(t('d.hot', { t:Math.round(state.weather.feels), list:listJoin(notes.hot), n:notes.hot.length }));
+  if (a.checks.length) d.push(j.transfers === 0 ? t('d.noChanges') : t('changesN', { n:j.transfers }));
+  if (a.busLegs) d.push(t('d.bus', { n:a.busLegs }));
+  if (a.over > 0) d.push(t('d.walkOver', { m:j.walkMin, lim:prefs.maxWalk }));
+  else if (j.walkMin >= EFFORT.walkEasy) d.push(t('d.walk', { m:j.walkMin }));
+  if (j.legs.some(l => l.type === 'pt') && !j.stepFree && !a.allStreet && !a.hasStairs) d.push(t('d.notFree'));
+  s.push(d.join(LANG === 'fr' ? ' ; ' : '; ').replace(/^./, ch => ch.toUpperCase()) + '.');
   return s.join(' ');
 }
 
 const capFirst = t => t.charAt(0).toUpperCase() + t.slice(1);
 function coolText(l, cool){
   const bus = /bus|noctilien/.test(fold(l.mode));
-  return cool === 'yes' ? 'cooled' : cool === 'partial' ? `some ${bus ? 'buses' : 'trains'} cooled` : 'not cooled';
+  return cool === 'yes' ? t('cool.yes') : cool === 'partial' ? t(bus ? 'cool.partBuses' : 'cool.partTrains') : t('cool.no');
 }
 // Staff and cooling under each station of a trip: staffed counter here, and whether the next ride is cooled.
 function stopFacts(c){
   const bits = [];
+  if (c.kind !== 'street' && c.st && (c.role === 'Start' || c.role === 'Arrive')){
+    const be = bestEntrance(c.st);
+    if (be && be.kind !== 'none'){
+      const label = `${be.entrance ? be.entrance.name : be.label} ${be.kind === 'lift' ? t('viaLift') : t('viaStepFree')}`;
+      bits.push(`<span class="jf ent-in">${esc(t(c.role === 'Start' ? 'enterBy' : 'leaveBy', { e:label }))}${be.entrance ? ` <a class="jf-link" href="${mapsUrl(be.entrance)}" target="_blank" rel="noopener">${t('map')}</a>` : ''}</span>`);
+    }
+  }
   if (c.kind !== 'street' && c.st){
     if (c.st.counters && c.st.counters.length){
       const k = c.st.counters[0];
-      bits.push(`<span class="jf staff">Staffed: ${esc(k.type)}${k.hours ? ` · ${esc(k.hours)}` : ''}</span>`);
-    } else if (state.countersOk) bits.push('<span class="jf">No staffed counter</span>');
+      const now = counterOpenNow(k);
+      bits.push(`<span class="jf staff">${t('staffed', { type:esc(k.type) })}${now && !now.open ? ` · <b>${t('closedShort')}</b>` : k.hours ? ` · ${esc(k.hours)}` : ''}</span>`);
+    } else if (state.countersOk) bits.push(`<span class="jf">${t('noStaffed')}</span>`);
   }
   const l = c.out || c.inn;
   const cool = l ? coolingFor(l.mode, l.code) : null;
-  if (cool) bits.push(`<span class="jf ${cool === 'no' ? 'warm' : 'cool'}">${esc(capFirst(lineName(l)))}: ${coolText(l, cool)}</span>`);
+  if (cool) bits.push(`<span class="jf ${cool === 'no' ? 'warm' : 'cool'}">${esc(capFirst(lineName(l)))}${t('colon')}${coolText(l, cool)}</span>`);
   return bits.length ? `<span class="j-facts">${bits.join('')}</span>` : '';
 }
 
@@ -1988,12 +2705,13 @@ const checkChip = c => c ? `<span class="chip ${c.cls}">${esc(c.label)}</span>` 
 function stepsHtml(j, checks){
   const find = name => checks.find(c => fold(c.name) === fold(name));
   return j.legs.map(l => {
-    if (l.type === 'walk') return `<li class="step"><span class="step-k">Walk</span><span>${l.min} min${l.to ? ` to ${esc(l.to)}` : ''}</span></li>`;
-    if (l.type === 'transfer') return `<li class="step"><span class="step-k">Change</span><span>Walk ${l.min} min to the next platform</span></li>`;
+    if (l.type === 'walk') return `<li class="step"><span class="step-k">${t('stepWalk')}</span><span>${l.to ? esc(t('walkTo', { m:l.min, to:l.to })) : `${l.min} min`}</span></li>`;
+    if (l.type === 'transfer') return `<li class="step"><span class="step-k">${t('stepChange')}</span><span>${t('walkToPlatform', { m:l.min })}</span></li>`;
     const cf = find(l.from.name), ct = find(l.to.name);
+    const cool = coolingFor(l.mode, l.code);
     return `<li class="step"><span class="step-k">${lineBadge(l)}</span><span>
       <span>${stationLink(l.from.name, cf && cf.st)} ${checkChip(cf)}</span>
-      <span class="fine">${l.direction ? `towards ${esc(l.direction)} · ` : ''}${l.stops} stop${l.stops === 1 ? '' : 's'} · ${l.min} min${coolingFor(l.mode, l.code) ? ` · ${coolText(l, coolingFor(l.mode, l.code))}` : ''}</span>
+      <span class="fine">${l.direction ? `${esc(t('towards', { d:l.direction }))} · ` : ''}${t('stopsN', { n:l.stops })} · ${l.min} min${cool ? ` · ${coolText(l, cool)}` : ''}</span>
       <span>${stationLink(l.to.name, ct && ct.st)} ${checkChip(ct)}</span></span></li>`;
   }).join('');
 }
@@ -2001,32 +2719,29 @@ function stepsHtml(j, checks){
 function journeyHtml(item){
   const { j, checks } = item;
   const tags = [];
-  if (item.top) tags.push(item.best ? '<span class="jt best">Matteo-approved</span>' : '<span class="jt okish">Best option</span>');
-  if (item.fastest && !item.top) tags.push('<span class="jt fast">Fastest</span>');
-  if (item.hasStairs){
-    const n = item.notes.stairs.length;
-    tags.push(`<span class="jt bad">Stairs at ${n} ${plural(n, 'station', 'stations')}</span>`);
-  }
-  if (item.over > 0) tags.push('<span class="jt stairs">Long walk</span>');
-  if (item.notes.air.length) tags.push('<span class="jt stairs">High particles</span>');
-  if (item.notes.hot.length) tags.push('<span class="jt stairs">Warm trains</span>');
+  if (item.top) tags.push(item.best ? `<span class="jt best">${t('tag.approved')}</span>` : `<span class="jt okish">${t('tag.best')}</span>`);
+  if (item.fastest && !item.top) tags.push(`<span class="jt fast">${t('tag.fastest')}</span>`);
+  if (item.hasStairs) tags.push(`<span class="jt bad">${t('tag.stairs', { n:item.notes.stairs.length })}</span>`);
+  if (item.over > 0) tags.push(`<span class="jt stairs">${t('tag.longWalk')}</span>`);
+  if (item.notes.air.length) tags.push(`<span class="jt stairs">${t('tag.particles')}</span>`);
+  if (item.notes.hot.length) tags.push(`<span class="jt stairs">${t('tag.warm')}</span>`);
   if (j.legs.some(l => l.type === 'pt') && !item.hasStairs){
-    if (j.stepFree) tags.push('<span class="jt free">Smooth ride</span>');
-    else if (item.allStreet) tags.push('<span class="jt free">Street level</span>');
-    else if (!item.hasStairs) tags.push('<span class="jt stairs">Not marked step-free</span>');
+    if (j.stepFree) tags.push(`<span class="jt free">${t('tag.smooth')}</span>`);
+    else if (item.allStreet) tags.push(`<span class="jt free">${t('tag.street')}</span>`);
+    else tags.push(`<span class="jt stairs">${t('tag.notFree')}</span>`);
   }
-  const lines = j.legs.filter(l => l.type === 'pt').map(lineBadge).join('<span class="j-sep" aria-hidden="true">›</span>') || '<span class="hint">Walk only</span>';
-  const changes = j.transfers === 0 ? 'direct' : `${j.transfers} change${j.transfers > 1 ? 's' : ''}`;
-  const rows = checks.map(c => `<li><span class="j-role">${c.role}</span><span class="j-st">${stationLink(c.name, c.st)}</span>${checkChip(c)}${c.air === 'high' ? '<span class="chip out">High particles</span>' : ''}${
-    (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">See Plan B</button>` : ''}${
-    c.kind === 'none' ? `<span class="j-note">${c.st ? 'expect stairs' : 'may mean stairs'}</span>` : ''}${stopFacts(c)}</li>`).join('');
+  const lines = j.legs.filter(l => l.type === 'pt').map(lineBadge).join('<span class="j-sep" aria-hidden="true">›</span>') || `<span class="hint">${t('walkOnly')}</span>`;
+  const changes = j.transfers === 0 ? t('direct') : t('changesN', { n:j.transfers });
+  const rows = checks.map(c => `<li><span class="j-role">${t('role.' + c.role)}</span><span class="j-st">${stationLink(c.name, c.st)}</span>${checkChip(c)}${c.air === 'high' ? `<span class="chip out">${t('chip.highParticles')}</span>` : ''}${
+    (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">${t('seePlanB')}</button>` : ''}${
+    c.kind === 'none' ? `<span class="j-note">${c.st ? t('expectStairs') : t('mayMeanStairs')}</span>` : ''}${stopFacts(c)}</li>`).join('');
   return `<li class="journey${item.best ? ' is-best' : ''}">
     <div class="j-tags">${tags.join('')}</div>
-    <div class="j-main"><p class="j-dur tnum">${j.durMin} min</p><p class="j-times tnum">${fmtTime(j.dep)} → ${fmtTime(j.arr)} · ${changes} · ${j.walkMin} min walking</p></div>
+    <div class="j-main"><p class="j-dur tnum">${j.durMin} min</p><p class="j-times tnum">${fmtTime(j.dep)} → ${fmtTime(j.arr)} · ${changes} · ${t('minWalking', { m:j.walkMin })}</p></div>
     <p class="j-why">${esc(item.comment)}</p>
     <div class="j-lines">${lines}</div>
     ${rows ? `<ul class="j-checks">${rows}</ul>` : ''}
-    <details class="j-steps"><summary>Step by step</summary><ol>${stepsHtml(j, checks)}</ol></details>
+    <details class="j-steps"><summary>${t('stepByStep')}</summary><ol>${stepsHtml(j, checks)}</ol></details>
   </li>`;
 }
 
@@ -2053,36 +2768,35 @@ function exampleTrip(){
 }
 
 function renderTrip(){
-  const t = state.trip, status = $('#trip-status'), list = $('#trip-results');
-  const addKey = '<button type="button" class="linkbtn open-conn">connect to IDFM in Settings</button>';
-  if (['loading', 'error', 'none', 'pick'].includes(t.status)) $('#trip-more').hidden = true;
-  if (t.status === 'loading'){
+  const t0 = state.trip, status = $('#trip-status'), list = $('#trip-results');
+  const addKey = `<button type="button" class="linkbtn open-conn">${t('connectSettings')}</button>`;
+  if (['loading', 'error', 'none', 'pick'].includes(t0.status)) $('#trip-more').hidden = true;
+  if (t0.status === 'loading'){
     status.className = 'trip-status';
-    status.innerHTML = `${PRAM_SVG} Finding Matteo's smoothest route…`;
+    status.innerHTML = `${PRAM_SVG} ${t('findingRoute')}`;
     list.innerHTML = '';
     return;
   }
-  if (t.status === 'error' || t.status === 'none' || t.status === 'pick'){
+  if (t0.status === 'error' || t0.status === 'none' || t0.status === 'pick'){
     status.className = 'trip-status is-error';
-    status.innerHTML = t.status === 'none' ? 'No route found between these places. Try a nearby station or address.'
-      : esc(t.message) + (t.status === 'error' && t.keyHelp
-        ? ` <span class="key-help">The route planner is a separate API on PRIM. Log in, open the API “Calculateur Île-de-France Mobilités – Accès générique”, and make sure your account has access to it. If PRIM gives you a separate token for it, paste it as the <button type="button" class="linkbtn open-conn">route planner key</button> in Settings.</span>`
-        : '');
+    let html = t0.status === 'none' ? t('noRoute') : esc(t(t0.msgKey, t0.msgVars));
+    if (t0.status === 'error' && t0.keyHelp) html += ` <span class="key-help">${t('keyHelp', { btn:`<button type="button" class="linkbtn open-conn">${t('keyHelpBtn')}</button>` })}</span>`;
+    status.innerHTML = html;
     list.innerHTML = '';
     return;
   }
-  let data = t.results, example = false;
+  let data = t0.results, example = false;
   if (!data){ data = exampleTrip(); example = true; }
   const msgs = [];
   if (example){
-    msgs.push(`<span><strong>Practice run:</strong> ${esc(data.from.name)} → ${esc(data.to.name)}.</span>`);
-    msgs.push(hasLiveAccess() ? '<span>Plan your own trip above.</span>' : `<span>To plan real trips, ${addKey}.</span>`);
+    msgs.push(`<span><strong>${t('practiceRun')}</strong> ${esc(data.from.name)} → ${esc(data.to.name)}.</span>`);
+    msgs.push(`<span>${hasLiveAccess() ? t('planOwn') : t('toPlanReal', { link:addKey })}</span>`);
   } else {
     msgs.push(`<strong>${esc(data.from.name)} → ${esc(data.to.name)}</strong>`);
-    if (isHot()) msgs.push(`<span>It's ${Math.round(state.weather.feels)}°C, so cooled lines get priority.</span>`);
+    if (isHot()) msgs.push(`<span>${t('hotPriority', { t:Math.round(state.weather.feels) })}</span>`);
   }
   const ranked = rankJourneys(data.journeys);
-  if (ranked.length && ranked.every(r => r.hasStairs)) msgs.push('<span class="trip-warn">Every route has stairs or a broken lift right now, so the quickest is first. Tap a station for its Plan B.</span>');
+  if (ranked.length && ranked.every(r => r.hasStairs)) msgs.push(`<span class="trip-warn">${t('allStairs')}</span>`);
   status.className = 'trip-status' + (example || state.mode === 'sample' ? ' is-example' : '');
   status.innerHTML = msgs.join(' ');
   list.innerHTML = ranked.slice(0, VISIBLE_ROUTES).map(journeyHtml).join('');
@@ -2090,7 +2804,7 @@ function renderTrip(){
   const moreEl = $('#trip-more');
   moreEl.hidden = !more.length;
   moreEl.open = false;
-  $('#trip-more-label').textContent = `Show ${more.length} more ${plural(more.length, 'route', 'routes')}`;
+  $('#trip-more-label').textContent = t('showMore', { n:more.length });
   $('#trip-more-list').innerHTML = more.map(journeyHtml).join('');
 }
 
@@ -2113,7 +2827,8 @@ async function runTrip(){
   const [from, to] = await Promise.all([state.trip.from || resolvePlace('from'), state.trip.to || resolvePlace('to')]);
   if (!from || !to){
     state.trip.status = 'pick';
-    state.trip.message = !from && !to ? 'Enter a start and a destination.' : !from ? 'Choose a start from the suggestions.' : 'Choose a destination from the suggestions.';
+    state.trip.msgKey = !from && !to ? 'enterBoth' : !from ? 'pickStart' : 'pickDest';
+    state.trip.msgVars = {};
     renderTrip();
     return;
   }
@@ -2126,9 +2841,8 @@ async function runTrip(){
     state.trip.results = null;
     state.trip.status = 'error';
     state.trip.keyHelp = !!err && (err.status === 401 || err.status === 403);
-    state.trip.message = state.trip.keyHelp
-      ? `IDFM's route planner refused your key (HTTP ${err.status}).`
-      : `IDFM's route planner didn't answer. ${(err && err.detail) || ''}`;
+    state.trip.msgKey = state.trip.keyHelp ? 'keyRefused' : 'plannerDown';
+    state.trip.msgVars = { s:err && err.status, d:(err && err.detail) || '' };
   }
   renderTrip();
 }
@@ -2147,15 +2861,15 @@ async function suggest(which, q){
   if (hasLiveAccess()){ try { items = await searchPlaces(q); } catch (e){ items = []; } }
   if (!items.length){
     const f = fold(q);
-    items = state.stations.filter(s => s.key.includes(f) && s.lat != null).slice(0, 6).map(s => ({ name:s.name, label:'Station with lifts', lat:s.lat, lon:s.lon }));
+    items = state.stations.filter(s => s.key.includes(f) && s.lat != null).slice(0, 6).map(s => ({ name:s.name, kind:'withLifts', lat:s.lat, lon:s.lon }));
   }
   if ($('#' + which).value.trim() !== q) return;
   state.sug[which] = items;
   const ul = $('#' + which + '-sug');
   ul.hidden = false;
   ul.innerHTML = items.length
-    ? items.map((it, i) => `<li><button type="button" class="hit" data-pick="${which}" data-idx="${i}"><span class="hit-name">${esc(it.name)}</span><span class="chip unknown">${esc(it.label)}</span></button></li>`).join('')
-    : `<li class="noresult">No match for “${esc(q)}”.</li>`;
+    ? items.map((it, i) => `<li><button type="button" class="hit" data-pick="${which}" data-idx="${i}"><span class="hit-name">${esc(it.name)}</span><span class="chip unknown">${t('place.' + (it.kind || 'place'))}</span></button></li>`).join('')
+    : `<li class="noresult">${t('noMatch', { q:esc(q) })}</li>`;
 }
 function pickSug(which, idx){
   const it = state.sug[which][idx];
@@ -2200,6 +2914,9 @@ function tripFromStation(which){
 document.addEventListener('click', e => {
   if (e.target.closest('#save')){ toggleSave(); return; }
   if (e.target.closest('#retry')){ retryLive(); return; }
+  if (e.target.closest('#copy-report')){ copyReport(); return; }
+  const lb = e.target.closest('[data-lang]');
+  if (lb){ setLang(lb.getAttribute('data-lang')); return; }
   if (e.target.closest('.open-conn')){ showView('settings', true); window.scrollTo(0, 0); return; }
   const fill = e.target.closest('[data-fill]');
   if (fill){ fillTripFromFav(fill.getAttribute('data-fill')); return; }
@@ -2269,6 +2986,8 @@ window.addEventListener('hashchange', () => { const h = location.hash.slice(1); 
 try { const h = location.hash.slice(1); showView(VIEWS.includes(h) ? h : 'trip'); } catch (e){ showView('trip'); }
 
 wireConnection();
+applyStatic();
+renderWeather();
 loadAll();
 loadWeather();
 })();

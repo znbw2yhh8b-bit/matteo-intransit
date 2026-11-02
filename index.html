@@ -290,6 +290,18 @@ button{ font:inherit; color:inherit; }
 .tab-count{ position:absolute; top:4px; left:calc(50% + 6px); min-width:1.4em; padding:0 .35em; border-radius:999px; background:var(--bad); color:var(--surface); font-size:.68rem; line-height:1.5; text-align:center; }
 .tab-count:empty{ display:none; }
 
+.facts{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.facts li{ display:grid; grid-template-columns:8.6em minmax(0, 1fr); gap:10px; align-items:baseline; font-size:.94rem; }
+.fact-k{ font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.fact-v{ min-width:0; display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 8px; }
+@media (max-width:380px){ .facts li{ grid-template-columns:1fr; gap:2px; } }
+.wx{ display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:10px 14px; }
+.wx-temp{ font-family:var(--f-display); font-weight:600; font-size:2rem; line-height:1; flex:none; }
+.wx.hot .wx-temp{ color:var(--bad); } .wx.cold .wx-temp{ color:var(--accent); }
+.wx-body{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+.wx-line{ font-size:.88rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:4px 8px; align-items:center; }
+.wx-tip{ font-weight:700; font-size:.93rem; line-height:1.35; }
+
 @media (prefers-reduced-motion: reduce){ .pulse, .rolling .wheel{ animation:none; } }
 </style>
 
@@ -321,6 +333,7 @@ button{ font:inherit; color:inherit; }
       </div>
       <div class="pass-stub"><p class="pass-k">Gate</p><p class="pass-v">Lifts only</p></div>
     </div>
+    <div id="wx" class="wx" role="status" hidden></div>
 
     <section class="panel" aria-labelledby="trip-h">
       <h2 id="trip-h" class="panel-h">Where to, Matteo?</h2>
@@ -427,6 +440,7 @@ button{ font:inherit; color:inherit; }
           <li>Time comes first: each route starts from the minutes until you arrive, including any wait.</li>
           <li>Extra minutes are added for what's harder with a pram. Stairs where a lift is missing or out: ~1 flight +8, 2–3 flights +15, a deep or large station +22 (with “A few are OK”: +3, +6, +10). Lifts partly out or with no status +6, step-free only with staff help +5, each change +4, each bus ride +2, a station with a single lift +2.</li>
           <li>Walking up to 10 minutes counts as normal, a little more up to your limit, and double past it.</li>
+          <li>A station with high particle levels on the platform adds +4. On hot days (feels like 27°C or more), each ride on a train without cooling adds +4, and +1 where only some trains are cooled.</li>
           <li>Stair sizes come from the station type: deep RER and train stations in Paris and big hubs 4+ flights, suburban train stations about 1, metro stations 2–3.</li>
         </ol>
       </details>
@@ -898,7 +912,7 @@ function renderDataPanel(){
     const time = state.loadedAt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
     const src = state.sources || {};
     el.innerHTML = `<p>Live from Île-de-France Mobilités, loaded at <span class="tnum">${time}</span>: <span class="tnum">${fmtNum(state.stations.length)}</span> stations and <span class="tnum">${fmtNum(lifts)}</span> lifts.</p>
-      <ul class="data-list">${row('Lift status', src.lifts)}${row('Stations and lines', src.rail)}${row('Accessibility ratings', src.access)}</ul>${actions}`;
+      <ul class="data-list">${row('Lift status', src.lifts)}${row('Stations and lines', src.rail)}${row('Accessibility ratings', src.access)}${row('Air on the platforms', src.air)}${row('Staffed counters', src.counters)}${row('Weather', src.weather)}</ul>${actions}`;
     return;
   }
   if (state.mode === 'file'){
@@ -906,7 +920,7 @@ function renderDataPanel(){
     return;
   }
   const steps = state.diag.map(d => `<li><b>${esc(d.label)}</b><br><span class="diag-url">${esc(d.url)}</span><br>${esc(d.detail)}</li>`).join('');
-  el.innerHTML = `<p>${hasLiveAccess() ? "Live data didn't load, so the app is in practice mode with made-up lift statuses." : 'Practice mode: lift statuses are made up so you can try the app. Add a PRIM key above to switch to live data.'}</p>
+  el.innerHTML = `<p>${hasLiveAccess() ? "Live data didn't load, so the app is in practice mode with made-up lift statuses." : 'Practice mode: lift statuses and staffed counters are made up so you can try the app. Add a PRIM key above to switch to live data.'}</p>
     ${hasLiveAccess() && steps ? `<details class="diag"><summary>What IDFM answered</summary><ol>${steps}</ol></details>` : ''}${actions}`;
 }
 
@@ -968,6 +982,34 @@ function renderPlanB(st){
   return `<div class="planb"><h3 class="sub-h">Plan B for Matteo · nearby stations with working lifts</h3>${body}</div>`;
 }
 
+function stationFacts(st){
+  const rows = [];
+  if (st.air){
+    const per = Object.entries(st.airLines || {}).filter(([l]) => l);
+    const detail = per.length > 1 ? per.map(([l, a]) => `${l}: ${a}`).join(' · ') : '';
+    rows.push(`<li><span class="fact-k">Air on platforms</span><span class="fact-v"><span class="chip ${AIR_CLS[st.air]}">${AIR_LABEL[st.air]}</span>${detail ? `<span class="fine">${esc(detail)}</span>` : ''}</span></li>`);
+  } else if (state.airOk){
+    rows.push('<li><span class="fact-k">Air on platforms</span><span class="fact-v"><span class="fine">Not measured (above ground or a new station)</span></span></li>');
+  }
+  if (st.counters && st.counters.length){
+    const c = st.counters[0];
+    const title = c.name && fold(c.name) !== fold(c.type) ? `${c.type} · ${c.name}` : c.type;
+    rows.push(`<li><span class="fact-k">Staff</span><span class="fact-v"><b>${esc(title)}</b>${c.hours ? `<span class="fine">${esc(c.hours)}</span>` : ''}</span></li>`);
+  } else if (state.countersOk){
+    rows.push('<li><span class="fact-k">Staff</span><span class="fact-v">No staffed counter listed</span></li>');
+  }
+  const cool = st.lines.map(l => [l.label, coolingFor(l.mode, l.code)]).filter(([, c]) => c);
+  if (cool.length){
+    const by = k => cool.filter(([, c]) => c === k).map(([l]) => l);
+    const parts = [];
+    if (by('yes').length) parts.push(`Cooled: ${by('yes').join(', ')}`);
+    if (by('partial').length) parts.push(`Some cooled: ${by('partial').join(', ')}`);
+    if (by('no').length) parts.push(`Not cooled: ${by('no').join(', ')}`);
+    rows.push(`<li><span class="fact-k">Trains</span><span class="fact-v">${esc(parts.join(' · '))}</span></li>`);
+  }
+  return rows.length ? `<h3 class="sub-h">At this station</h3><ul class="facts">${rows.join('')}</ul>` : '';
+}
+
 function renderStation(){
   const el = $('#station');
   const st = state.selected;
@@ -1003,6 +1045,7 @@ function renderStation(){
     <p class="st-meta">${meta.join('<span aria-hidden="true">·</span>')}</p>
     <div class="st-actions"><button type="button" class="btn" data-trip="from">Trip from here</button><button type="button" class="btn" data-trip="to">Trip to here</button></div>
     <div class="verdict ${v.cls}">${v.icon}<div><p class="v-title">${v.title}</p><p class="v-sub">${v.sub}</p></div></div>
+    ${stationFacts(st)}
     <h3 class="sub-h">Lifts at this station</h3>
     ${liftList}
     ${showPlanB ? renderPlanB(st) : ''}`;
@@ -1211,16 +1254,201 @@ function applyAccess(recs){
   return matched;
 }
 
+/* ---------- Air on the platforms (IDFM × Airparif) ---------- */
+const AIR_DATASET = 'qualite-de-lair-dans-le-reseau-de-transport-francilien';
+// "High" stations in Airparif's 2026 update of the map, used when the dataset can't be read.
+const AIR_HIGH_FALLBACK = [['Belleville','2'],['Jaurès','5'],['Laumière','5'],['Michel-Ange - Auteuil','9'],['Michel-Ange - Molitor','9'],
+  ['Oberkampf','5'],['Oberkampf','9'],['Ourcq','5'],['Père Lachaise','2'],['Pigalle','2'],['Porte de Clichy','C'],['Saint-Philippe du Roule','9'],['Trocadéro','9']];
+const AIR_LABEL = { low:'Low particles', medium:'Medium particles', high:'High particles' };
+const AIR_CLS = { low:'ok', medium:'unknown', high:'out' };
+const AIR_RANK = { low:1, medium:2, high:3 };
+const worseAir = (a, b) => (AIR_RANK[b] || 0) > (AIR_RANK[a] || 0) ? b : a;
+
+function airLevelOf(v){
+  if (v == null || v === '' || typeof v !== 'string') return null;
+  const f = fold(v);
+  if (/eleve|haut|high|rouge|red|fort/.test(f)) return 'high';
+  if (/moyen|medium|modere|jaune|yellow|orange/.test(f)) return 'medium';
+  if (/faible|low|bas\b|vert|green/.test(f)) return 'low';
+  return null;
+}
+function airFromRecord(rec){
+  for (const k in rec){
+    if (!/niveau|classe|class|qualit|pollution|categor|couleur|level/i.test(k)) continue;
+    const v = rec[k];
+    if (typeof v === 'number'){ if (/classe|niveau|level/i.test(k) && [1, 2, 3].includes(v)) return ['low', 'medium', 'high'][v - 1]; continue; }
+    const a = airLevelOf(v);
+    if (a) return a;
+  }
+  return null;
+}
+function setAir(st, line, level){
+  st.air = worseAir(st.air, level);
+  st.airLines = st.airLines || {};
+  if (line) st.airLines[line] = worseAir(st.airLines[line], level);
+}
+function applyAir(recs){
+  let matched = 0;
+  for (const rec of recs){
+    const level = airFromRecord(rec);
+    const name = pick(rec, ['nom_gare', 'nom_station', 'station', 'nom_zdc', 'nom_zdl', 'nom_arret', 'stop_name', 'gare', 'nom', 'libelle']);
+    if (!level || !name) continue;
+    const c = coordsOf(rec);
+    const st = matchStation({ name:String(name), lat:c ? c.lat : null, lon:c ? c.lon : null });
+    if (!st) continue;
+    const line = pick(rec, ['ligne', 'indice_lig', 'res_com', 'line', 'code_ligne', 'nom_ligne']);
+    setAir(st, line ? String(line).replace(/^(m[eé]tro|rer|ligne)\s+/i, '') : '', level);
+    matched++;
+  }
+  return matched;
+}
+function applyAirFallback(){
+  for (const [name, line] of AIR_HIGH_FALLBACK){ const st = matchStation({ name }); if (st) setAir(st, line, 'high'); }
+}
+async function loadAir(){
+  const { recs, detail } = await loadDataset(AIR_DATASET);
+  const matched = recs.length ? applyAir(recs) : 0;
+  if (matched){ state.airOk = true; state.sources.air = { ok:true, text:`${fmtNum(matched)} ${plural(matched, 'platform', 'platforms')} matched to stations` }; return; }
+  applyAirFallback();
+  state.airOk = false;
+  state.sources.air = { ok:false, text:(recs.length ? `Got ${recs.length} rows but couldn't read them. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${detail}`) + ' Showing the 2026 list of high-particle stations instead.' };
+}
+
+/* ---------- Staffed counters (IDFM sales points) ---------- */
+const COUNTER_DATASET = 'points-de-vente';
+const STAFF_YES = /guichet|comptoir|agence|accueil|espace (client|service)|boutique|bureau|point (d )?information|service client|avec agent/;
+const STAFF_NO = /automat|distributeur|machine|borne|commerce|tabac|presse|relais|buraliste|librairie|e ?shop|internet|appli|mobile|depositaire|partenaire|epicerie|supermarche/;
+function counterFromRecord(rec){
+  const typeRaw = pick(rec, ['type', 'type_point_de_vente', 'type_pdv', 'libelle_type', 'type_de_point_de_vente', 'categorie', 'nature', 'canal']);
+  const all = Object.values(rec).filter(v => typeof v === 'string').join(' | ');
+  const txt = fold(typeRaw ? String(typeRaw) : all);
+  if (!STAFF_YES.test(txt) || STAFF_NO.test(txt)) return null;
+  const hours = [];
+  for (const k in rec){
+    const v = rec[k];
+    if (typeof v !== 'string' || !v.trim()) continue;
+    if (/horaire|ouverture|hours|heure|lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|semaine|week/i.test(k)) hours.push(/horaire|ouverture|hours/i.test(k) ? v.trim() : `${k.replace(/_/g, ' ')}: ${v.trim()}`);
+  }
+  const name = pick(rec, ['nom', 'nom_point_de_vente', 'nom_pdv', 'libelle', 'name', 'denomination', 'raison_sociale']);
+  return { type:typeRaw ? String(typeRaw) : 'Staffed counter', name:name ? String(name) : '', hours:hours.join(' · ').slice(0, 220) };
+}
+function applyCounters(recs){
+  let matched = 0;
+  for (const rec of recs){
+    const ctr = counterFromRecord(rec);
+    if (!ctr) continue;
+    const c = coordsOf(rec);
+    const where = pick(rec, ['nom_zdc', 'nom_gare', 'gare', 'station', 'nom_station', 'nom_arret', 'arret', 'zdc']) || ctr.name;
+    const st = matchStation({ name:String(where || ''), lat:c ? c.lat : null, lon:c ? c.lon : null });
+    if (!st) continue;
+    st.counters = st.counters || [];
+    if (!st.counters.some(x => x.type === ctr.type && x.name === ctr.name)){ st.counters.push(ctr); matched++; }
+  }
+  return matched;
+}
+async function loadCounters(){
+  const { recs, detail } = await loadDataset(COUNTER_DATASET);
+  const matched = recs.length ? applyCounters(recs) : 0;
+  state.countersOk = matched > 0;
+  state.sources.counters = matched
+    ? { ok:true, text:`${fmtNum(matched)} staffed ${plural(matched, 'counter', 'counters')} matched to stations (from ${fmtNum(recs.length)} sales points)` }
+    : { ok:false, text:recs.length ? `Got ${recs.length} sales points but found no staffed counters in stations. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${detail}` };
+}
+function applySampleCounters(){
+  const add = (name, type, hours) => { const st = matchStation({ name }); if (st) st.counters = [{ type, name:'', hours }]; };
+  add('Gare du Nord', 'Comptoir RATP', 'Every day 6:30–21:30');
+  add('Châtelet - Les Halles', 'Agence RATP', 'Mon–Fri 7:00–20:00');
+  state.countersOk = true;
+}
+
+/* ---------- Cooled trains by line (RATP, summer 2026) ---------- */
+const COOLING = { 'M1':'yes', 'M2':'yes', 'M5':'yes', 'M9':'yes', 'M11':'yes', 'M14':'yes',
+  'M3':'no', 'M3bis':'no', 'M4':'no', 'M6':'no', 'M7':'no', 'M7bis':'no', 'M8':'no', 'M10':'no', 'M12':'no', 'M13':'no',
+  'RER B':'partial', 'RER C':'partial', 'RER D':'no', 'RER E':'no' };
+function coolingFor(mode, code){
+  const f = fold(mode);
+  const c = String(code || '').trim().replace(/^(\d+)\s*b(is)?$/i, '$1bis');
+  if (/tram/.test(f)) return 'yes';
+  if (/bus|noctilien/.test(f)) return 'partial';
+  if (/metro/.test(f)) return COOLING['M' + c] || null;
+  if (/rer/.test(f)) return COOLING['RER ' + c.toUpperCase()] || null;
+  return null;
+}
+function lineName(l){
+  const f = fold(l.mode);
+  if (/metro/.test(f)) return `line ${l.code}`;
+  if (/rer/.test(f)) return `RER ${l.code}`;
+  if (/bus|noctilien/.test(f)) return `bus ${l.code}`;
+  return l.code || l.mode;
+}
+
+/* ---------- Paris weather (Open-Meteo: free, no key) ---------- */
+const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current=temperature_2m,apparent_temperature,weather_code&timezone=Europe%2FParis';
+const AQ_URL = 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=48.8566&longitude=2.3522&current=european_aqi&timezone=Europe%2FParis';
+const HOT_C = 27, COLD_C = 5;
+const isHot = () => !!state.weather && state.weather.feels >= HOT_C;
+async function plainJson(url){
+  // No key here: these requests go to a third-party weather service.
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+  try { const res = await fetch(url, { signal:ctrl.signal }); if (!res.ok) throw new Error('HTTP ' + res.status); return await res.json(); }
+  finally { clearTimeout(timer); }
+}
+function wxText(code){
+  if (code === 0) return 'Clear';
+  if (code <= 2) return 'Partly cloudy';
+  if (code === 3) return 'Cloudy';
+  if (code === 45 || code === 48) return 'Fog';
+  if (code >= 51 && code <= 57) return 'Drizzle';
+  if (code >= 61 && code <= 67) return 'Rain';
+  if (code >= 71 && code <= 77) return 'Snow';
+  if (code >= 80 && code <= 82) return 'Showers';
+  if (code >= 85 && code <= 86) return 'Snow showers';
+  if (code >= 95) return 'Thunderstorm';
+  return '';
+}
+const aqiLabel = v => v <= 20 ? 'good' : v <= 40 ? 'fair' : v <= 60 ? 'moderate' : v <= 80 ? 'poor' : v <= 100 ? 'very poor' : 'extremely poor';
+const aqiCls = v => v <= 40 ? 'ok' : v <= 60 ? 'warn' : 'out';
+async function loadWeather(){
+  const [w, a] = await Promise.allSettled([plainJson(WX_URL), plainJson(AQ_URL)]);
+  const cur = w.status === 'fulfilled' && w.value && w.value.current;
+  if (!cur || typeof cur.temperature_2m !== 'number'){ state.weather = null; state.sources.weather = { ok:false, text:"Weather didn't load." }; renderWeather(); return; }
+  const aqi = a.status === 'fulfilled' && a.value && a.value.current && typeof a.value.current.european_aqi === 'number' ? a.value.current.european_aqi : null;
+  state.weather = { temp:cur.temperature_2m, feels:typeof cur.apparent_temperature === 'number' ? cur.apparent_temperature : cur.temperature_2m, code:cur.weather_code, aqi };
+  state.sources.weather = { ok:true, text:`Paris now: ${Math.round(state.weather.temp)}°C${aqi != null ? `, outside air ${aqiLabel(aqi)}` : ''}` };
+  renderWeather(); renderTrip(); renderDataPanel();
+}
+function renderWeather(){
+  const el = $('#wx');
+  const w = state.weather;
+  if (!w){ el.hidden = true; return; }
+  const code = w.code;
+  const rainy = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95;
+  const snowy = (code >= 71 && code <= 77) || code === 85 || code === 86;
+  const hot = w.feels >= HOT_C, cold = w.feels <= COLD_C;
+  const tip = hot ? 'Hot one: cooled lines get priority today. Shade and water for Matteo.'
+    : snowy ? 'Snow out there: footmuff and rain cover on.'
+    : rainy ? 'Rain about: pack the pram cover.'
+    : cold ? 'Chilly: an extra layer for Matteo.'
+    : 'Nice weather for the walking bits.';
+  el.className = 'wx' + (hot ? ' hot' : cold ? ' cold' : '');
+  el.innerHTML = `<p class="wx-temp tnum">${Math.round(w.temp)}°</p><div class="wx-body">
+    <p class="wx-line"><span>${esc(wxText(code) || 'Paris now')} · feels ${Math.round(w.feels)}°</span>${w.aqi != null ? `<span class="chip ${aqiCls(w.aqi)}">Outside air ${aqiLabel(w.aqi)}</span>` : ''}</p>
+    <p class="wx-tip">${tip}</p></div>`;
+  el.hidden = false;
+}
+
 // Lifts first so the page is usable quickly, then every other station, then accessibility levels.
 function loadAll(){
   return loadLifts().then(r => {
     if (r.mode === 'live'){
       const lifts = r.stations.reduce((n, s) => n + s.counts.n, 0);
       state.sources = { lifts:{ ok:true, text:`${fmtNum(lifts)} lifts at ${fmtNum(r.stations.length)} stations` },
-        rail:{ ok:null, text:'Loading…' }, access:{ ok:null, text:'Waiting…' } };
+        rail:{ ok:null, text:'Loading…' }, access:{ ok:null, text:'Waiting…' }, air:{ ok:null, text:'Waiting…' }, counters:{ ok:null, text:'Waiting…' },
+        weather:state.sources && state.sources.weather };
     }
     setData(r);
-    if (r.mode !== 'live') return r;
+    if (r.mode !== 'live'){ applyAirFallback(); applySampleCounters(); renderAll(); return r; }
     return loadRail().then(rail => {
       state.sources.access = { ok:null, text:'Loading…' };
       if (rail.length) setData(Object.assign({}, r, { stations:mergeStations(r.stations, rail), railOk:true }));
@@ -1233,7 +1461,7 @@ function loadAll(){
             : { ok:false, text:`Got ${acc.length} rows but couldn't match them to stations. Fields: ${fieldsOf(acc)}.` };
         }
         renderAll();
-        return r;
+        return Promise.all([loadAir(), loadCounters()]).then(() => { renderAll(); return r; });
       });
     });
   });
@@ -1278,6 +1506,7 @@ async function loadFile(file){
   }
   state.fileError = '';
   setData({ stations, mode:'file', source:file.name, diag:state.diag });
+  applyAirFallback(); renderAll();
 }
 
 function retryLive(){
@@ -1339,6 +1568,9 @@ const EFFORT = {
   noStatus:[6, 3],     // no lift status at all
   staffHelp:[5, 3],    // step-free only with help from station staff
   notStepFree:[4, 2],  // IDFM doesn't mark the route as step-free (and no stairs were found)
+  airHigh:4,           // a station with high particle levels on the platform
+  hotNoCooling:4,      // on hot days: each ride on a train without cooling
+  hotPartial:1,        // on hot days: each ride where only some trains are cooled
   change:4,            // each change: another platform to find
   bus:2,               // each bus ride: no stairs, but space for a pram can be tight
   walkEasy:10,         // walking up to this many minutes costs nothing extra
@@ -1512,7 +1744,11 @@ function journeyChecks(j){
     push(l.from, i === 0 ? 'Start' : 'Change');
     push(l.to, i === pts.length - 1 ? 'Arrive' : 'Change');
   });
-  return stops.map(s => Object.assign({ name:s.p.name, role:s.role }, checkStop(s.p, s.mode)));
+  return stops.map(s => {
+    const c = Object.assign({ name:s.p.name, role:s.role }, checkStop(s.p, s.mode));
+    if (c.kind !== 'street' && c.st && c.st.air) c.air = c.st.air;
+    return c;
+  });
 }
 
 function assessJourney(j, prefs, now){
@@ -1521,7 +1757,7 @@ function assessJourney(j, prefs, now){
   const pts = j.legs.filter(l => l.type === 'pt');
   const allStreet = pts.length > 0 && pts.every(l => isStreetMode(l.mode));
   const busLegs = pts.filter(isBusLeg).length;
-  const notes = { stairs:[], someOut:[], noStatus:[], help:[], stale:[], single:[] };
+  const notes = { stairs:[], someOut:[], noStatus:[], help:[], stale:[], single:[], air:[], hot:[] };
   let effort = 0;
   for (const c of checks){
     if (c.kind === 'ok'){
@@ -1535,6 +1771,14 @@ function assessJourney(j, prefs, now){
     else if (c.kind === 'bad' || c.kind === 'none'){ effort += STAIRS[c.stairs][ix ? 'ok' : 'avoid']; notes.stairs.push(c); }
   }
   effort += EFFORT.change * j.transfers + EFFORT.bus * busLegs;
+  for (const c of checks) if (c.air === 'high'){ effort += EFFORT.airHigh; notes.air.push(c.name); }
+  if (isHot()){
+    for (const l of pts){
+      const cool = coolingFor(l.mode, l.code);
+      if (cool === 'no'){ effort += EFFORT.hotNoCooling; if (!notes.hot.includes(lineName(l))) notes.hot.push(lineName(l)); }
+      else if (cool === 'partial') effort += EFFORT.hotPartial;
+    }
+  }
   if (pts.length && !j.stepFree && !allStreet && !notes.stairs.length) effort += EFFORT.notStepFree[ix];
   const over = Math.max(0, j.walkMin - prefs.maxWalk);
   effort += Math.max(0, Math.min(j.walkMin, prefs.maxWalk) - EFFORT.walkEasy) * EFFORT.walkSoft + over * EFFORT.walkOver;
@@ -1567,6 +1811,8 @@ function advantage(a, b){
   const bs = b.notes.stairs.map(c => c.name), as = a.notes.stairs.map(c => c.name);
   if (bs.length && !as.length) return `it avoids the stairs at ${listJoin(bs)}`;
   if (bs.length > as.length) return 'it has fewer stairs';
+  if (b.notes.air.length > a.notes.air.length) return 'it has cleaner air on the platforms';
+  if (b.notes.hot.length > a.notes.hot.length) return 'its trains are cooled';
   if (b.j.transfers > a.j.transfers){ const d = b.j.transfers - a.j.transfers; return `it has ${d} fewer ${plural(d, 'change', 'changes')}`; }
   if (b.j.walkMin - a.j.walkMin >= 3) return `it has ${b.j.walkMin - a.j.walkMin} min less walking`;
   if (b.notes.someOut.length + b.notes.noStatus.length > a.notes.someOut.length + a.notes.noStatus.length) return 'its lifts are more reliable';
@@ -1602,6 +1848,8 @@ function tripComment(a, top, fastest, prefs){
     else if (okN) d.push(`lifts working at ${okN === 1 ? 'the station' : okN === 2 ? 'both stations' : `all ${okN} stations`}`);
     else d.push('street-level bus or tram stops, so no stairs');
   }
+  if (notes.air.length) d.push(`high particle levels at ${listJoin(notes.air)}`);
+  if (notes.hot.length) d.push(`it's ${Math.round(state.weather.feels)}°C and ${listJoin(notes.hot)} ${plural(notes.hot.length, "isn't", "aren't")} cooled`);
   if (a.checks.length) d.push(j.transfers === 0 ? 'no changes' : `${j.transfers} ${plural(j.transfers, 'change', 'changes')}`);
   if (a.busLegs) d.push(a.busLegs > 1 ? `${a.busLegs} bus rides` : 'one bus ride');
   if (a.over > 0) d.push(`${j.walkMin} min of walking, over your ${prefs.maxWalk} min limit`);
@@ -1656,6 +1904,8 @@ function journeyHtml(item){
     tags.push(`<span class="jt bad">Stairs at ${n} ${plural(n, 'station', 'stations')}</span>`);
   }
   if (item.over > 0) tags.push('<span class="jt stairs">Long walk</span>');
+  if (item.notes.air.length) tags.push('<span class="jt stairs">High particles</span>');
+  if (item.notes.hot.length) tags.push('<span class="jt stairs">Warm trains</span>');
   if (j.legs.some(l => l.type === 'pt') && !item.hasStairs){
     if (j.stepFree) tags.push('<span class="jt free">Smooth ride</span>');
     else if (item.allStreet) tags.push('<span class="jt free">Street level</span>');
@@ -1663,7 +1913,7 @@ function journeyHtml(item){
   }
   const lines = j.legs.filter(l => l.type === 'pt').map(lineBadge).join('<span class="j-sep" aria-hidden="true">›</span>') || '<span class="hint">Walk only</span>';
   const changes = j.transfers === 0 ? 'direct' : `${j.transfers} change${j.transfers > 1 ? 's' : ''}`;
-  const rows = checks.map(c => `<li><span class="j-role">${c.role}</span><span class="j-st">${stationLink(c.name, c.st)}</span>${checkChip(c)}${
+  const rows = checks.map(c => `<li><span class="j-role">${c.role}</span><span class="j-st">${stationLink(c.name, c.st)}</span>${checkChip(c)}${c.air === 'high' ? '<span class="chip out">High particles</span>' : ''}${
     (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">See Plan B</button>` : ''}${
     c.kind === 'none' ? `<span class="j-note">${c.st ? 'expect stairs' : 'may mean stairs'}</span>` : ''}</li>`).join('');
   return `<li class="journey${item.best ? ' is-best' : ''}">
@@ -1725,6 +1975,7 @@ function renderTrip(){
     msgs.push(hasLiveAccess() ? '<span>Plan your own trip above.</span>' : `<span>To plan real trips, ${addKey}.</span>`);
   } else {
     msgs.push(`<strong>${esc(data.from.name)} → ${esc(data.to.name)}</strong>`);
+    if (isHot()) msgs.push(`<span>It's ${Math.round(state.weather.feels)}°C, so cooled lines get priority.</span>`);
   }
   const ranked = rankJourneys(data.journeys);
   if (ranked.length && ranked.every(r => r.hasStairs)) msgs.push('<span class="trip-warn">Every route has stairs or a broken lift right now, so the quickest is first. Tap a station for its Plan B.</span>');
@@ -1915,6 +2166,7 @@ try { const h = location.hash.slice(1); showView(VIEWS.includes(h) ? h : 'trip')
 
 wireConnection();
 loadAll();
+loadWeather();
 })();
 </script>
 

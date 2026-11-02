@@ -295,12 +295,29 @@ button{ font:inherit; color:inherit; }
 .fact-k{ font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
 .fact-v{ min-width:0; display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 8px; }
 @media (max-width:380px){ .facts li{ grid-template-columns:1fr; gap:2px; } }
-.wx{ display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:10px 14px; }
-.wx-temp{ font-family:var(--f-display); font-weight:600; font-size:2rem; line-height:1; flex:none; }
+.wx{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:14px 16px; display:flex; flex-direction:column; gap:10px; min-width:0; }
+.wx-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.wx-now{ display:flex; align-items:center; gap:12px; }
+.wx-now .wx-ic{ width:44px; height:44px; flex:none; }
+.wx-temp{ font-family:var(--f-display); font-weight:600; font-size:2.6rem; line-height:1; flex:none; }
 .wx.hot .wx-temp{ color:var(--bad); } .wx.cold .wx-temp{ color:var(--accent); }
-.wx-body{ display:flex; flex-direction:column; gap:3px; min-width:0; }
-.wx-line{ font-size:.88rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:4px 8px; align-items:center; }
-.wx-tip{ font-weight:700; font-size:.93rem; line-height:1.35; }
+.wx-body{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.wx-cond{ font-weight:700; }
+.wx-line{ font-size:.88rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:2px 10px; }
+.wx-hours{ list-style:none; margin:0; padding:10px 0 0; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:4px; text-align:center; }
+.wx-hours li{ display:flex; flex-direction:column; align-items:center; gap:2px; font-size:.82rem; }
+.wx-hours .wx-ic{ width:26px; height:26px; }
+.wx-h-t{ color:var(--muted); font-weight:700; }
+.wx-h-temp{ font-weight:700; font-size:.95rem; }
+.wx-h-rain{ color:var(--focus); font-weight:700; min-height:1.2em; }
+.wx-tip{ font-weight:700; font-size:.95rem; line-height:1.35; background:var(--pass); border-radius:10px; padding:8px 12px; }
+.wx-ic .sun{ fill:var(--sun); } .wx-ic .cloud{ fill:var(--unk-soft); stroke:var(--muted); stroke-width:1.5; }
+.wx-ic .drop{ stroke:var(--focus); stroke-width:2; stroke-linecap:round; fill:none; } .wx-ic .flake{ fill:var(--focus); }
+.wx-ic .bolt{ fill:var(--sun); stroke:var(--warn); stroke-width:1; } .wx-ic .fog{ stroke:var(--muted); stroke-width:2; stroke-linecap:round; }
+.j-facts{ flex-basis:100%; padding-left:calc(4.4em + 8px); display:flex; flex-wrap:wrap; gap:2px 12px; font-size:.8rem; color:var(--muted); }
+.jf.staff{ color:var(--ink); }
+.jf.cool{ color:var(--accent); } .jf.warm{ color:var(--warn); }
+@media (max-width:380px){ .j-facts{ padding-left:0; } }
 
 @media (prefers-reduced-motion: reduce){ .pulse, .rolling .wheel{ animation:none; } }
 </style>
@@ -325,6 +342,7 @@ button{ font:inherit; color:inherit; }
   </header>
 
   <div id="view-trip" class="view" role="tabpanel" aria-labelledby="tab-trip">
+    <section id="wx" class="wx" aria-label="Today's weather in Paris" aria-live="polite"><p class="label">Today in Paris</p><p class="hint">Checking the sky…</p></section>
     <div class="pass" aria-label="Matteo's boarding pass">
       <div class="pass-fields">
         <div><p class="pass-k">Passenger</p><p class="pass-v">Matteo</p></div>
@@ -333,7 +351,6 @@ button{ font:inherit; color:inherit; }
       </div>
       <div class="pass-stub"><p class="pass-k">Gate</p><p class="pass-v">Lifts only</p></div>
     </div>
-    <div id="wx" class="wx" role="status" hidden></div>
 
     <section class="panel" aria-labelledby="trip-h">
       <h2 id="trip-h" class="panel-h">Where to, Matteo?</h2>
@@ -1072,7 +1089,7 @@ function renderOutages(){
   }).join('') : `<li class="happy">${PRAM_SVG}Every lift is awake. Smooth rolling!</li>`;
 }
 
-function renderAll(){ renderSource(); renderResults(); renderFavs(); renderStation(); renderOutages(); renderTrip(); }
+function renderAll(){ renderSource(); renderResults(); renderFavs(); renderStation(); renderOutages(); renderTrip(); renderWeather(); }
 
 /* ---------- Views (Trip / Station / Lifts out), routed on the page hash ---------- */
 const VIEWS = ['trip', 'station', 'out', 'settings'];
@@ -1383,10 +1400,15 @@ function lineName(l){
 }
 
 /* ---------- Paris weather (Open-Meteo: free, no key) ---------- */
-const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current=temperature_2m,apparent_temperature,weather_code&timezone=Europe%2FParis';
+const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522'
+  + '&current=temperature_2m,apparent_temperature,weather_code'
+  + '&hourly=temperature_2m,precipitation_probability,weather_code'
+  + '&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,weather_code'
+  + '&timezone=Europe%2FParis&forecast_days=2';
 const AQ_URL = 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=48.8566&longitude=2.3522&current=european_aqi&timezone=Europe%2FParis';
 const HOT_C = 27, COLD_C = 5;
-const isHot = () => !!state.weather && state.weather.feels >= HOT_C;
+state.weatherStatus = 'loading';
+const isHot = () => !!state.weather && !state.weather.sample && state.weather.feels >= HOT_C;
 async function plainJson(url){
   // No key here: these requests go to a third-party weather service.
   const ctrl = new AbortController();
@@ -1407,35 +1429,95 @@ function wxText(code){
   if (code >= 95) return 'Thunderstorm';
   return '';
 }
+const isRainCode = c => (c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95;
+const isSnowCode = c => (c >= 71 && c <= 77) || c === 85 || c === 86;
+function wxIcon(code){
+  const sun = '<circle class="sun" cx="12" cy="12" r="5"/><g class="drop" style="stroke:var(--sun)"><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></g>';
+  const cloud = (y) => `<path class="cloud" d="M7 ${17 + y}h10.5a3.5 3.5 0 0 0 .3-7 5 5 0 0 0-9.6-1.2A4 4 0 0 0 7 ${17 + y}z"/>`;
+  let body;
+  if (code === 0 || code === 1) body = sun;
+  else if (code === 2) body = '<g transform="translate(-3 -3) scale(.8)">' + sun + '</g>' + cloud(1);
+  else if (code === 45 || code === 48) body = cloud(-3) + '<path class="fog" d="M5 18h14M7 21h10"/>';
+  else if (isSnowCode(code)) body = cloud(-3) + '<circle class="flake" cx="9" cy="19" r="1.4"/><circle class="flake" cx="13" cy="21" r="1.4"/><circle class="flake" cx="16" cy="18.5" r="1.4"/>';
+  else if (code >= 95) body = cloud(-3) + '<path class="bolt" d="M12 15l-2.5 4h2.5l-1 4 4-5.5h-2.6l1.4-2.5z"/>';
+  else if (isRainCode(code)) body = cloud(-3) + '<path class="drop" d="M9 17.5l-1 2.5M13 17.5l-1 2.5M17 17.5l-1 2.5"/>';
+  else body = cloud(0);
+  return `<svg class="wx-ic" viewBox="0 0 24 24" aria-hidden="true">${body}</svg>`;
+}
 const aqiLabel = v => v <= 20 ? 'good' : v <= 40 ? 'fair' : v <= 60 ? 'moderate' : v <= 80 ? 'poor' : v <= 100 ? 'very poor' : 'extremely poor';
 const aqiCls = v => v <= 40 ? 'ok' : v <= 60 ? 'warn' : 'out';
+
+function parseForecast(wv, aqi){
+  const cur = wv && wv.current;
+  if (!cur || typeof cur.temperature_2m !== 'number') return null;
+  const d = wv.daily || {}, h = wv.hourly || {};
+  const hours = [];
+  if (Array.isArray(h.time)){
+    let i = h.time.findIndex(t => t > cur.time);
+    if (i < 0) i = 0;
+    for (let k = i; k < h.time.length && hours.length < 5; k += 3){
+      hours.push({ label:`${parseInt(String(h.time[k]).slice(11, 13), 10)}h`, temp:h.temperature_2m[k], code:h.weather_code[k], rain:h.precipitation_probability ? h.precipitation_probability[k] : null });
+    }
+  }
+  const first = (arr) => Array.isArray(arr) && arr.length ? arr[0] : null;
+  return { temp:cur.temperature_2m, feels:typeof cur.apparent_temperature === 'number' ? cur.apparent_temperature : cur.temperature_2m,
+    code:cur.weather_code, aqi, max:first(d.temperature_2m_max), min:first(d.temperature_2m_min),
+    rain:first(d.precipitation_probability_max), uv:first(d.uv_index_max), dayCode:first(d.weather_code), hours };
+}
+// Shown in practice mode only, when the live forecast can't be reached.
+function sampleForecast(){
+  const now = new Date();
+  const hours = [];
+  for (let k = 1; k <= 13; k += 3){
+    const t = new Date(now.getTime() + k * 3600000);
+    hours.push({ label:`${t.getHours()}h`, temp:[15, 14, 12, 10, 9][hours.length], code:[3, 61, 61, 3, 2][hours.length], rain:[20, 70, 60, 30, 10][hours.length] });
+  }
+  return { temp:14, feels:12, code:3, aqi:28, max:16, min:9, rain:70, uv:2, dayCode:61, hours, sample:true };
+}
 async function loadWeather(){
+  state.weatherStatus = 'loading'; renderWeather();
   const [w, a] = await Promise.allSettled([plainJson(WX_URL), plainJson(AQ_URL)]);
-  const cur = w.status === 'fulfilled' && w.value && w.value.current;
-  if (!cur || typeof cur.temperature_2m !== 'number'){ state.weather = null; state.sources.weather = { ok:false, text:"Weather didn't load." }; renderWeather(); return; }
   const aqi = a.status === 'fulfilled' && a.value && a.value.current && typeof a.value.current.european_aqi === 'number' ? a.value.current.european_aqi : null;
-  state.weather = { temp:cur.temperature_2m, feels:typeof cur.apparent_temperature === 'number' ? cur.apparent_temperature : cur.temperature_2m, code:cur.weather_code, aqi };
-  state.sources.weather = { ok:true, text:`Paris now: ${Math.round(state.weather.temp)}°C${aqi != null ? `, outside air ${aqiLabel(aqi)}` : ''}` };
+  const fc = w.status === 'fulfilled' ? parseForecast(w.value, aqi) : null;
+  if (fc){
+    state.weather = fc; state.weatherStatus = 'ok';
+    state.sources.weather = { ok:true, text:`Paris now: ${Math.round(fc.temp)}°C${aqi != null ? `, outside air ${aqiLabel(aqi)}` : ''}` };
+  } else {
+    state.weather = null; state.weatherStatus = 'error';
+    state.sources.weather = { ok:false, text:"The forecast didn't load." };
+  }
   renderWeather(); renderTrip(); renderDataPanel();
+}
+function weatherTip(w){
+  const rainToday = isRainCode(w.code) || (w.rain != null && w.rain >= 50) || w.hours.some(h => h.rain >= 60);
+  if (w.feels >= HOT_C) return 'Hot one: cooled lines get priority today. Shade and water for Matteo.';
+  if (isSnowCode(w.code) || isSnowCode(w.dayCode)) return 'Snow about: footmuff and rain cover on.';
+  if (rainToday) return 'Rain likely today: pack the pram cover.';
+  if (w.uv != null && w.uv >= 6) return 'Strong sun today: hat and shade for Matteo.';
+  if (w.feels <= COLD_C) return 'Chilly: an extra layer for Matteo.';
+  return 'Nice day for the walking bits.';
 }
 function renderWeather(){
   const el = $('#wx');
-  const w = state.weather;
-  if (!w){ el.hidden = true; return; }
-  const code = w.code;
-  const rainy = (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95;
-  const snowy = (code >= 71 && code <= 77) || code === 85 || code === 86;
+  let w = state.weather;
+  if (!w && state.weatherStatus === 'error' && state.mode === 'sample') w = sampleForecast();
+  if (!w){
+    el.className = 'wx';
+    el.innerHTML = `<p class="label">Today in Paris</p><p class="hint">${state.weatherStatus === 'loading' ? 'Checking the sky…' : "The forecast didn't load. It will try again next time you open the app."}</p>`;
+    return;
+  }
   const hot = w.feels >= HOT_C, cold = w.feels <= COLD_C;
-  const tip = hot ? 'Hot one: cooled lines get priority today. Shade and water for Matteo.'
-    : snowy ? 'Snow out there: footmuff and rain cover on.'
-    : rainy ? 'Rain about: pack the pram cover.'
-    : cold ? 'Chilly: an extra layer for Matteo.'
-    : 'Nice weather for the walking bits.';
+  const day = [];
+  if (w.max != null && w.min != null) day.push(`<span class="tnum">High ${Math.round(w.max)}° · Low ${Math.round(w.min)}°</span>`);
+  if (w.rain != null) day.push(`<span class="tnum">Rain ${Math.round(w.rain)}%</span>`);
+  if (w.uv != null) day.push(`<span class="tnum">UV ${Math.round(w.uv)}</span>`);
+  const hours = w.hours.length ? `<ul class="wx-hours" aria-label="Next hours">${w.hours.map(h => `<li><span class="wx-h-t tnum">${esc(h.label)}</span>${wxIcon(h.code)}<span class="wx-h-temp tnum">${Math.round(h.temp)}°</span><span class="wx-h-rain tnum">${h.rain != null && h.rain >= 10 ? `${Math.round(h.rain)}%` : ''}</span></li>`).join('')}</ul>` : '';
   el.className = 'wx' + (hot ? ' hot' : cold ? ' cold' : '');
-  el.innerHTML = `<p class="wx-temp tnum">${Math.round(w.temp)}°</p><div class="wx-body">
-    <p class="wx-line"><span>${esc(wxText(code) || 'Paris now')} · feels ${Math.round(w.feels)}°</span>${w.aqi != null ? `<span class="chip ${aqiCls(w.aqi)}">Outside air ${aqiLabel(w.aqi)}</span>` : ''}</p>
-    <p class="wx-tip">${tip}</p></div>`;
-  el.hidden = false;
+  el.innerHTML = `<div class="wx-head"><p class="label">Today in Paris${w.sample ? ' <span class="tag sample">Practice</span>' : ''}</p>${w.aqi != null ? `<span class="chip ${aqiCls(w.aqi)}">Outside air ${aqiLabel(w.aqi)}</span>` : ''}</div>
+    <div class="wx-now">${wxIcon(w.code)}<p class="wx-temp tnum">${Math.round(w.temp)}°</p>
+      <div class="wx-body"><p class="wx-cond">${esc(wxText(w.code) || 'Now')} · feels ${Math.round(w.feels)}°</p><p class="wx-line">${day.join('')}</p></div></div>
+    ${hours}
+    <p class="wx-tip">${weatherTip(w)}</p>`;
 }
 
 // Lifts first so the page is usable quickly, then every other station, then accessibility levels.
@@ -1732,20 +1814,22 @@ function journeyChecks(j){
   const stops = [];
   const pts = j.legs.filter(l => l.type === 'pt');
   pts.forEach((l, i) => {
-    const push = (p, role) => {
+    // Each stop remembers the ride arriving there and the ride leaving from there.
+    const push = (p, role, dir) => {
       const last = stops[stops.length - 1];
       if (last && fold(last.p.name) === fold(p.name)){
         last.role = 'Change';
         if (isStreetMode(last.mode)) last.mode = l.mode;
+        last[dir] = l;
         return;
       }
-      stops.push({ p, role, mode:l.mode });
+      stops.push({ p, role, mode:l.mode, [dir]:l });
     };
-    push(l.from, i === 0 ? 'Start' : 'Change');
-    push(l.to, i === pts.length - 1 ? 'Arrive' : 'Change');
+    push(l.from, i === 0 ? 'Start' : 'Change', 'out');
+    push(l.to, i === pts.length - 1 ? 'Arrive' : 'Change', 'inn');
   });
   return stops.map(s => {
-    const c = Object.assign({ name:s.p.name, role:s.role }, checkStop(s.p, s.mode));
+    const c = Object.assign({ name:s.p.name, role:s.role, out:s.out || null, inn:s.inn || null }, checkStop(s.p, s.mode));
     if (c.kind !== 'street' && c.st && c.st.air) c.air = c.st.air;
     return c;
   });
@@ -1859,6 +1943,26 @@ function tripComment(a, top, fastest, prefs){
   return s.join(' ');
 }
 
+const capFirst = t => t.charAt(0).toUpperCase() + t.slice(1);
+function coolText(l, cool){
+  const bus = /bus|noctilien/.test(fold(l.mode));
+  return cool === 'yes' ? 'cooled' : cool === 'partial' ? `some ${bus ? 'buses' : 'trains'} cooled` : 'not cooled';
+}
+// Staff and cooling under each station of a trip: staffed counter here, and whether the next ride is cooled.
+function stopFacts(c){
+  const bits = [];
+  if (c.kind !== 'street' && c.st){
+    if (c.st.counters && c.st.counters.length){
+      const k = c.st.counters[0];
+      bits.push(`<span class="jf staff">Staffed: ${esc(k.type)}${k.hours ? ` · ${esc(k.hours)}` : ''}</span>`);
+    } else if (state.countersOk) bits.push('<span class="jf">No staffed counter</span>');
+  }
+  const l = c.out || c.inn;
+  const cool = l ? coolingFor(l.mode, l.code) : null;
+  if (cool) bits.push(`<span class="jf ${cool === 'no' ? 'warm' : 'cool'}">${esc(capFirst(lineName(l)))}: ${coolText(l, cool)}</span>`);
+  return bits.length ? `<span class="j-facts">${bits.join('')}</span>` : '';
+}
+
 const stationLink = (name, st) => st
   ? `<button type="button" class="stlink" data-id="${esc(st.id)}" data-from-trip="1">${esc(name)}</button>`
   : `<b>${esc(name)}</b>`;
@@ -1889,7 +1993,7 @@ function stepsHtml(j, checks){
     const cf = find(l.from.name), ct = find(l.to.name);
     return `<li class="step"><span class="step-k">${lineBadge(l)}</span><span>
       <span>${stationLink(l.from.name, cf && cf.st)} ${checkChip(cf)}</span>
-      <span class="fine">${l.direction ? `towards ${esc(l.direction)} · ` : ''}${l.stops} stop${l.stops === 1 ? '' : 's'} · ${l.min} min</span>
+      <span class="fine">${l.direction ? `towards ${esc(l.direction)} · ` : ''}${l.stops} stop${l.stops === 1 ? '' : 's'} · ${l.min} min${coolingFor(l.mode, l.code) ? ` · ${coolText(l, coolingFor(l.mode, l.code))}` : ''}</span>
       <span>${stationLink(l.to.name, ct && ct.st)} ${checkChip(ct)}</span></span></li>`;
   }).join('');
 }
@@ -1915,7 +2019,7 @@ function journeyHtml(item){
   const changes = j.transfers === 0 ? 'direct' : `${j.transfers} change${j.transfers > 1 ? 's' : ''}`;
   const rows = checks.map(c => `<li><span class="j-role">${c.role}</span><span class="j-st">${stationLink(c.name, c.st)}</span>${checkChip(c)}${c.air === 'high' ? '<span class="chip out">High particles</span>' : ''}${
     (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">See Plan B</button>` : ''}${
-    c.kind === 'none' ? `<span class="j-note">${c.st ? 'expect stairs' : 'may mean stairs'}</span>` : ''}</li>`).join('');
+    c.kind === 'none' ? `<span class="j-note">${c.st ? 'expect stairs' : 'may mean stairs'}</span>` : ''}${stopFacts(c)}</li>`).join('');
   return `<li class="journey${item.best ? ' is-best' : ''}">
     <div class="j-tags">${tags.join('')}</div>
     <div class="j-main"><p class="j-dur tnum">${j.durMin} min</p><p class="j-times tnum">${fmtTime(j.dep)} → ${fmtTime(j.arr)} · ${changes} · ${j.walkMin} min walking</p></div>

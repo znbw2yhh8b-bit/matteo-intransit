@@ -95,7 +95,10 @@ button{ font:inherit; color:inherit; }
 .pass-stub{ display:flex; flex-direction:column; justify-content:center; gap:2px; padding:12px 16px; border-left:2px dashed var(--pass-line); background:color-mix(in srgb, var(--sun) 38%, var(--surface)); position:relative; }
 .pass-stub::before, .pass-stub::after{ content:""; position:absolute; left:-9px; width:16px; height:16px; border-radius:50%; background:var(--bg); border:1.5px solid var(--pass-line); }
 .pass-stub::before{ top:-9px; } .pass-stub::after{ bottom:-9px; }
-@media (max-width:420px){ .pass-fields{ grid-template-columns:repeat(2, minmax(0, 1fr)); } .pass-fields .pass-wide{ grid-column:span 2; } }
+.pass-fields{ padding:10px 12px; gap:6px 14px; }
+@media (max-width:480px){ .pass-fields{ grid-template-columns:repeat(2, minmax(0, 1fr)); } .pass-fields .pass-wide{ grid-column:span 2; } }
+.pass-v{ font-size:.95rem; }
+.pass-stub{ padding:10px 14px; }
 
 /* Panels and text */
 .view{ display:flex; flex-direction:column; gap:14px; }
@@ -352,6 +355,49 @@ button{ font:inherit; color:inherit; }
 .jf.ent-in{ color:var(--accent); font-weight:700; }
 .chip.closed{ background:var(--bad-soft); color:var(--bad); } .chip.open{ background:var(--ok-soft); color:var(--ok); }
 
+/* Route card: summary on top, then a vertical timeline of stations, rides and walks */
+.j-top{ display:flex; align-items:baseline; justify-content:space-between; gap:8px 12px; flex-wrap:wrap; }
+.j-top .j-times{ font-weight:700; color:var(--ink); }
+.j-sub{ display:flex; flex-wrap:wrap; align-items:center; gap:6px 8px; color:var(--muted); font-size:.88rem; margin-top:-6px; }
+.j-sub .line{ min-height:22px; font-size:.9rem; }
+.j-why{ font-size:.92rem; color:var(--ink); background:var(--bg); border-radius:10px; padding:8px 10px; }
+.tl{ list-style:none; margin:0; padding:4px 0 0; border-top:1px solid var(--line); }
+.tl > li{ position:relative; padding-left:30px; }
+.tl-node{ padding-block:8px; }
+.tl-dot{ position:absolute; left:5px; top:12px; width:14px; height:14px; border-radius:50%; background:var(--surface); border:3px solid var(--ink); box-sizing:border-box; z-index:1; }
+.tl-node.start .tl-dot, .tl-node.end .tl-dot{ background:var(--ink); }
+.tl-head{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; }
+.tl-head .stlink{ font-size:1.02rem; }
+.tl-facts{ list-style:none; margin:6px 0 0; padding:0; display:flex; flex-direction:column; gap:5px; font-size:.86rem; }
+.tf-row{ display:flex; gap:7px; align-items:flex-start; line-height:1.35; }
+.tf-row > svg{ width:17px; height:17px; flex:none; margin-top:1px; color:var(--accent); }
+.tf-row a{ font-weight:700; color:var(--accent); }
+.tf-row.muted, .tf-row .muted{ color:var(--muted); }
+.tf-row.muted > svg{ color:var(--muted); }
+.ok-t{ color:var(--ok); } .bad-t{ color:var(--bad); }
+.tl-ride{ padding-block:8px; }
+.tl-ride::before{ content:""; position:absolute; left:10px; top:-8px; bottom:-8px; width:4px; border-radius:2px; background:var(--line-color, var(--plaque)); }
+.tl-ride-body{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; font-size:.84rem; color:var(--muted); }
+.tl-ride-body .lc-s{ font-size:.8rem; }
+.tl-walk{ display:flex; align-items:center; gap:6px; padding-block:5px; font-size:.84rem; color:var(--muted); }
+.tl-walk::before{ content:""; position:absolute; left:11px; top:0; bottom:0; border-left:2px dotted var(--muted); }
+.tl-walk > svg{ width:16px; height:16px; flex:none; }
+.wx-fresh{ font-size:.72rem; color:var(--muted); font-weight:700; }
+
+@media (max-width:480px){
+  .wrap{ gap:12px; }
+  .panel{ padding:14px; border-radius:16px; }
+  .journey{ padding:14px; border-radius:16px; gap:10px; }
+  .top h1{ font-size:1.6rem; }
+  .brand .pram{ width:48px; height:42px; }
+  .wx{ padding:12px 14px; gap:8px; }
+  .wx-temp{ font-size:2.2rem; }
+  .wx-now .wx-ic{ width:38px; height:38px; }
+  .panel-h{ font-size:1.22rem; }
+  .j-dur{ font-size:1.75rem; }
+  .btn-primary{ min-height:52px; }
+}
+
 @media (prefers-reduced-motion: reduce){ .pulse, .rolling .wheel{ animation:none; } }
 </style>
 
@@ -533,7 +579,7 @@ button{ font:inherit; color:inherit; }
 // IDFM lift-status endpoints (Opendatasoft API). The feed refuses anonymous requests, so the page sends a free PRIM API key
 // that the viewer types in; it stays in their browser only. Add ?src=<url> to the page address to try another endpoint first.
 // Bump on every update so you can see which version a phone is running.
-const APP_VERSION = '2.1';
+const APP_VERSION = '2.2';
 const APP_DATE = '2026-11-02';
 /* ---------- Languages: English, French, Italian ---------- */
 const LANG_KEY = 'lift-or-stairs:lang';
@@ -681,6 +727,7 @@ const I18N = {
     entAll:v => `All entrances (${v.n})`, entStepChip:'Step-free', entLiftChip:'Street lift', map:'Map',
     enterBy:v => `Enter by: ${v.e}`, leaveBy:v => `Leave by: ${v.e}`, viaLift:'(street lift)', viaStepFree:'(step-free)',
     openNow:v => `Open now · until ${v.t}`, closedNow:v => v.t ? `Closed now · opens ${v.t}` : 'Closed now', closedShort:'closed now',
+    wxUpdated:v => `updated ${v.t}`,
     'd.walk':v => `${v.m} min of walking`, 'd.notFree':'not marked step-free by IDFM', and:'and'
   },
 
@@ -814,6 +861,7 @@ const I18N = {
     entAll:v => `Toutes les entrées (${v.n})`, entStepChip:'Sans marches', entLiftChip:'Ascenseur', map:'Plan',
     enterBy:v => `Entrer par : ${v.e}`, leaveBy:v => `Sortir par : ${v.e}`, viaLift:'(ascenseur)', viaStepFree:'(sans marches)',
     openNow:v => `Ouvert · jusqu’à ${v.t}`, closedNow:v => v.t ? `Fermé · ouvre à ${v.t}` : 'Fermé maintenant', closedShort:'fermé',
+    wxUpdated:v => `mis à jour à ${v.t}`,
     'd.walk':v => `${v.m} min de marche`, 'd.notFree':'non indiqué sans marches par IDFM', and:'et'
   },
 
@@ -947,6 +995,7 @@ const I18N = {
     entAll:v => `Tutti gli ingressi (${v.n})`, entStepChip:'Senza gradini', entLiftChip:'Ascensore', map:'Mappa',
     enterBy:v => `Entra da: ${v.e}`, leaveBy:v => `Esci da: ${v.e}`, viaLift:'(ascensore)', viaStepFree:'(senza gradini)',
     openNow:v => `Aperto · fino alle ${v.t}`, closedNow:v => v.t ? `Chiuso · apre alle ${v.t}` : 'Chiuso ora', closedShort:'chiuso',
+    wxUpdated:v => `aggiornato alle ${v.t}`,
     'd.walk':v => `${v.m} min a piedi`, 'd.notFree':'non segnato senza gradini da IDFM', and:'e'
   }
 };
@@ -2125,8 +2174,8 @@ const isHot = () => !!state.weather && !state.weather.sample && state.weather.fe
 async function plainJson(url){
   // No key here: these requests go to a third-party weather service.
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 10000);
-  try { const res = await fetch(url, { signal:ctrl.signal }); if (!res.ok) throw new Error('HTTP ' + res.status); return await res.json(); }
+  const timer = setTimeout(() => ctrl.abort(), 20000);
+  try { const res = await fetch(url, { signal:ctrl.signal, cache:'no-store' }); if (!res.ok) throw new Error('HTTP ' + res.status); return await res.json(); }
   finally { clearTimeout(timer); }
 }
 function wxText(code){
@@ -2161,8 +2210,8 @@ function parseForecast(wv, aqi){
   if (Array.isArray(h.time)){
     let i = h.time.findIndex(t => t > cur.time);
     if (i < 0) i = 0;
-    for (let k = i; k < h.time.length && hours.length < 5; k += 3){
-      hours.push({ hour:parseInt(String(h.time[k]).slice(11, 13), 10), temp:h.temperature_2m[k], code:h.weather_code[k], rain:h.precipitation_probability ? h.precipitation_probability[k] : null });
+    for (let k = i; k < h.time.length && hours.length < 8; k += 3){
+      hours.push({ time:String(h.time[k]), hour:parseInt(String(h.time[k]).slice(11, 13), 10), temp:h.temperature_2m[k], code:h.weather_code[k], rain:h.precipitation_probability ? h.precipitation_probability[k] : null });
     }
   }
   const first = (arr) => Array.isArray(arr) && arr.length ? arr[0] : null;
@@ -2181,18 +2230,43 @@ function sampleForecast(){
   return { temp:14, feels:12, code:3, aqi:28, max:16, min:9, rain:70, uv:2, dayCode:61, hours, sample:true };
 }
 async function loadWeather(){
-  state.weatherStatus = 'loading'; renderWeather();
-  const [w, a] = await Promise.allSettled([plainJson(WX_URL), plainJson(AQ_URL)]);
-  const aqi = a.status === 'fulfilled' && a.value && a.value.current && typeof a.value.current.european_aqi === 'number' ? a.value.current.european_aqi : null;
-  const fc = w.status === 'fulfilled' ? parseForecast(w.value, aqi) : null;
-  if (fc){
-    state.weather = fc; state.weatherStatus = 'ok';
-    state.sources.weather = { ok:true, text:`Paris now: ${Math.round(fc.temp)}°C${aqi != null ? `, outside air ${aqiLabel(aqi)}` : ''}` };
-  } else {
-    state.weather = null; state.weatherStatus = 'error';
-    state.sources.weather = { ok:false, text:"The forecast didn't load." };
+  if (state.weatherBusy) return;
+  state.weatherBusy = true;
+  if (!state.weather){
+    const c = loadWxCache();
+    if (c){ state.weather = c.fc; state.weatherAt = c.at; state.weatherStatus = 'ok'; }
+    else state.weatherStatus = 'loading';
   }
+  renderWeather();
+  // Up to 3 tries: the forecast competes with the big IDFM downloads when the app opens.
+  let fc = null, aqi = null;
+  for (let attempt = 0; attempt < 3 && !fc; attempt++){
+    if (attempt) await new Promise(r => setTimeout(r, attempt * 4000));
+    const [w, a] = await Promise.allSettled([plainJson(WX_URL), aqi == null ? plainJson(AQ_URL) : Promise.resolve(null)]);
+    if (a.status === 'fulfilled' && a.value && a.value.current && typeof a.value.current.european_aqi === 'number') aqi = a.value.current.european_aqi;
+    fc = w.status === 'fulfilled' ? parseForecast(w.value, aqi) : null;
+  }
+  const hhmm = ms => new Date(ms).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+  if (fc){
+    state.weather = fc; state.weatherAt = Date.now(); state.weatherStatus = 'ok';
+    try { localStorage.setItem(WX_CACHE, JSON.stringify({ at:state.weatherAt, fc })); } catch (e){}
+    state.sources.weather = { ok:true, text:`Paris now: ${Math.round(fc.temp)}°C${aqi != null ? `, outside air ${aqiLabel(aqi)}` : ''}` };
+  } else if (state.weather){
+    state.sources.weather = { ok:true, text:`Showing the forecast from ${hhmm(state.weatherAt)}; the latest one didn't load.` };
+  } else {
+    state.weatherStatus = 'error';
+    state.sources.weather = { ok:false, text:"The forecast didn't load after 3 tries." };
+  }
+  state.weatherBusy = false;
   renderWeather(); renderTrip(); renderDataPanel();
+}
+const WX_CACHE = 'lift-or-stairs:wx';
+function loadWxCache(){
+  try {
+    const v = JSON.parse(localStorage.getItem(WX_CACHE) || 'null');
+    if (v && v.fc && typeof v.at === 'number' && Date.now() - v.at < 6 * 3600000) return v;
+  } catch (e){}
+  return null;
 }
 function weatherTip(w){
   const rainToday = isRainCode(w.code) || (w.rain != null && w.rain >= 50) || w.hours.some(h => h.rain >= 60);
@@ -2218,9 +2292,14 @@ function renderWeather(){
   if (w.max != null && w.min != null) day.push(`<span class="tnum">${t('highLow', { max:Math.round(w.max), min:Math.round(w.min) })}</span>`);
   if (w.rain != null) day.push(`<span class="tnum">${t('rainPct', { p:Math.round(w.rain) })}</span>`);
   if (w.uv != null) day.push(`<span class="tnum">UV ${Math.round(w.uv)}</span>`);
-  const hours = w.hours.length ? `<ul class="wx-hours" aria-label="${t('nextHours')}">${w.hours.map(h => `<li><span class="wx-h-t tnum">${fmtHour(h.hour)}</span>${wxIcon(h.code)}<span class="wx-h-temp tnum">${Math.round(h.temp)}°</span><span class="wx-h-rain tnum">${h.rain != null && h.rain >= 10 ? `${Math.round(h.rain)}%` : ''}</span></li>`).join('')}</ul>` : '';
+  const d0 = new Date(), pad = n => String(n).padStart(2, '0');
+  const nowIso = `${d0.getFullYear()}-${pad(d0.getMonth() + 1)}-${pad(d0.getDate())}T${pad(d0.getHours())}:00`;
+  const nextHours = w.hours.filter(h => !h.time || h.time > nowIso).slice(0, 5);
+  const stale = state.weatherAt && Date.now() - state.weatherAt > 45 * 60000;
+  const fresh = stale ? `<span class="wx-fresh">${t('wxUpdated', { t:new Date(state.weatherAt).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) })}</span>` : '';
+  const hours = nextHours.length ? `<ul class="wx-hours" aria-label="${t('nextHours')}">${nextHours.map(h => `<li><span class="wx-h-t tnum">${fmtHour(h.hour)}</span>${wxIcon(h.code)}<span class="wx-h-temp tnum">${Math.round(h.temp)}°</span><span class="wx-h-rain tnum">${h.rain != null && h.rain >= 10 ? `${Math.round(h.rain)}%` : ''}</span></li>`).join('')}</ul>` : '';
   el.className = 'wx' + (hot ? ' hot' : cold ? ' cold' : '');
-  el.innerHTML = `<div class="wx-head"><p class="label">${t('todayParis')}${w.sample ? ` <span class="tag sample">${t('practice')}</span>` : ''}</p>${w.aqi != null ? `<span class="chip ${aqiCls(w.aqi)}">${t('outsideAir', { l:aqiLabel(w.aqi) })}</span>` : ''}</div>
+  el.innerHTML = `<div class="wx-head"><p class="label">${t('todayParis')}${w.sample ? ` <span class="tag sample">${t('practice')}</span>` : ''} ${fresh}</p>${w.aqi != null ? `<span class="chip ${aqiCls(w.aqi)}">${t('outsideAir', { l:aqiLabel(w.aqi) })}</span>` : ''}</div>
     <div class="wx-now">${wxIcon(w.code)}<p class="wx-temp tnum">${Math.round(w.temp)}°</p>
       <div class="wx-body"><p class="wx-cond">${esc(wxText(w.code))} · ${t('feels', { t:Math.round(w.feels) })}</p><p class="wx-line">${day.join('')}</p></div></div>
     ${hours}
@@ -2675,26 +2754,27 @@ function coolText(l, cool){
   return cool === 'yes' ? t('cool.yes') : cool === 'partial' ? t(bus ? 'cool.partBuses' : 'cool.partTrains') : t('cool.no');
 }
 // Staff and cooling under each station of a trip: staffed counter here, and whether the next ride is cooled.
-function stopFacts(c){
-  const bits = [];
-  if (c.kind !== 'street' && c.st && (c.role === 'Start' || c.role === 'Arrive')){
+const ICON_WALK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13" cy="4.5" r="2" fill="currentColor"/><path d="M10.5 21l2-6-2.5-2.5 1-4.5 3.5 3 3 1M10 8.5 7 10.5 6 14M13 15l3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// The small lines under a station in a route: entrance to use, staff, all with an icon.
+function nodeFacts(c){
+  const out = [];
+  if (!c || c.kind === 'street' || !c.st) return out;
+  if (c.role === 'Start' || c.role === 'Arrive'){
     const be = bestEntrance(c.st);
     if (be && be.kind !== 'none'){
-      const label = `${be.entrance ? be.entrance.name : be.label} ${be.kind === 'lift' ? t('viaLift') : t('viaStepFree')}`;
-      bits.push(`<span class="jf ent-in">${esc(t(c.role === 'Start' ? 'enterBy' : 'leaveBy', { e:label }))}${be.entrance ? ` <a class="jf-link" href="${mapsUrl(be.entrance)}" target="_blank" rel="noopener">${t('map')}</a>` : ''}</span>`);
+      const name = be.entrance ? be.entrance.name : be.label;
+      out.push(`<li class="tf-row">${ICON_DOOR}<span>${esc(t(c.role === 'Start' ? 'enterBy' : 'leaveBy', { e:name }))} <span class="muted">${be.kind === 'lift' ? t('viaLift') : t('viaStepFree')}</span>${be.entrance ? ` · <a href="${mapsUrl(be.entrance)}" target="_blank" rel="noopener">${t('map')}</a>` : ''}</span></li>`);
     }
   }
-  if (c.kind !== 'street' && c.st){
-    if (c.st.counters && c.st.counters.length){
-      const k = c.st.counters[0];
-      const now = counterOpenNow(k);
-      bits.push(`<span class="jf staff">${t('staffed', { type:esc(k.type) })}${now && !now.open ? ` · <b>${t('closedShort')}</b>` : k.hours ? ` · ${esc(k.hours)}` : ''}</span>`);
-    } else if (state.countersOk) bits.push(`<span class="jf">${t('noStaffed')}</span>`);
+  if (c.st.counters && c.st.counters.length){
+    const k = c.st.counters[0];
+    const now = counterOpenNow(k);
+    const state2 = now ? ` · <b class="${now.open ? 'ok-t' : 'bad-t'}">${now.open ? t('openNow', { t:now.until }) : t('closedNow', { t:now.opens })}</b>` : '';
+    out.push(`<li class="tf-row">${ICON_PERSON}<span>${esc(k.type)}${state2}</span></li>`);
+  } else if (state.countersOk){
+    out.push(`<li class="tf-row muted">${ICON_PERSON}<span>${t('noStaffed')}</span></li>`);
   }
-  const l = c.out || c.inn;
-  const cool = l ? coolingFor(l.mode, l.code) : null;
-  if (cool) bits.push(`<span class="jf ${cool === 'no' ? 'warm' : 'cool'}">${esc(capFirst(lineName(l)))}${t('colon')}${coolText(l, cool)}</span>`);
-  return bits.length ? `<span class="j-facts">${bits.join('')}</span>` : '';
+  return out;
 }
 
 const stationLink = (name, st) => st
@@ -2719,18 +2799,31 @@ function lineBadge(l){
 }
 const checkChip = c => c ? `<span class="chip ${c.cls}">${esc(c.label)}</span>` : '';
 
-function stepsHtml(j, checks){
+function timelineHtml(j, checks){
   const find = name => checks.find(c => fold(c.name) === fold(name));
-  return j.legs.map(l => {
-    if (l.type === 'walk') return `<li class="step"><span class="step-k">${t('stepWalk')}</span><span>${l.to ? esc(t('walkTo', { m:l.min, to:l.to })) : `${l.min} min`}</span></li>`;
-    if (l.type === 'transfer') return `<li class="step"><span class="step-k">${t('stepChange')}</span><span>${t('walkToPlatform', { m:l.min })}</span></li>`;
-    const cf = find(l.from.name), ct = find(l.to.name);
+  const pts = j.legs.filter(l => l.type === 'pt');
+  const rows = [];
+  let last = null;
+  const node = (p, kind) => {
+    if (last && fold(last) === fold(p.name)) return;
+    last = p.name;
+    const c = find(p.name);
+    const facts = nodeFacts(c);
+    const planB = c && (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">${t('seePlanB')}</button>` : '';
+    rows.push(`<li class="tl-node ${kind}"><span class="tl-dot" aria-hidden="true"></span>
+      <div class="tl-head">${stationLink(p.name, c && c.st)}${checkChip(c)}${c && c.air === 'high' ? `<span class="chip out">${t('chip.highParticles')}</span>` : ''}${planB}</div>
+      ${facts.length ? `<ul class="tl-facts">${facts.join('')}</ul>` : ''}</li>`);
+  };
+  for (const l of j.legs){
+    if (l.type === 'walk'){ rows.push(`<li class="tl-walk">${ICON_WALK}<span>${l.to ? esc(t('walkTo', { m:l.min, to:l.to })) : `${l.min} min`}</span></li>`); continue; }
+    if (l.type === 'transfer'){ rows.push(`<li class="tl-walk">${ICON_WALK}<span>${t('walkToPlatform', { m:l.min })}</span></li>`); continue; }
+    node(l.from, l === pts[0] ? 'start' : 'mid');
     const cool = coolingFor(l.mode, l.code);
-    return `<li class="step"><span class="step-k">${lineBadge(l)}</span><span>
-      <span>${stationLink(l.from.name, cf && cf.st)} ${checkChip(cf)}</span>
-      <span class="fine">${l.direction ? `${esc(t('towards', { d:l.direction }))} · ` : ''}${t('stopsN', { n:l.stops })} · ${l.min} min${cool ? ` · ${coolText(l, cool)}` : ''}</span>
-      <span>${stationLink(l.to.name, ct && ct.st)} ${checkChip(ct)}</span></span></li>`;
-  }).join('');
+    const coolTag = cool ? `<span class="lc-s ${cool === 'yes' ? 'yes' : cool === 'partial' ? 'part' : 'no'}">${cool === 'no' ? ICON_THERMO : ICON_SNOW}${coolText(l, cool)}</span>` : '';
+    rows.push(`<li class="tl-ride" style="--line-color:${hexColor(l.color) || 'var(--plaque)'}"><div class="tl-ride-body">${lineBadge(l)}<span>${l.direction ? `${esc(t('towards', { d:l.direction }))} · ` : ''}${t('stopsN', { n:l.stops }).replace(' ', '&nbsp;')} · ${l.min}&nbsp;min</span>${coolTag}</div></li>`);
+    node(l.to, l === pts[pts.length - 1] ? 'end' : 'mid');
+  }
+  return rows.length ? `<ol class="tl">${rows.join('')}</ol>` : '';
 }
 
 function journeyHtml(item){
@@ -2747,18 +2840,14 @@ function journeyHtml(item){
     else if (item.allStreet) tags.push(`<span class="jt free">${t('tag.street')}</span>`);
     else tags.push(`<span class="jt stairs">${t('tag.notFree')}</span>`);
   }
-  const lines = j.legs.filter(l => l.type === 'pt').map(lineBadge).join('<span class="j-sep" aria-hidden="true">›</span>') || `<span class="hint">${t('walkOnly')}</span>`;
+  const lines = j.legs.filter(l => l.type === 'pt').map(lineBadge).join('<span class="j-sep" aria-hidden="true">›</span>') || `<span>${t('walkOnly')}</span>`;
   const changes = j.transfers === 0 ? t('direct') : t('changesN', { n:j.transfers });
-  const rows = checks.map(c => `<li><span class="j-role">${t('role.' + c.role)}</span><span class="j-st">${stationLink(c.name, c.st)}</span>${checkChip(c)}${c.air === 'high' ? `<span class="chip out">${t('chip.highParticles')}</span>` : ''}${
-    (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">${t('seePlanB')}</button>` : ''}${
-    c.kind === 'none' ? `<span class="j-note">${c.st ? t('expectStairs') : t('mayMeanStairs')}</span>` : ''}${stopFacts(c)}</li>`).join('');
   return `<li class="journey${item.best ? ' is-best' : ''}">
-    <div class="j-tags">${tags.join('')}</div>
-    <div class="j-main"><p class="j-dur tnum">${j.durMin} min</p><p class="j-times tnum">${fmtTime(j.dep)} → ${fmtTime(j.arr)} · ${changes} · ${t('minWalking', { m:j.walkMin })}</p></div>
+    <div class="j-top"><p class="j-dur tnum">${j.durMin} min</p><p class="j-times tnum">${fmtTime(j.dep)} → ${fmtTime(j.arr)}</p></div>
+    <p class="j-sub tnum">${lines}<span>${changes} · ${t('minWalking', { m:j.walkMin })}</span></p>
+    ${tags.length ? `<div class="j-tags">${tags.join('')}</div>` : ''}
     <p class="j-why">${esc(item.comment)}</p>
-    <div class="j-lines">${lines}</div>
-    ${rows ? `<ul class="j-checks">${rows}</ul>` : ''}
-    <details class="j-steps"><summary>${t('stepByStep')}</summary><ol>${stepsHtml(j, checks)}</ol></details>
+    ${timelineHtml(j, checks)}
   </li>`;
 }
 
@@ -2823,6 +2912,10 @@ function renderTrip(){
   moreEl.open = false;
   $('#trip-more-label').textContent = t('showMore', { n:more.length });
   $('#trip-more-list').innerHTML = more.map(journeyHtml).join('');
+  if (t0.scrollToResults){
+    t0.scrollToResults = false;
+    requestAnimationFrame(() => status.scrollIntoView({ behavior:reduceMotion ? 'auto' : 'smooth', block:'start' }));
+  }
 }
 
 async function resolvePlace(which){
@@ -2854,6 +2947,7 @@ async function runTrip(){
     const journeys = await findJourneys(from, to, state.trip.includeBus);
     state.trip.results = journeys.length ? { from, to, journeys } : null;
     state.trip.status = journeys.length ? 'live' : 'none';
+    state.trip.scrollToResults = true;
   } catch (err){
     state.trip.results = null;
     state.trip.status = 'error';
@@ -3007,6 +3101,11 @@ applyStatic();
 renderWeather();
 loadAll();
 loadWeather();
+// Keep the forecast fresh while the app stays open, and when it comes back to the screen.
+setInterval(loadWeather, 30 * 60000);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && (!state.weatherAt || Date.now() - state.weatherAt > 20 * 60000)) loadWeather();
+});
 })();
 </script>
 

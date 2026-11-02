@@ -377,6 +377,12 @@ button{ font:inherit; color:inherit; }
 .tf-row a{ font-weight:700; color:var(--accent); }
 .tf-row.muted, .tf-row .muted{ color:var(--muted); }
 .tf-row.muted > svg{ color:var(--muted); }
+.lp{ list-style:none; margin:3px 0 0; padding:0; display:flex; flex-direction:column; gap:4px; }
+.lp li{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; padding-left:14px; position:relative; }
+.lp li::before{ content:""; position:absolute; left:3px; top:.55em; width:6px; height:6px; border-radius:50%; background:var(--accent); }
+.lp li.out::before{ background:var(--bad); }
+.lp .chip{ font-size:.72rem; padding:1px 7px; }
+.lp-k{ font-weight:700; }
 .ok-t{ color:var(--ok); } .bad-t{ color:var(--bad); }
 .tl-ride{ padding-block:8px; }
 .tl-ride::before{ content:""; position:absolute; left:10px; top:-8px; bottom:-8px; width:4px; border-radius:2px; background:var(--line-color, var(--plaque)); }
@@ -582,7 +588,7 @@ button{ font:inherit; color:inherit; }
 // IDFM lift-status endpoints (Opendatasoft API). The feed refuses anonymous requests, so the page sends a free PRIM API key
 // that the viewer types in; it stays in their browser only. Add ?src=<url> to the page address to try another endpoint first.
 // Bump on every update so you can see which version a phone is running.
-const APP_VERSION = '2.5';
+const APP_VERSION = '2.6';
 const APP_DATE = '2026-11-02';
 /* ---------- Languages: English, French, Italian ---------- */
 const LANG_KEY = 'lift-or-stairs:lang';
@@ -728,7 +734,7 @@ const I18N = {
     entBest:'Best entrance for the pram', entLift:'street lift, working', entStepFree:'step-free entrance (IDFM)',
     entUseLift:v => `Use the entrance with the street lift: ${v.side}`, entLiftOut:v => `The street lift (${v.side}) is out of service.`,
     entAll:v => `All entrances (${v.n})`, entStepChip:'Step-free', entLiftChip:'Street lift', map:'Map',
-    enterBy:v => `Enter by: ${v.e}`, leaveBy:v => `Leave by: ${v.e}`, viaLift:'(street lift)', viaStepFree:'(step-free)',
+    liftsToPlatform:'Lifts to the platform', liftsToStreet:'Lifts up to the street', liftsChange:'Lifts for the change', liftOutOnPath:'One of these lifts is out: see Plan B.', enterBy:v => `Enter by: ${v.e}`, leaveBy:v => `Leave by: ${v.e}`, viaLift:'(street lift)', viaStepFree:'(step-free)',
     openNow:v => `Open now · until ${v.t}`, closedNow:v => v.t ? `Closed now · opens ${v.t}` : 'Closed now', closedShort:'closed now',
     wxUpdated:v => `updated ${v.t}`,
     'd.walk':v => `${v.m} min of walking`, 'd.notFree':'not marked step-free by IDFM', and:'and'
@@ -862,7 +868,7 @@ const I18N = {
     entBest:'Meilleure entrée pour la poussette', entLift:'ascenseur depuis la rue, en service', entStepFree:'entrée sans marches (IDFM)',
     entUseLift:v => `Prenez l’entrée avec l’ascenseur depuis la rue : ${v.side}`, entLiftOut:v => `L’ascenseur depuis la rue (${v.side}) est hors service.`,
     entAll:v => `Toutes les entrées (${v.n})`, entStepChip:'Sans marches', entLiftChip:'Ascenseur', map:'Plan',
-    enterBy:v => `Entrer par : ${v.e}`, leaveBy:v => `Sortir par : ${v.e}`, viaLift:'(ascenseur)', viaStepFree:'(sans marches)',
+    liftsToPlatform:'Ascenseurs jusqu’au quai', liftsToStreet:'Ascenseurs jusqu’à la rue', liftsChange:'Ascenseurs pour la correspondance', liftOutOnPath:'Un de ces ascenseurs est en panne : voir le Plan B.', enterBy:v => `Entrer par : ${v.e}`, leaveBy:v => `Sortir par : ${v.e}`, viaLift:'(ascenseur)', viaStepFree:'(sans marches)',
     openNow:v => `Ouvert · jusqu’à ${v.t}`, closedNow:v => v.t ? `Fermé · ouvre à ${v.t}` : 'Fermé maintenant', closedShort:'fermé',
     wxUpdated:v => `mis à jour à ${v.t}`,
     'd.walk':v => `${v.m} min de marche`, 'd.notFree':'non indiqué sans marches par IDFM', and:'et'
@@ -996,7 +1002,7 @@ const I18N = {
     entBest:'Ingresso migliore per il passeggino', entLift:'ascensore dalla strada, funzionante', entStepFree:'ingresso senza gradini (IDFM)',
     entUseLift:v => `Usa l’ingresso con l’ascensore dalla strada: ${v.side}`, entLiftOut:v => `L’ascensore dalla strada (${v.side}) è fuori servizio.`,
     entAll:v => `Tutti gli ingressi (${v.n})`, entStepChip:'Senza gradini', entLiftChip:'Ascensore', map:'Mappa',
-    enterBy:v => `Entra da: ${v.e}`, leaveBy:v => `Esci da: ${v.e}`, viaLift:'(ascensore)', viaStepFree:'(senza gradini)',
+    liftsToPlatform:'Ascensori fino al binario', liftsToStreet:'Ascensori fino alla strada', liftsChange:'Ascensori per il cambio', liftOutOnPath:'Uno di questi ascensori è fuori servizio: vedi il Piano B.', enterBy:v => `Entra da: ${v.e}`, leaveBy:v => `Esci da: ${v.e}`, viaLift:'(ascensore)', viaStepFree:'(senza gradini)',
     openNow:v => `Aperto · fino alle ${v.t}`, closedNow:v => v.t ? `Chiuso · apre alle ${v.t}` : 'Chiuso ora', closedShort:'chiuso',
     wxUpdated:v => `aggiornato alle ${v.t}`,
     'd.walk':v => `${v.m} min a piedi`, 'd.notFree':'non segnato senza gradini da IDFM', and:'e'
@@ -2896,7 +2902,54 @@ function coolText(l, cool){
 // Staff and cooling under each station of a trip: staffed counter here, and whether the next ride is cooled.
 const ICON_WALK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13" cy="4.5" r="2" fill="currentColor"/><path d="M10.5 21l2-6-2.5-2.5 1-4.5 3.5 3 3 1M10 8.5 7 10.5 6 14M13 15l3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 // The small lines under a station in a route: entrance to use, staff, all with an icon.
-function nodeFacts(c){
+/* ---------- Which lifts you actually use at a station, in order ---------- */
+const ICON_LIFT = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 9.5L12 7l2.5 2.5M9.5 14.5L12 17l2.5-2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function liftLines(text){
+  const f = fold(text), codes = new Set();
+  for (const m of f.matchAll(/\bligne?s?\s+(\d{1,2}(?:\s*bis)?(?:\s*(?:,|et)\s*\d{1,2})*)/g)) m[1].split(/,|et/).forEach(x => codes.add(x.replace(/\s+/g, '').trim()));
+  for (const m of f.matchAll(/\brer\s+([a-e](?:\s*(?:,|et)\s*[a-e])*)\b/g)) m[1].split(/,|et/).forEach(x => codes.add(x.trim()));
+  for (const m of f.matchAll(/\bm\s?(\d{1,2})\b/g)) codes.add(m[1]);
+  return codes;
+}
+const liftIsStreet = l => !!streetSide(l.where);
+const liftIsPlatform = l => /\bquais?\b|\bvoies?\b/.test(fold(l.where));
+// Platform lifts that serve this ride: right line, right direction (or "all directions").
+function platformLiftsFor(lifts, leg){
+  const plat = lifts.filter(liftIsPlatform);
+  if (!leg) return plat;
+  const code = fold(leg.code || '').replace(/\s+/g, '');
+  const onLine = plat.filter(l => { const c = liftLines(l.where + ' ' + l.dir); return !c.size || !code || c.has(code); });
+  const want = sigTokens(leg.direction || '');
+  const allDir = l => !l.dir || /\b(toutes|tous|all|both)\b|\/|<->|↔/.test(fold(l.dir));
+  const byDir = onLine.filter(l => { if (allDir(l)) return true; const have = new Set(sigTokens(l.dir)); return want.some(w => have.has(w)); });
+  return byDir.length ? byDir : onLine;
+}
+function liftPath(st, role, arrive, depart){
+  const lifts = (st && st.lifts) || [];
+  if (!lifts.length) return null;
+  const street = lifts.filter(liftIsStreet);
+  const middle = lifts.filter(l => !liftIsStreet(l) && !liftIsPlatform(l));
+  let list, key;
+  if (role === 'start'){ list = [...street, ...middle, ...platformLiftsFor(lifts.filter(l => !liftIsStreet(l)), depart)]; key = 'liftsToPlatform'; }
+  else if (role === 'end'){ list = [...platformLiftsFor(lifts.filter(l => !liftIsStreet(l)), arrive), ...middle, ...street]; key = 'liftsToStreet'; }
+  else {
+    const nonStreet = lifts.filter(l => !liftIsStreet(l));
+    const a = platformLiftsFor(nonStreet, arrive), d = platformLiftsFor(nonStreet, depart);
+    list = [...a, ...middle, ...d.filter(l => !a.includes(l))]; key = 'liftsChange';
+  }
+  list = list.filter((l, i) => list.indexOf(l) === i);
+  if (!list.length) list = lifts.slice();
+  return { key, lifts:list.slice(0, 4), more:Math.max(0, list.length - 4) };
+}
+function liftPathRow(st, role, arrive, depart){
+  const p = liftPath(st, role, arrive, depart);
+  if (!p) return '';
+  const items = p.lifts.map(l => `<li class="${l.status}"><span>${esc(l.where)}${l.dir && !/toutes/i.test(l.dir) ? ` <span class="muted">(${esc(l.dir)})</span>` : ''}</span><span class="chip ${l.status}">${t('status.' + l.status)}</span></li>`).join('');
+  const out = p.lifts.some(l => l.status === 'out');
+  return `<li class="tf-row">${ICON_LIFT}<div><span class="lp-k">${t(p.key)}</span><ol class="lp">${items}</ol>${out ? `<span class="bad-t">${t('liftOutOnPath')}</span>` : ''}</div></li>`;
+}
+
+function nodeFacts(c, arrive, depart){
   const out = [];
   if (!c || c.kind === 'street' || !c.st) return out;
   if (c.role === 'Start' || c.role === 'Arrive'){
@@ -2906,6 +2959,8 @@ function nodeFacts(c){
       out.push(`<li class="tf-row">${ICON_DOOR}<span>${esc(t(c.role === 'Start' ? 'enterBy' : 'leaveBy', { e:name }))} <span class="muted">${be.kind === 'lift' ? t('viaLift') : t('viaStepFree')}</span>${be.entrance ? ` · <a href="${mapsUrl(be.entrance)}" target="_blank" rel="noopener">${t('map')}</a>` : ''}</span></li>`);
     }
   }
+  const lp = liftPathRow(c.st, c.role === 'Start' ? 'start' : c.role === 'Arrive' ? 'end' : 'mid', arrive, depart);
+  if (lp) out.push(lp);
   if (c.st.counters && c.st.counters.length){
     const k = bestCounter(c.st);
     const now = counterOpenNow(k);
@@ -2946,11 +3001,11 @@ function timelineHtml(j, checks){
   const pts = j.legs.filter(l => l.type === 'pt');
   const rows = [];
   let last = null;
-  const node = (p, kind) => {
+  const node = (p, kind, arrive, depart) => {
     if (last && fold(last) === fold(p.name)) return;
     last = p.name;
     const c = find(p.name);
-    const facts = nodeFacts(c);
+    const facts = nodeFacts(c, arrive, depart);
     const planB = c && (c.kind === 'bad' || c.kind === 'none') && c.st ? `<button type="button" class="linkbtn" data-id="${esc(c.st.id)}" data-from-trip="1">${t('seePlanB')}</button>` : '';
     rows.push(`<li class="tl-node ${kind}"><span class="tl-dot" aria-hidden="true"></span>
       <div class="tl-head">${stationLink(p.name, c && c.st)}${checkChip(c)}${c && c.air === 'high' ? `<span class="chip out">${t('chip.highParticles')}</span>` : ''}${planB}</div>
@@ -2959,11 +3014,12 @@ function timelineHtml(j, checks){
   for (const l of j.legs){
     if (l.type === 'walk'){ rows.push(`<li class="tl-walk">${ICON_WALK}<span>${l.to ? esc(t('walkTo', { m:l.min, to:l.to })) : `${l.min} min`}</span></li>`); continue; }
     if (l.type === 'transfer'){ rows.push(`<li class="tl-walk">${ICON_WALK}<span>${t('walkToPlatform', { m:l.min })}</span></li>`); continue; }
-    node(l.from, l === pts[0] ? 'start' : 'mid');
+    const pi = pts.indexOf(l);
+    node(l.from, l === pts[0] ? 'start' : 'mid', pts[pi - 1] || null, l);
     const cool = coolingFor(l.mode, l.code);
     const coolTag = cool ? `<span class="lc-s ${cool === 'yes' ? 'yes' : cool === 'partial' ? 'part' : 'no'}">${cool === 'no' ? ICON_THERMO : ICON_SNOW}${coolText(l, cool)}</span>` : '';
     rows.push(`<li class="tl-ride" style="--line-color:${hexColor(l.color) || 'var(--plaque)'}"><div class="tl-ride-body">${lineBadge(l)}<span>${l.direction ? `${esc(t('towards', { d:l.direction }))} · ` : ''}${t('stopsN', { n:l.stops }).replace(' ', '&nbsp;')} · ${l.min}&nbsp;min</span>${coolTag}</div></li>`);
-    node(l.to, l === pts[pts.length - 1] ? 'end' : 'mid');
+    node(l.to, l === pts[pts.length - 1] ? 'end' : 'mid', l, pts[pi + 1] || null);
   }
   return rows.length ? `<ol class="tl">${rows.join('')}</ol>` : '';
 }

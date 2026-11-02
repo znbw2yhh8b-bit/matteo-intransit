@@ -533,7 +533,7 @@ button{ font:inherit; color:inherit; }
 // IDFM lift-status endpoints (Opendatasoft API). The feed refuses anonymous requests, so the page sends a free PRIM API key
 // that the viewer types in; it stays in their browser only. Add ?src=<url> to the page address to try another endpoint first.
 // Bump on every update so you can see which version a phone is running.
-const APP_VERSION = '2.0';
+const APP_VERSION = '2.1';
 const APP_DATE = '2026-11-02';
 /* ---------- Languages: English, French, Italian ---------- */
 const LANG_KEY = 'lift-or-stairs:lang';
@@ -1068,10 +1068,12 @@ function l93ToWgs84(X, Y){
 }
 
 function coordsOf(rec){
-  const geo = pick(rec, ['geo_point_2d', 'stop_point_geopoint', 'geopoint', 'geo_point', 'coordonnees', 'coordinates']);
+  let geo = pick(rec, ['geo_point_2d', 'stop_point_geopoint', 'geopoint', 'geo_point', 'point_geo', 'accgeopoint', 'coordonnees', 'coordinates']);
+  if (!geo) for (const k in rec){ if (/geo_?point|geopoint|point_?geo/i.test(k) && rec[k]){ geo = rec[k]; break; } }
   if (geo){
     if (Array.isArray(geo) && geo.length === 2) return { lat:+geo[0], lon:+geo[1] };
     if (typeof geo === 'object' && geo.lat != null) return { lat:+geo.lat, lon:+(geo.lon != null ? geo.lon : geo.lng) };
+    if (typeof geo === 'object' && Array.isArray(geo.coordinates) && geo.coordinates.length >= 2) return { lat:+geo.coordinates[1], lon:+geo.coordinates[0] };
     if (typeof geo === 'string' && geo.includes(',')){
       const [a, b] = geo.split(',').map(parseFloat);
       if (isFinite(a) && isFinite(b)) return { lat:a, lon:b };
@@ -1080,15 +1082,21 @@ function coordsOf(rec){
   let x = parseFloat(pick(rec, ['ZdCXEpsg2154', 'zdcx', 'x_l93', 'coord_x', 'x'])), y = parseFloat(pick(rec, ['ZdCYEpsg2154', 'zdcy', 'y_l93', 'coord_y', 'y']));
   if (!isFinite(x) || !isFinite(y)){
     for (const k in rec){
-      if (/x.?epsg.?2154|^x_?l93/i.test(k)) x = parseFloat(rec[k]);
-      if (/y.?epsg.?2154|^y_?l93/i.test(k)) y = parseFloat(rec[k]);
+      if (/x.?epsg.?2154|^x_?l93/i.test(k)) x = parseFloat(String(rec[k]).replace(',', '.'));
+      if (/y.?epsg.?2154|^y_?l93/i.test(k)) y = parseFloat(String(rec[k]).replace(',', '.'));
     }
   }
   if (isFinite(x) && isFinite(y)){
     if (x > 1e5 && y > 6e6) return l93ToWgs84(x, y);
     if (Math.abs(x) <= 180 && y > 40 && y <= 90) return { lat:y, lon:x };
   }
-  const lat = parseFloat(pick(rec, ['lat', 'latitude'])), lon = parseFloat(pick(rec, ['lon', 'lng', 'longitude']));
+  let lat = parseFloat(pick(rec, ['lat', 'latitude'])), lon = parseFloat(pick(rec, ['lon', 'lng', 'longitude']));
+  if (!isFinite(lat) || !isFinite(lon)){
+    for (const k in rec){
+      if (/(^|_)lat$|latitude$/i.test(k)) lat = parseFloat(rec[k]);
+      if (/(^|_)(lon|lng)$|longitude$/i.test(k)) lon = parseFloat(rec[k]);
+    }
+  }
   if (isFinite(lat) && isFinite(lon)) return { lat, lon };
   return null;
 }
@@ -1811,6 +1819,11 @@ function airLevelOf(v){
   return null;
 }
 function airFromRecord(rec){
+  for (const k of ['niveau_de_pollution_aux_particules', 'niveau_de_pollution', 'pollution_air', 'niveau']){
+    const a = airLevelOf(typeof rec[k] === 'string' ? rec[k] : null);
+    if (a) return a;
+    if (typeof rec[k] === 'number' && [1, 2, 3].includes(rec[k])) return ['low', 'medium', 'high'][rec[k] - 1];
+  }
   for (const k in rec){
     if (!/niveau|classe|class|qualit|pollution|categor|couleur|level/i.test(k)) continue;
     const v = rec[k];
@@ -1829,13 +1842,13 @@ function applyAir(recs){
   let matched = 0;
   for (const rec of recs){
     const level = airFromRecord(rec);
-    const name = pick(rec, ['nom_gare', 'nom_station', 'station', 'nom_zdc', 'nom_zdl', 'nom_arret', 'stop_name', 'gare', 'nom', 'libelle']);
+    const name = pick(rec, ['nom_de_la_station', 'nom_gare', 'nom_station', 'station', 'nom_zdc', 'nom_zdl', 'nom_arret', 'stop_name', 'gare', 'nom', 'libelle']);
     if (!level || !name) continue;
     const c = coordsOf(rec);
     const st = matchStation({ name:String(name), lat:c ? c.lat : null, lon:c ? c.lon : null });
     if (!st) continue;
-    const line = pick(rec, ['ligne', 'indice_lig', 'res_com', 'line', 'code_ligne', 'nom_ligne']);
-    setAir(st, line ? String(line).replace(/^(m[eé]tro|rer|ligne)\s+/i, '') : '', level);
+    const line = pick(rec, ['nom_de_la_ligne', 'ligne', 'indice_lig', 'res_com', 'line', 'code_ligne', 'nom_ligne']);
+    setAir(st, line ? String(line).replace(/^(m[eé]tro|rer|ligne|train|tram(way)?)\s+/i, '') : '', level);
     matched++;
   }
   return matched;
@@ -1857,7 +1870,7 @@ async function loadAir(){
 const COUNTER_DATASET = 'points-de-vente';
 const TYPES_DATASET = 'types-des-points-de-vente';
 const STAFF_YES = /guichet|comptoir|agence|accueil|espace (client|service)|boutique|bureau|point (d )?information|service client|avec agent|vente physique|personnel/;
-const STAFF_NO = /automat|distributeur|\bdat\b|libre service|machine|borne|commerce|tabac|presse|relais|buraliste|librairie|e ?shop|internet|appli|mobile|depositaire|partenaire|epicerie|supermarche/;
+const STAFF_NO = /automat|distributeur|\bdat\b|libre service|machine|borne|commerce|commercant|tabac|presse|relais|buraliste|librairie|e ?shop|internet|appli|mobile|depositaire|partenaire|epicerie|supermarche|en ligne/;
 state.countersStatus = 'loading';
 state.debug = {};
 const sampleRecs = recs => recs.slice(0, 2).map(r => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, typeof v === 'string' ? v.slice(0, 80) : v])));
@@ -1876,7 +1889,7 @@ function buildTypeMap(recs){
   return map;
 }
 function typeLabelOf(rec, typeMap){
-  const raw = pick(rec, ['type', 'type_point_de_vente', 'type_pdv', 'libelle_type', 'type_de_point_de_vente', 'categorie', 'nature', 'canal', 'id_type', 'code_type', 'type_id']);
+  const raw = pick(rec, ['pdvtypename', 'type', 'type_point_de_vente', 'type_pdv', 'libelle_type', 'type_de_point_de_vente', 'categorie', 'nature', 'canal', 'id_type', 'code_type', 'type_id']);
   if (raw != null && typeMap.has(String(raw))) return typeMap.get(String(raw));
   for (const k in rec){ if (/type|categ|nature/i.test(k) && rec[k] != null && typeMap.has(String(rec[k]))) return typeMap.get(String(rec[k])); }
   return raw != null && isNaN(Number(raw)) ? String(raw) : '';
@@ -1892,7 +1905,7 @@ function counterFromRecord(rec, typeMap){
     if (typeof v !== 'string' || !v.trim()) continue;
     if (/horaire|ouverture|hours|heure|lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|semaine|week/i.test(k)) hours.push(/horaire|ouverture|hours/i.test(k) ? v.trim() : `${k.replace(/_/g, ' ')}: ${v.trim()}`);
   }
-  const name = pick(rec, ['nom', 'nom_point_de_vente', 'nom_pdv', 'libelle', 'name', 'denomination', 'raison_sociale']);
+  const name = pick(rec, ['pdvname', 'nom', 'nom_point_de_vente', 'nom_pdv', 'libelle', 'name', 'denomination', 'raison_sociale']);
   return { type:typeLabel || 'Staffed counter', name:name ? String(name) : '', hours:hours.join(' · ').slice(0, 220) };
 }
 function applyCounters(recs, typeMap){
@@ -1904,6 +1917,8 @@ function applyCounters(recs, typeMap){
     const where = pick(rec, ['nom_zdc', 'nom_zda', 'nom_gare', 'gare', 'station', 'nom_station', 'nom_arret', 'arret', 'zdc']) || ctr.name;
     const st = matchStation({ name:String(where || ''), lat:c ? c.lat : null, lon:c ? c.lon : null });
     if (!st) continue;
+    // A counter must be in the station: same name, or within 150 m of it.
+    if (c && st.lat != null && fold(where) !== st.key && !st.altKeys.includes(fold(where)) && distM(c, st) > 150) continue;
     st.counters = st.counters || [];
     if (!st.counters.some(x => x.type === ctr.type && x.name === ctr.name)){ st.counters.push(ctr); matched++; }
   }
@@ -1989,7 +2004,7 @@ async function loadEntrances(){
   state.entrancesOk = matched > 0;
   state.sources.entrances = matched
     ? { ok:true, text:`${fmtNum(matched)} entrances matched to stations (from ${fmtNum(recs.length)})` }
-    : { ok:false, text:recs.length ? `Got ${recs.length} rows but couldn't place them. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${detail}` };
+    : { ok:false, text:recs.length ? `Got ${recs.length} rows (${recs.filter(r => coordsOf(r)).length} with a position) but couldn't place them near stations. Fields: ${fieldsOf(recs)}.` : `Didn't load. ${detail}` };
 }
 function applySampleEntrances(){
   const add = (name, list) => { const st = matchStation({ name }); if (st) st.entrances = list.map(([n, lat, lon]) => ({ name:n, lat, lon, step:null })); };
@@ -2026,7 +2041,7 @@ function bestEntrance(st){
 const mapsUrl = p => `https://www.google.com/maps/dir/?api=1&destination=${p.lat.toFixed(5)},${p.lon.toFixed(5)}&travelmode=walking`;
 
 /* ---------- Counter opening hours: "Lun-Ven 6h30-20h", "Mon–Fri 7:00–20:00", "Tous les jours 6h30-21h30"… ---------- */
-const DAY_IDX = { lun:1, mon:1, mar:2, tue:2, mer:3, wed:3, jeu:4, thu:4, ven:5, fri:5, sam:6, sat:6, dim:0, sun:0 };
+const DAY_IDX = { lun:1, mon:1, mar:2, tue:2, mer:3, wed:3, jeu:4, thu:4, ven:5, fri:5, sam:6, sat:6, dim:0, sun:0, mo:1, tu:2, we:3, th:4, fr:5, sa:6, su:0 };
 function parseHours(str){
   if (!str) return null;
   const rules = [];
@@ -2036,14 +2051,16 @@ function parseHours(str){
     const re = /(\d{1,2})\s*[h:]\s*(\d{2})?\s*(?:-|a|to|au|>)\s*(\d{1,2})\s*[h:]?\s*(\d{2})?/g;
     let m;
     while ((m = re.exec(n))) ranges.push([+m[1] * 60 + (+m[2] || 0), +m[3] * 60 + (+m[4] || 0)]);
+    if (/24 ?\/ ?7|24 ?h ?\/ ?24/.test(n)) ranges.push([0, 1440]);
     if (!ranges.length) continue;
     let days = null;
     if (/every day|tous les jours|7 ?j ?\/ ?7|7\/7|daily|tutti i giorni/.test(n)) days = new Set([0, 1, 2, 3, 4, 5, 6]);
     else {
-      const found = [...n.matchAll(/\b(lun|mon|mar|tue|mer|wed|jeu|thu|ven|fri|sam|sat|dim|sun)[a-z]*\.?/g)];
+      const found = [...n.matchAll(/\b(lun|mon|mar|tue|mer|wed|jeu|thu|ven|fri|sam|sat|dim|sun|mo|tu|we|th|fr|sa|su)[a-z]*\.?/g)];
       if (found.length){
         days = new Set();
         const between = found.length >= 2 ? n.slice(found[0].index + found[0][0].length, found[1].index) : '';
+        const parts = n.split(/,/);
         if (found.length === 2 && /-|\bau\b|\ba\b|\bto\b/.test(between)){
           for (let d = DAY_IDX[found[0][1]], k = 0; k < 7; d = (d + 1) % 7, k++){ days.add(d); if (d === DAY_IDX[found[1][1]]) break; }
         } else found.forEach(f => days.add(DAY_IDX[f[1]]));
